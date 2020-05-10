@@ -1,0 +1,8 @@
+version: '{branch}/{build}'
+image: Visual Studio 2019
+configuration: Release
+platform: x64
+install:
+- ps: ".\\tools\\install_sdk.ps1"
+- cmd: >-
+    if defined AP
