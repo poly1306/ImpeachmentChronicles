@@ -34,4 +34,65 @@ public class FakeElectrocutionShotDemo : Script
 		var shotNM = ped.Euphoria.Shot;
 		shotNM.Start();
 
-		var ShotConfigureArmsNM
+		var ShotConfigureArmsNM = ped.Euphoria.ShotConfigureArms;
+		ShotConfigureArmsNM.PointGun = true;
+		ShotConfigureArmsNM.Start();
+
+		// You can send NM message to a ped without setting "start" parameter to true so this message can update parameters of the running behavior
+		var ConfigureBalanceNM = ped.Euphoria.ConfigureBalance;
+		ConfigureBalanceNM.FallMult = 40f;
+		ConfigureBalanceNM.Update();
+	}
+
+	// normal in WeaponSets (priority: 5)
+	// NmShotTuningSet is set to normal in WEAPON_STUNGUN config in weapons.meta.
+	static private void StartNormalWeapomNmMessages(Ped ped)
+	{
+		var ConfigureBalanceNM = ped.Euphoria.ConfigureBalance;
+		ConfigureBalanceNM.StableLinSpeedThresh = 0.7f;
+		ConfigureBalanceNM.StableRotSpeedThresh = 0.85f;
+		ConfigureBalanceNM.UseComDirTurnVelThresh = 0.6f;
+		ConfigureBalanceNM.StepIfInSupport = true;
+		ConfigureBalanceNM.BackwardsLeanCutoff = 0.3f;
+		ConfigureBalanceNM.ExtraSteps = -1;
+		ConfigureBalanceNM.ExtraTime = -1.0f;
+		ConfigureBalanceNM.MaxBalanceTime = 2.0f;
+		ConfigureBalanceNM.GiveUpHeight = 0.62f;
+		ConfigureBalanceNM.LegStiffness = 12.0f;
+		ConfigureBalanceNM.MaxSteps = 3;
+		ConfigureBalanceNM.LegsTogetherRestep = 1.0f;
+		ConfigureBalanceNM.LegsApartRestep = 0.2f;
+		ConfigureBalanceNM.ExtraFeetApart = 0f;
+		ConfigureBalanceNM.StepDecisionThreshold = 0f;
+		ConfigureBalanceNM.DontStepTime = 0.2f;
+		ConfigureBalanceNM.Start();
+
+		var shotNM = ped.Euphoria.Shot;
+		shotNM.InitialNeckStiffness = 5.0f;
+		shotNM.InitialNeckDamping = 2.0f;
+		shotNM.Looseness4Fall = 0.7f;
+		shotNM.Looseness4Stagger = 0.4f;
+		shotNM.MinArmsLooseness = 0.1f;
+		shotNM.AlwaysResetNeckLooseness = true;
+		shotNM.AngVelScale = 0f;
+		shotNM.TimeBeforeReachForWound = 0.5f;
+		shotNM.CpainSmooth2Time = 0f;
+		shotNM.CpainMag = 0f;
+		shotNM.CpainTwistMag = 0f;
+		shotNM.CpainSmooth2Zero = 0f;
+		shotNM.FallingReaction = 3;
+		shotNM.InitialWeaknessZeroDuration = 0.1f;
+		shotNM.InitialWeaknessRampDuration = 0.2f;
+		shotNM.UseCStrModulation = false;
+		shotNM.CStrUpperMin = 1.0f;
+		shotNM.CStrLowerMin = 0.8f;
+		shotNM.BodyStiffness = 10f;
+		shotNM.SpineBlendExagCPain = true;
+		shotNM.AlwaysResetLooseness = true;
+		shotNM.Fling = true;
+		shotNM.FlingWidth = 0.5f;
+		shotNM.FlingTime = 0.05f;
+		shotNM.Start();
+
+		var shotSnapNM = ped.Euphoria.ShotSnap;
+		shotSnapNM.Snap = true;
