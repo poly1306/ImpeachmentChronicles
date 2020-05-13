@@ -96,3 +96,59 @@ public class FakeElectrocutionShotDemo : Script
 
 		var shotSnapNM = ped.Euphoria.ShotSnap;
 		shotSnapNM.Snap = true;
+		shotSnapNM.SnapMag = 1f;
+		shotSnapNM.SnapDirectionRandomness = 0f;
+		shotSnapNM.SnapLeftLeg = false;
+		shotSnapNM.SnapRightLeg = false;
+		shotSnapNM.SnapNeck = true;
+		shotSnapNM.UnSnapInterval = 0.05f;
+		shotSnapNM.SnapMovingMult = 2f;
+		shotSnapNM.SnapBalancingMult = 1f;
+		shotSnapNM.SnapAirborneMult = 1.0f;
+		shotSnapNM.SnapMovingThresh = 1.0f;
+		shotSnapNM.SnapLeftArm = false;
+		shotSnapNM.SnapRightArm = false;
+		shotSnapNM.SnapSpine = true;
+		shotSnapNM.SnapPhasedLegs = true;
+		shotSnapNM.SnapHipType = 2;
+		shotSnapNM.SnapUseBulletDir = true;
+		shotSnapNM.SnapHitPart = false;
+		shotSnapNM.UnSnapRatio = 0.3f;
+		shotSnapNM.SnapUseTorques = true;
+		shotSnapNM.Start();
+
+		var shotShockSpinNM = ped.Euphoria.ShotShockSpin;
+		shotShockSpinNM.AddShockSpin = false;
+		shotShockSpinNM.AlwaysAddShockSpin = false;
+		shotShockSpinNM.ShockSpinMin = 100f;
+		shotShockSpinNM.ShockSpinMax = 100f;
+		shotShockSpinNM.BracedSideSpinMult = 2f;
+		shotShockSpinNM.Start();
+
+		var configureBulletsNM = ped.Euphoria.ConfigureBullets;
+		configureBulletsNM.LoosenessFix = true;
+		configureBulletsNM.ImpulseReductionPerShot = 0.1f;
+		configureBulletsNM.ImpulseRecovery = 0f;
+		configureBulletsNM.TorqueAlwaysSpine3 = true;
+		configureBulletsNM.RbRatio = 0f;
+		configureBulletsNM.RbMaxTwistMomentArm = 1f;
+		configureBulletsNM.RbMaxBroomMomentArm = 0f;
+		configureBulletsNM.RbRatioAirborne = 0f;
+		configureBulletsNM.RbMaxTwistMomentArmAirborne = 1f;
+		configureBulletsNM.RbMaxBroomMomentArmAirborne = 0f;
+		configureBulletsNM.RbRatioOneLeg = 0f;
+		configureBulletsNM.RbMaxTwistMomentArmOneLeg = 1f;
+		configureBulletsNM.RbMaxBroomMomentArmOneLeg = 0f;
+		configureBulletsNM.RbPivot = false;
+		configureBulletsNM.ImpulseAirOn = true;
+		configureBulletsNM.ImpulseAirMax = 150f;
+		configureBulletsNM.ImpulseAirMult = 1.0f;
+		configureBulletsNM.Start();
+
+		var configureShotInjuredLegNM = ped.Euphoria.ConfigureShotInjuredLeg;
+		configureShotInjuredLegNM.TimeBeforeCollapseWoundLeg = 0f;
+		configureShotInjuredLegNM.LegInjuryTime = 1.4f;
+		configureShotInjuredLegNM.LegLimpBend = 0.2f;
+		configureShotInjuredLegNM.LegInjury = 0f;
+		configureShotInjuredLegNM.LegInjuryHipPitch = -0.2f;
+		configure
