@@ -276,4 +276,75 @@ public class FakeElectrocutionShotDemo : Script
 		shotConfigureArmsNM.Start();
 
 		var shotSnapNM = ped.Euphoria.ShotSnap;
-		shotSnapNM.SnapHitPart = fa
+		shotSnapNM.SnapHitPart = false;
+		shotSnapNM.SnapMag = 1.5f;
+		shotSnapNM.Update();
+	}
+
+	// Shot_Electrocute (priority: 15)
+	static private void StartShotElectrocuteMessages(Ped ped)
+	{
+		var elecNM = ped.Euphoria.Electrocute;
+		elecNM.StunMag = 0.2f;
+		elecNM.ApplyStiffness = false;
+		elecNM.UseTorques = true;
+		elecNM.HipType = 1;
+		elecNM.InitialMult = 2f;
+		elecNM.LargeMult = 1.5f;
+		elecNM.LargeMinTime = 1f;
+		elecNM.LargeMaxTime = 2f;
+		elecNM.MovingMult = 3.92f;
+		elecNM.BalancingMult = 3f;
+		elecNM.MovingThresh = 1f;
+		elecNM.LeftLeg = true;
+		elecNM.RightLeg = true;
+		elecNM.Start();
+
+		var forceLeanRandomNM = ped.Euphoria.ForceLeanRandom;
+		forceLeanRandomNM.LeanAmountMin = 0.1f;
+		forceLeanRandomNM.LeanAmountMax = 0.1f;
+		forceLeanRandomNM.BodyPart = 10;
+		forceLeanRandomNM.Start();
+
+		var ShotFallToKneesNM = ped.Euphoria.ShotFallToKnees;
+		ShotFallToKneesNM.FallToKnees = true;
+		ShotFallToKneesNM.FtkAlwaysChangeFall = true;
+		ShotFallToKneesNM.FtkBalanceTime = 1f;
+		ShotFallToKneesNM.FtkHelperForce = 100f;
+		ShotFallToKneesNM.Start();
+
+		var staggerFallNM = ped.Euphoria.StaggerFall;
+		staggerFallNM.UpperBodyReaction = false;
+		staggerFallNM.Start();
+
+		var ShotSnapNM = ped.Euphoria.ShotSnap;
+		ShotSnapNM.ResetArguments();
+
+		var setFallingReactionNM = ped.Euphoria.SetFallingReaction;
+		setFallingReactionNM.HandsAndKnees = false;
+		setFallingReactionNM.CallRDS = false;
+		setFallingReactionNM.Update();
+
+		var pointGunNM = ped.Euphoria.PointGun;
+		pointGunNM.ResetArguments();
+		pointGunNM.EnableLeft = false;
+		pointGunNM.EnableRight = false;
+		pointGunNM.Start();
+
+		var ConfigureBalanceNM = ped.Euphoria.ConfigureBalance;
+		ConfigureBalanceNM.ResetArguments();
+		ConfigureBalanceNM.FootFriction = 0.5f;
+		ConfigureBalanceNM.Start();
+	}
+
+	// Shot_LegShot (priority: 21)
+	static private void StartLegShot21Messages(Ped ped)
+	{
+		var configureBulletsNM = ped.Euphoria.ConfigureBullets;
+		configureBulletsNM.RbLowerShare = 0.5f;
+		configureBulletsNM.Update();
+
+		var configureShotInjuredLegNM = ped.Euphoria.ConfigureShotInjuredLeg;
+		configureShotInjuredLegNM.TimeBeforeCollapseWoundLeg = 0.5f;
+		configureShotInjuredLegNM.LegInjuryTime = 0.5f;
+		configureShotInjuredLegNM.LegLimpBend =
