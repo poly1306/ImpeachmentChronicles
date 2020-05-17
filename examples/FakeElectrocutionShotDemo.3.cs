@@ -151,4 +151,64 @@ public class FakeElectrocutionShotDemo : Script
 		configureShotInjuredLegNM.LegLimpBend = 0.2f;
 		configureShotInjuredLegNM.LegInjury = 0f;
 		configureShotInjuredLegNM.LegInjuryHipPitch = -0.2f;
-		configure
+		configureShotInjuredLegNM.LegInjuryHipPitch = -0.1f;
+		configureShotInjuredLegNM.Start();
+
+		var shotConfigureArmsNM = ped.Euphoria.ShotConfigureArms;
+		shotConfigureArmsNM.Brace = false;
+		shotConfigureArmsNM.UseArmsWindmill = false;
+		shotConfigureArmsNM.ReleaseWound = 0;
+		shotConfigureArmsNM.AlwaysReachTime = 0f;
+		shotConfigureArmsNM.AWSpeedMult = 0f;
+		shotConfigureArmsNM.AWRadiusMult = 0f;
+		shotConfigureArmsNM.AWStiffnessAdd = 0f;
+		shotConfigureArmsNM.Start();
+
+		var bodyBalanceNM = ped.Euphoria.BodyBalance;
+		bodyBalanceNM.UseBodyTurn = true;
+		bodyBalanceNM.SpineStiffness = 12f;
+		bodyBalanceNM.Shoulder = 1f;
+		bodyBalanceNM.Start();
+
+		var shotInGutsNM = ped.Euphoria.ShotInGuts;
+		shotInGutsNM.ShotInGuts = true;
+		shotInGutsNM.SigSpineAmount = 2f;
+		shotInGutsNM.SigNeckAmount = 0f;
+		shotInGutsNM.SigHipAmount = 1f;
+		shotInGutsNM.SigKneeAmount = 0.1f;
+		shotInGutsNM.SigPeriod = 0.2f;
+		shotInGutsNM.SigForceBalancePeriod = 0f;
+		shotInGutsNM.SigKneesOnset = 0f;
+		shotInGutsNM.Update();
+
+		var stayUprightNM = ped.Euphoria.StayUpright;
+		stayUprightNM.UseForces = true;
+		stayUprightNM.UseTorques = true;
+		stayUprightNM.LastStandMode = false;
+		stayUprightNM.LastStandSinkRate = 0.3f;
+		stayUprightNM.LastStandHorizDamping = 0.4f;
+		stayUprightNM.LastStandMaxTime = 0.4f;
+		stayUprightNM.TurnTowardsBullets = true;
+		stayUprightNM.VelocityBased = true;
+		stayUprightNM.TorqueOnlyInAir = false;
+		stayUprightNM.LastStandHorizDamping = 3.3f;
+		stayUprightNM.ForceDamping = -1.0f;
+		stayUprightNM.ForceFeetMult = 1.0f;
+		stayUprightNM.ForceSpine3Share = 0.3f;
+		stayUprightNM.ForceLeanReduction = 1f;
+		stayUprightNM.ForceInAirShare = 0.5f;
+		stayUprightNM.ForceMin = -1f;
+		stayUprightNM.ForceMax = -1f;
+		stayUprightNM.ForceSaturationVel = 4.0f;
+		stayUprightNM.ForceThresholdVel = 0.5f;
+		stayUprightNM.TorqueStrength = 0f;
+		stayUprightNM.TorqueDamping = 0.5f;
+		stayUprightNM.TorqueSaturationVel = 4.0f;
+		stayUprightNM.TorqueThresholdVel = 2.5f;
+		stayUprightNM.SupportPosition = 2f;
+		stayUprightNM.NoSupportForceMult = 1.0f;
+		stayUprightNM.StepUpHelp = 0f;
+		stayUprightNM.StayUpAcc = 0.7f;
+		stayUprightNM.StayUpAccMax = 5.0f;
+		stayUprightNM.Update();
+
