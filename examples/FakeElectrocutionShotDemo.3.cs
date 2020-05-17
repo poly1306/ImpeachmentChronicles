@@ -212,3 +212,68 @@ public class FakeElectrocutionShotDemo : Script
 		stayUprightNM.StayUpAccMax = 5.0f;
 		stayUprightNM.Update();
 
+		var smartFallNM = ped.Euphoria.SmartFall;
+		smartFallNM.SplatWhenStopped = 5.0f;
+		smartFallNM.BlendHeadWhenStopped = 0.8f;
+		smartFallNM.Update();
+
+		var setFallingReactionNM = ped.Euphoria.SetFallingReaction;
+		setFallingReactionNM.AntiPropClav = true;
+		setFallingReactionNM.Start();
+	}
+
+	// Shot_Base (priority: 0)
+	static private void StartBackShotNmMessages(Ped ped)
+	{
+		var stayUprightNM = ped.Euphoria.StayUpright;
+		stayUprightNM.UseForces = true;
+		stayUprightNM.TurnTowardsBullets = false;
+		stayUprightNM.ForceStrength = 0f;
+		stayUprightNM.Start();
+
+		var shotNM = ped.Euphoria.Shot;
+		shotNM.BodyStiffness = 7f;
+		shotNM.Fling = false;
+		shotNM.BodyStiffness = 1f;
+		shotNM.Update();
+
+		var configureBulletsExtraNM = ped.Euphoria.ConfigureBulletsExtra;
+		configureBulletsExtraNM.RbRatio = 0f;
+		configureBulletsExtraNM.LiftGain = 1f;
+		configureBulletsExtraNM.Stop();
+
+		var applyBulletImpulseNM = ped.Euphoria.ApplyBulletImpulse;
+		applyBulletImpulseNM.EqualizeAmount = 0f;
+		applyBulletImpulseNM.PartIndex = 0;
+		applyBulletImpulseNM.Impulse = Vector3.Zero;
+		applyBulletImpulseNM.HitPoint = Vector3.Zero;
+		applyBulletImpulseNM.LocalHitPointInfo = false;
+		applyBulletImpulseNM.ExtraShare = -2f;
+		applyBulletImpulseNM.Stop();
+
+		var shotFromBehindNM = ped.Euphoria.ShotFromBehind;
+		shotFromBehindNM.Stop();
+
+		var configureBalanceNM = ped.Euphoria.ConfigureBalance;
+		configureBalanceNM.TaperKneeStrength = true;
+		configureBalanceNM.LegStiffness = 0f;
+		configureBalanceNM.GiveUpHeight = 1f;
+		configureBalanceNM.MaxSteps = 1;
+		configureBalanceNM.MaxBalanceTime = 1f;
+		configureBalanceNM.ExtraSteps = -1;
+		configureBalanceNM.FallType = 0;
+		configureBalanceNM.FallMult = 100f;
+		configureBalanceNM.RampHipPitchOnFail = true;
+		configureBalanceNM.StableLinSpeedThresh = 0.01f;
+		configureBalanceNM.StableRotSpeedThresh = 0.01f;
+		configureBalanceNM.UseComDirTurnVelThresh = 0.1f;
+		configureBalanceNM.BalanceAbortThreshold = 0.1f;
+		configureBalanceNM.Start();
+
+		var shotConfigureArmsNM = ped.Euphoria.ShotConfigureArms;
+		shotConfigureArmsNM.Fling2 = true;
+		shotConfigureArmsNM.PointGun = true;
+		shotConfigureArmsNM.Start();
+
+		var shotSnapNM = ped.Euphoria.ShotSnap;
+		shotSnapNM.SnapHitPart = fa
