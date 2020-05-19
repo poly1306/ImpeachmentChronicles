@@ -475,4 +475,35 @@ public class FakeElectrocutionShotDemo : Script
 		shotHeadLookNM.HeadLook = Vector3.Zero;
 		shotHeadLookNM.HeadLookAtWoundMinTimer = 0f;
 		shotHeadLookNM.HeadLookAtWoundMaxTimer = 10f;
-		shotHeadLookNM.HeadLookAtHeadPosMax
+		shotHeadLookNM.HeadLookAtHeadPosMaxTimer = 10f;
+		shotHeadLookNM.HeadLookAtHeadPosMinTimer = 10f;
+		shotHeadLookNM.Update();
+
+		var staggerFallNM = ped.Euphoria.StaggerFall;
+		staggerFallNM.Stop();
+	}
+
+	private void FakeElectrocutionShotDemo_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+	{
+		Ped playerPed = Game.Player.Character;
+
+		if (e.KeyCode == System.Windows.Forms.Keys.J)
+		{
+			// Switch the player ped to a ragdoll so they can recieve NaturalMotion messages.
+			// This method starts a new ragdoll task.
+			 playerPed.Ragdoll(5000, RagdollType.ScriptControl);
+
+			// Send the player ped message so they will move like when a stun gun bullet hits them in the chest
+			playerPed.ApplyRelativeForceRelativeOffset(new Vector3(0f, -1.5f, 0f), Vector3.Zero, ForceType.ExternalImpulse, RagdollComponent.Spine3, true, false, false);
+			StartShotBaseNmMessages(playerPed);
+			StartNormalWeapomNmMessages(playerPed);
+			StartShotElectrocuteMessages(playerPed);
+		}
+		else if (e.KeyCode == System.Windows.Forms.Keys.K)
+		{
+			// Send the player ped message so they will move like when a stun gun bullet hits them in the left leg, but never start a new ragdoll task
+			playerPed.ApplyRelativeForceRelativeOffset(new Vector3(0f, -1.5f, 0f), Vector3.Zero, ForceType.ExternalImpulse, RagdollComponent.ShinRight, true, false, false);
+			StartLegShot21Messages(playerPed);
+		}
+	}
+}
