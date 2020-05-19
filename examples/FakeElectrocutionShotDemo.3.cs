@@ -410,4 +410,69 @@ public class FakeElectrocutionShotDemo : Script
 		shotNM.CpainTwistMag = 0.5f;
 		shotNM.CpainSmooth2Zero = 1.5f;
 		shotNM.Crouching = false;
-		
+		shotNM.ChickenArms = true;
+		shotNM.ReachForWound = true;
+		shotNM.Fling = true;
+		shotNM.AllowInjuredArm = false;
+		shotNM.StableHandsAndNeck = false;
+		shotNM.Melee = false;
+		shotNM.FallingReaction = 0;
+		shotNM.UseExtendedCatchFall = false;
+		shotNM.InitialWeaknessZeroDuration = 0f;
+		shotNM.InitialWeaknessRampDuration = 0.4f;
+		shotNM.InitialNeckDuration = 0f;
+		shotNM.InitialNeckRampDuration = 0.4f;
+		shotNM.UseCStrModulation = false;
+		shotNM.CStrUpperMin = 0.1f;
+		shotNM.CStrUpperMax = 1f;
+		shotNM.CStrLowerMin = 0.1f;
+		shotNM.CStrLowerMax = 1f;
+		shotNM.DeathTime = -1f;
+		shotNM.Update();
+
+		var stayUprightNM = ped.Euphoria.StayUpright;
+		stayUprightNM.Stop();
+
+		var configureBalanceNM = ped.Euphoria.ConfigureBalance;
+		configureBalanceNM.StableLinSpeedThresh = 0.35f;
+		configureBalanceNM.StableRotSpeedThresh = 0.4f;
+		configureBalanceNM.BalanceAbortThreshold = 0.6f;
+		configureBalanceNM.Update();
+
+		var shotFallToKneesNM = ped.Euphoria.ShotFallToKnees;
+		shotFallToKneesNM.Start();
+
+		var shotSnapNM = ped.Euphoria.ShotSnap;
+		shotSnapNM.Snap = true;
+		shotSnapNM.SnapMag = 1f;
+		shotSnapNM.SnapMovingMult = 1f;
+		shotSnapNM.SnapBalancingMult = 1f;
+		shotSnapNM.SnapAirborneMult = 1f;
+		shotSnapNM.SnapMovingThresh = 1f;
+		shotSnapNM.SnapDirectionRandomness = 0.3f;
+		shotSnapNM.SnapLeftArm = false;
+		shotSnapNM.SnapRightArm = false;
+		shotSnapNM.SnapLeftLeg = true;
+		shotSnapNM.SnapLeftLeg = true;
+		shotSnapNM.SnapSpine = true;
+		shotSnapNM.SnapNeck = false;
+		shotSnapNM.SnapPhasedLegs = true;
+		shotSnapNM.SnapHipType = 0;
+		shotSnapNM.SnapUseBulletDir = true;
+		shotSnapNM.SnapHitPart = false;
+		shotSnapNM.UnSnapInterval = 0.1f;
+		shotSnapNM.UnSnapRatio = 0.7f;
+		shotSnapNM.SnapUseTorques = true;
+		shotSnapNM.Update();
+
+		var headLookNM = ped.Euphoria.HeadLook;
+		headLookNM.AlwaysLook = true;
+		headLookNM.KeepHeadAwayFromGround = true;
+		headLookNM.Update();
+
+		var shotHeadLookNM = ped.Euphoria.ShotHeadLook;
+		shotHeadLookNM.UseHeadLook = true;
+		shotHeadLookNM.HeadLook = Vector3.Zero;
+		shotHeadLookNM.HeadLookAtWoundMinTimer = 0f;
+		shotHeadLookNM.HeadLookAtWoundMaxTimer = 10f;
+		shotHeadLookNM.HeadLookAtHeadPosMax
