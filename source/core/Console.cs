@@ -605,3 +605,148 @@ namespace SHVDN
 						stringPtr[index + 1] = tmp;
 					}
 				}
+			}
+		}
+
+		void MoveCursorLeft()
+		{
+			if (cursorPos > 0)
+				cursorPos--;
+		}
+		void MoveCursorRight()
+		{
+			if (cursorPos < input.Length)
+				cursorPos++;
+		}
+		void MoveCursorToBegOfLine()
+		{
+			cursorPos = 0;
+		}
+		void MoveCursorToEndOfLine()
+		{
+			cursorPos = input.Length;
+		}
+
+		void CompileExpression()
+		{
+			if (string.IsNullOrEmpty(input) || compilerTask != null)
+				return;
+
+			commandPos = -1;
+			if (commandHistory.LastOrDefault() != input)
+				commandHistory.Add(input);
+
+			compilerTask = Task.Factory.StartNew(() =>
+			{
+				var compiler = new Microsoft.CSharp.CSharpCodeProvider();
+				var compilerOptions = new System.CodeDom.Compiler.CompilerParameters();
+				compilerOptions.GenerateInMemory = true;
+				compilerOptions.IncludeDebugInformation = true;
+				compilerOptions.ReferencedAssemblies.Add("System.dll");
+				compilerOptions.ReferencedAssemblies.Add("System.Core.dll");
+				compilerOptions.ReferencedAssemblies.Add("System.Drawing.dll");
+				compilerOptions.ReferencedAssemblies.Add("System.Windows.Forms.dll");
+				// Reference the newest scripting API
+				compilerOptions.ReferencedAssemblies.Add("ScriptHookVDotNet3.dll");
+				compilerOptions.ReferencedAssemblies.Add(typeof(ScriptDomain).Assembly.Location);
+
+				foreach (var script in ScriptDomain.CurrentDomain.RunningScripts.Where(x => x.IsRunning))
+					if (System.IO.File.Exists(script.Filename) && System.IO.Path.GetExtension(script.Filename) == ".dll")
+						compilerOptions.ReferencedAssemblies.Add(script.Filename);
+
+				const string template =
+					"using System; using System.Linq; using System.Drawing; using System.Windows.Forms; using GTA; using GTA.Math; using GTA.Native; " +
+					// Define some shortcut variables to simplify commands
+					"public class ConsoleInput : ScriptHookVDotNet {{ public static object Execute() {{ var P = Game.Player.Character; var V = P.CurrentVehicle; {0}; return null; }} }}";
+
+				System.CodeDom.Compiler.CompilerResults compilerResult = compiler.CompileAssemblyFromSource(compilerOptions, string.Format(template, input));
+
+				if (!compilerResult.Errors.HasErrors)
+				{
+					return compilerResult.CompiledAssembly.GetType("ConsoleInput").GetMethod("Execute");
+				}
+				else
+				{
+					PrintError($"Couldn't compile input expression: {input}");
+
+					StringBuilder errors = new StringBuilder();
+
+					for (int i = 0; i < compilerResult.Errors.Count; ++i)
+					{
+						errors.Append("   at line ");
+						errors.Append(compilerResult.Errors[i].Line);
+						errors.Append(": ");
+						errors.Append(compilerResult.Errors[i].ErrorText);
+
+						if (i < compilerResult.Errors.Count - 1)
+							errors.AppendLine();
+					}
+
+					PrintError(errors.ToString());
+					return null;
+				}
+			});
+		}
+
+		public override object InitializeLifetimeService()
+		{
+			return null;
+		}
+
+		static unsafe void DrawRect(float x, float y, int width, int height, Color color)
+		{
+			float w = (float)(width) / BASE_WIDTH;
+			float h = (float)(height) / BASE_HEIGHT;
+
+			NativeFunc.InvokeInternal(0x3A618A217E5154F0ul /* DRAW_RECT */,
+				(x / BASE_WIDTH) + w * 0.5f,
+				(y / BASE_HEIGHT) + h * 0.5f,
+				w, h,
+				color.R, color.G, color.B, color.A);
+		}
+		static unsafe void DrawText(float x, float y, string text, Color color)
+		{
+			NativeFunc.InvokeInternal(0x66E0276CC5F6B9DA /* SET_TEXT_FONT */, 0); // Chalet London :>
+			NativeFunc.InvokeInternal(0x07C837F9A01C34C9 /* SET_TEXT_SCALE */, 0.35f, 0.35f);
+			NativeFunc.InvokeInternal(0xBE6B23FFA53FB442 /* SET_TEXT_COLOUR */, color.R, color.G, color.B, color.A);
+			NativeFunc.InvokeInternal(0x25FBB336DF1804CB /* BEGIN_TEXT_COMMAND_DISPLAY_TEXT */, NativeMemory.CellEmailBcon);
+			NativeFunc.PushLongString(text);
+			NativeFunc.InvokeInternal(0xCD015E5BB0D96A57 /* END_TEXT_COMMAND_DISPLAY_TEXT */, (x / BASE_WIDTH), (y / BASE_HEIGHT));
+		}
+
+		static unsafe void DisableControlsThisFrame()
+		{
+			NativeFunc.InvokeInternal(0x5F4B6931816E599B /* DISABLE_ALL_CONTROL_ACTIONS */, 0);
+
+			// LookLeftRight .. LookRightOnly
+			for (ulong i = 1; i <= 6; i++)
+				NativeFunc.InvokeInternal(0x351220255D64C155 /* ENABLE_CONTROL_ACTION */, 0, i, 0);
+		}
+
+		static unsafe float GetTextLength(string text)
+		{
+			NativeFunc.InvokeInternal(0x66E0276CC5F6B9DA /* SET_TEXT_FONT */, 0);
+			NativeFunc.InvokeInternal(0x07C837F9A01C34C9 /* SET_TEXT_SCALE */, 0.35f, 0.35f);
+			NativeFunc.InvokeInternal(0x54CE8AC98E120CAB /* BEGIN_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT */, NativeMemory.CellEmailBcon);
+			NativeFunc.PushLongString(text);
+			return *(float*)NativeFunc.InvokeInternal(0x85F061DA64ED2F67 /* END_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT */, true);
+		}
+	}
+
+	public class ConsoleCommand : Attribute
+	{
+		public ConsoleCommand() : this(string.Empty)
+		{
+		}
+		public ConsoleCommand(string help)
+		{
+			Help = help;
+		}
+
+		public string Help { get; }
+
+		internal string Name => MethodInfo.Name;
+		internal string Namespace => MethodInfo.DeclaringType.FullName;
+		internal MethodInfo MethodInfo { get; set; }
+	}
+}
