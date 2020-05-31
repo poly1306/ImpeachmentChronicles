@@ -78,4 +78,79 @@ namespace SHVDN
 		/// <param name="str">The string to push.</param>
 		static void PushString(string str)
 		{
-			var domain = 
+			var domain = SHVDN.ScriptDomain.CurrentDomain;
+			if (domain == null)
+			{
+				throw new InvalidOperationException("Illegal scripting call outside script domain.");
+			}
+
+			IntPtr strUtf8 = domain.PinString(str);
+
+			var strArg = (ulong)strUtf8.ToInt64();
+			domain.ExecuteTask(new NativeTaskPtrArgs
+			{
+				Hash = 0x6C188BE134E074AA /* ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME */,
+				ArgumentPtr = &strArg,
+				ArgumentCount = 1
+			});
+		}
+
+		/// <summary>
+		/// Splits up a string into manageable components and adds them as text components to the current text command.
+		/// This requires that a text command that accepts multiple text components is active (e.g. "CELL_EMAIL_BCON").
+		/// </summary>
+		/// <param name="str">The string to split up.</param>
+		public static void PushLongString(string str)
+		{
+			PushLongString(str, PushString);
+		}
+		/// <summary>
+		/// Splits up a string into manageable components and performs an <paramref name="action"/> on them.
+		/// </summary>
+		/// <param name="str">The string to split up.</param>
+		/// <param name="action">The action to perform on the component.</param>
+		public static void PushLongString(string str, Action<string> action)
+		{
+			const int maxLengthUtf8 = 99;
+
+			if (str == null || Encoding.UTF8.GetByteCount(str) <= maxLengthUtf8)
+			{
+				action(str);
+				return;
+			}
+
+			int startPos = 0;
+			int currentPos = 0;
+			int currentUtf8StrLength = 0;
+
+			while (currentPos < str.Length)
+			{
+				int codePointSize = 0;
+
+				// Calculate the UTF-8 code point size of the current character
+				var chr = str[currentPos];
+				if (chr < 0x80)
+				{
+					codePointSize = 1;
+				}
+				else if (chr < 0x800)
+				{
+					codePointSize = 2;
+				}
+				else if (chr < 0x10000)
+				{
+					codePointSize = 3;
+				}
+				else
+				{
+					#region Surrogate check
+					const int LowSurrogateStart = 0xD800;
+					const int HighSurrogateStart = 0xD800;
+
+					var temp1 = (int)chr - HighSurrogateStart;
+					if (temp1 >= 0 && temp1 <= 0x7ff)
+					{
+						// Found a high surrogate
+						if (currentPos < str.Length - 1)
+						{
+							var temp2 = str[currentPos + 1] - LowSur
