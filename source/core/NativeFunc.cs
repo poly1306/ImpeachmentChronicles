@@ -153,4 +153,98 @@ namespace SHVDN
 						// Found a high surrogate
 						if (currentPos < str.Length - 1)
 						{
-							var temp2 = str[currentPos + 1] - LowSur
+							var temp2 = str[currentPos + 1] - LowSurrogateStart;
+							if (temp2 >= 0 && temp2 <= 0x3ff)
+							{
+								// Found a low surrogate
+								codePointSize = 4;
+							}
+						}
+					}
+					#endregion
+				}
+
+				if (currentUtf8StrLength + codePointSize > maxLengthUtf8)
+				{
+					action(str.Substring(startPos, currentPos - startPos));
+
+					startPos = currentPos;
+					currentUtf8StrLength = 0;
+				}
+				else
+				{
+					currentPos++;
+					currentUtf8StrLength += codePointSize;
+				}
+
+				// Additional increment is needed for surrogate
+				if (codePointSize == 4)
+				{
+					currentPos++;
+				}
+			}
+
+			if (startPos == 0)
+				action(str);
+			else
+				action(str.Substring(startPos, str.Length - startPos));
+		}
+
+		/// <summary>
+		/// Helper function that converts an array of primitive values to a native stack.
+		/// </summary>
+		/// <param name="args"></param>
+		/// <returns></returns>
+		static ulong[] ConvertPrimitiveArguments(object[] args)
+		{
+			var result = new ulong[args.Length];
+			for (int i = 0; i < args.Length; ++i)
+			{
+				if (args[i] is bool valueBool)
+				{
+					result[i] = valueBool ? 1ul : 0ul;
+					continue;
+				}
+				if (args[i] is byte valueByte)
+				{
+					result[i] = (ulong)valueByte;
+					continue;
+				}
+				if (args[i] is int valueInt32)
+				{
+					result[i] = (ulong)valueInt32;
+					continue;
+				}
+				if (args[i] is ulong valueUInt64)
+				{
+					result[i] = valueUInt64;
+					continue;
+				}
+				if (args[i] is float valueFloat)
+				{
+					result[i] = *(ulong*)&valueFloat;
+					continue;
+				}
+				if (args[i] is IntPtr valueIntPtr)
+				{
+					result[i] = (ulong)valueIntPtr.ToInt64();
+					continue;
+				}
+				if (args[i] is string valueString)
+				{
+					result[i] = (ulong)ScriptDomain.CurrentDomain.PinString(valueString).ToInt64();
+					continue;
+				}
+
+				throw new ArgumentException("Unknown primitive type in native argument list", nameof(args));
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Executes a script function inside the current script domain.
+		/// </summary>
+		/// <param name="hash">The function has to call.</param>
+		/// <param name="argPtr">A pointer of function arguments.</param>
+		/// <param name="argCount">The length of <paramref name="argPtr"
