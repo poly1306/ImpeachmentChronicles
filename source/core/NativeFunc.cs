@@ -247,4 +247,62 @@ namespace SHVDN
 		/// </summary>
 		/// <param name="hash">The function has to call.</param>
 		/// <param name="argPtr">A pointer of function arguments.</param>
-		/// <param name="argCount">The length of <paramref name="argPtr"
+		/// <param name="argCount">The length of <paramref name="argPtr" />.</param>
+		/// <returns>A pointer to the return value of the call.</returns>
+		public static ulong* Invoke(ulong hash, ulong* argPtr, int argCount)
+		{
+			var domain = ScriptDomain.CurrentDomain;
+			if (domain == null)
+			{
+				throw new InvalidOperationException("Illegal scripting call outside script domain.");
+			}
+
+			var task = new NativeTaskPtrArgs { Hash = hash, ArgumentPtr = argPtr, ArgumentCount = argCount };
+			domain.ExecuteTask(task);
+
+			return task.Result;
+		}
+		/// <summary>
+		/// Executes a script function inside the current script domain.
+		/// </summary>
+		/// <param name="hash">The function has to call.</param>
+		/// <param name="args">A list of function arguments.</param>
+		/// <returns>A pointer to the return value of the call.</returns>
+		public static ulong* Invoke(ulong hash, params ulong[] args)
+		{
+			var domain = ScriptDomain.CurrentDomain;
+			if (domain == null)
+			{
+				throw new InvalidOperationException("Illegal scripting call outside script domain.");
+			}
+
+			var task = new NativeTask { Hash = hash, Arguments = args };
+			domain.ExecuteTask(task);
+
+			return task.Result;
+		}
+		public static ulong* Invoke(ulong hash, params object[] args)
+		{
+			return Invoke(hash, ConvertPrimitiveArguments(args));
+		}
+
+		/// <summary>
+		/// Executes a script function immediately. This may only be called from the main script domain thread.
+		/// </summary>
+		/// <param name="hash">The function has to call.</param>
+		/// <param name="argPtr">A pointer of function arguments.</param>
+		/// <param name="argCount">The length of <paramref name="argPtr" />.</param>
+		/// <returns>A pointer to the return value of the call.</returns>
+		public static ulong* InvokeInternal(ulong hash, ulong* argPtr, int argCount)
+		{
+			NativeInit(hash);
+			for (int i = 0; i < argCount; i++)
+				NativePush64(argPtr[i]);
+			return NativeCall();
+		}
+		/// <summary>
+		/// Executes a script function immediately. This may only be called from the main script domain thread.
+		/// </summary>
+		/// <param name="hash">The function has to call.</param>
+		/// <param name="args">A list of function arguments.</param>
+		//
