@@ -305,4 +305,17 @@ namespace SHVDN
 		/// </summary>
 		/// <param name="hash">The function has to call.</param>
 		/// <param name="args">A list of function arguments.</param>
-		//
+		/// <returns>A pointer to the return value of the call.</returns>
+		public static ulong* InvokeInternal(ulong hash, params ulong[] args)
+		{
+			NativeInit(hash);
+			foreach (var arg in args)
+				NativePush64(arg);
+			return NativeCall();
+		}
+		public static ulong* InvokeInternal(ulong hash, params object[] args)
+		{
+			return InvokeInternal(hash, ConvertPrimitiveArguments(args));
+		}
+	}
+}
