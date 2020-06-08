@@ -1834,3 +1834,2188 @@ namespace SHVDN
 		#endregion
 
 		#region -- Vehicle Offsets --
+
+		public static int NextGearOffset { get; }
+		public static int GearOffset { get; }
+		public static int HighGearOffset { get; }
+
+		public static int CurrentRPMOffset { get; }
+		public static int ClutchOffset { get; }
+		public static int AccelerationOffset { get; }
+
+		public static int TurboOffset { get; }
+
+		public static int FuelLevelOffset { get; }
+		public static int OilLevelOffset { get; }
+
+		public static int VehicleTypeOffsetInCVehicle { get; }
+
+		public static int WheelPtrArrayOffset { get; }
+		public static int WheelCountOffset { get; }
+		public static int WheelBoneIdToPtrArrayIndexOffset { get; }
+		public static int WheelSpeedOffset { get; }
+		public static int CanWheelBreakOffset { get; }
+
+		public static int SteeringAngleOffset { get; }
+		public static int SteeringScaleOffset { get; }
+		public static int ThrottlePowerOffset { get; }
+		public static int BrakePowerOffset { get; }
+
+		public static int EngineTemperatureOffset { get; }
+		public static int EnginePowerMultiplierOffset { get; }
+
+		public static int DisablePretendOccupantOffset { get; }
+
+		public static int VehicleProvidesCoverOffset { get; }
+
+		public static int VehicleLightsMultiplierOffset { get; }
+
+		public static int IsInteriorLightOnOffset { get; }
+		public static int IsEngineStartingOffset { get; }
+
+		public static int IsWantedOffset { get; }
+
+		public static int IsHeadlightDamagedOffset { get; }
+
+		public static int PreviouslyOwnedByPlayerOffset { get; }
+		public static int NeedsToBeHotwiredOffset { get; }
+
+		public static int AlarmTimeOffset { get; }
+
+		public static int VehicleLodMultiplierOffset { get; }
+
+		public static int CanUseSirenOffset { get; }
+		public static int HasMutedSirensOffset { get; }
+		public static int HasMutedSirensBit { get; }
+
+		public static int VehicleDropsMoneyWhenBlownUpOffset { get; }
+
+		public static int HeliBladesSpeedOffset { get; }
+
+		public static int HeliMainRotorHealthOffset { get; }
+		public static int HeliTailRotorHealthOffset { get; }
+		public static int HeliTailBoomHealthOffset { get; }
+
+		public static int HandlingDataOffset { get; }
+
+		public static int FirstVehicleFlagsOffset { get; }
+
+		public static bool HasMutedSirens(int vehicleHandle)
+		{
+			var address = GetEntityAddress(vehicleHandle);
+
+			if (address == IntPtr.Zero)
+			{
+				return false;
+			}
+
+			return (*(byte*)(address + HasMutedSirensOffset) & HasMutedSirensBit) != 0;
+		}
+
+		#endregion
+
+		#region -- Prop Data --
+
+		static int objParentEntityAddressDetachedFromOffset;
+
+		static IntPtr GetParentEntityOfPropDetachedFrom(int objHandle)
+		{
+			var entityAddress = GetEntityAddress(objHandle);
+			if (objParentEntityAddressDetachedFromOffset == 0 || entityAddress == IntPtr.Zero)
+			{
+				return IntPtr.Zero;
+			}
+
+			return new IntPtr(*(long*)(entityAddress + objParentEntityAddressDetachedFromOffset));
+		}
+		public static int GetParentEntityHandleOfPropDetachedFrom(int objHandle)
+		{
+			var parentEntityAddr = GetParentEntityOfPropDetachedFrom(objHandle);
+			if (parentEntityAddr == IntPtr.Zero)
+			{
+				return 0;
+			}
+
+			return GetEntityHandleFromAddress(parentEntityAddr);
+		}
+		public static bool HasPropBeenDetachedFromParentEntity(int objHandle) => GetParentEntityOfPropDetachedFrom(objHandle) != IntPtr.Zero;
+
+		#endregion -- Prop Data --
+
+		#region -- Vehicle Wheel Data --
+
+
+		static delegate* unmanaged[Stdcall]<IntPtr, void> FixVehicleWheelFunc;
+		static delegate* unmanaged[Stdcall]<IntPtr, ulong, float, ulong, ulong, int, byte, bool, void> PunctureVehicleTireNewFunc;
+		static delegate* unmanaged[Stdcall]<IntPtr, ulong, float, IntPtr, ulong, ulong, int, byte, bool, void> PunctureVehicleTireOldFunc;
+		static delegate* unmanaged[Stdcall]<IntPtr, void> BurstVehicleTireOnRimNewFunc;
+		static delegate* unmanaged[Stdcall]<IntPtr, IntPtr, void> BurstVehicleTireOnRimOldFunc;
+
+		public static int VehicleWheelSteeringLimitMultiplierOffset { get; }
+
+		public static int VehicleWheelTemperatureOffset { get; }
+
+		public static int VehicleWheelHealthOffset { get; }
+
+		public static int VehicleTireHealthOffset { get; }
+
+		public static int VehicleTireWearMultiplierOffset { get; }
+
+		// the on fire offset is the same as this offset
+		public static int VehicleWheelTouchingFlagsOffset { get; }
+
+		public static int VehicleWheelIdOffset { get; }
+
+		public static int ShouldShowOnlyVehicleTiresWithPositiveHealthOffset { get; }
+
+		public static void FixVehicleWheel(IntPtr wheelAddress) => FixVehicleWheelFunc(wheelAddress);
+
+		public static IntPtr GetVehicleWheelAddressByIndexOfWheelArray(IntPtr vehicleAddress, int index)
+		{
+			var vehicleWheelArrayAddr = *(ulong**)(vehicleAddress + SHVDN.NativeMemory.WheelPtrArrayOffset);
+
+			if (vehicleWheelArrayAddr == null)
+				return IntPtr.Zero;
+
+			return new IntPtr((long)*(vehicleWheelArrayAddr + index));
+		}
+
+		public static bool IsWheelTouchingSurface(IntPtr wheelAddress, IntPtr vehicleAddress)
+		{
+			if (VehicleWheelTouchingFlagsOffset == 0)
+				return false;
+
+			var wheelTouchingFlag = *(uint*)(wheelAddress + VehicleWheelTouchingFlagsOffset).ToPointer();
+			if ((wheelTouchingFlag & 1) != 0)
+				return true;
+
+			#region Slower Check
+			if (((wheelTouchingFlag >> 1) & 1) == 0)
+				return false;
+
+			var phCollider = *(ulong*)(*(ulong*)(vehicleAddress + 0x50).ToPointer() + 0x50);
+			if (phCollider == 0)
+				return true;
+			var unkStructAddr = *(ulong*)(phCollider + 0x18);
+			if (unkStructAddr == 0)
+				return false;
+
+			return (*(uint*)(unkStructAddr + 0x14) & 0xFFFFFFFD) == 0;
+			#endregion
+		}
+
+		static bool VehicleWheelHasVehiclePtr() => PunctureVehicleTireNewFunc != null;
+
+		public static void PunctureTire(IntPtr wheelAddress, float damage, IntPtr vehicleAddress)
+		{
+			var task = new VehicleWheelPunctureTask(wheelAddress, vehicleAddress, false, damage);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+		}
+
+		public static void BurstTireOnRim(IntPtr wheelAddress, IntPtr vehicleAddress)
+		{
+			var task = new VehicleWheelPunctureTask(wheelAddress, vehicleAddress, true);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+		}
+
+		// the function BurstVehicleTireOnRimNew(Old)Func calls must be called in the main thread or the game will crash
+		// the function PunctureVehicleTireNew(Old)Func calls should be called in the main thread or the game might crash in some cases
+		internal class VehicleWheelPunctureTask : IScriptTask
+		{
+			#region Fields
+			IntPtr wheelAddress;
+			IntPtr vehicleAddress;
+			bool burstWheelCompletely;
+			float damage;
+			#endregion
+
+			internal VehicleWheelPunctureTask(IntPtr wheelAddress, IntPtr vehicleAddress, bool burstWheelCompletely, float damage = 1000f)
+			{
+				this.wheelAddress = wheelAddress;
+				this.vehicleAddress = vehicleAddress;
+				this.burstWheelCompletely = burstWheelCompletely;
+				this.damage = damage;
+			}
+
+			public void Run()
+			{
+				int outValInt;
+				float outValFloat;
+
+				if (VehicleWheelHasVehiclePtr())
+				{
+					PunctureVehicleTireNewFunc(wheelAddress, 0, damage, (ulong)&outValInt, (ulong)&outValFloat, 3, 0, true);
+					if (burstWheelCompletely)
+						BurstVehicleTireOnRimNewFunc(wheelAddress);
+				}
+				else
+				{
+					PunctureVehicleTireOldFunc(wheelAddress, 0, damage, vehicleAddress, (ulong)&outValInt, (ulong)&outValFloat, 3, 0, true);
+					if (burstWheelCompletely)
+						BurstVehicleTireOnRimOldFunc(wheelAddress, vehicleAddress);
+				}
+			}
+		}
+
+		#endregion
+
+		#region -- Ped Offsets --
+
+		public static int SweatOffset { get; }
+
+		// the same offset as the offset for SET_PED_CAN_BE_TARGETTED
+		public static int PedDropsWeaponsWhenDeadOffset { get; }
+
+		public static int PedSuffersCriticalHitOffset { get; }
+
+		public static int ArmorOffset { get; }
+
+		public static int InjuryHealthThresholdOffset { get; }
+		public static int FatalInjuryHealthThresholdOffset { get; }
+
+		public static int PedIsInVehicleOffset { get; }
+		public static int PedLastVehicleOffset { get; }
+		public static int SeatIndexOffset { get; }
+
+		public static int PedSourceOfDeathOffset { get; }
+		public static int PedCauseOfDeathOffset { get; }
+		public static int PedTimeOfDeathOffset { get; }
+
+		#region -- Ped Intelligence Offsets --
+
+		public static int PedIntelligenceOffset { get; }
+
+		public static int FiringPatternOffset { get; }
+
+		public static int PedIntelligenceDecisionMakerHashOffset { get; }
+
+		public static int SeeingRangeOffset { get; }
+		public static int HearingRangeOffset { get; }
+		public static int VisualFieldMinAngleOffset { get; }
+		public static int VisualFieldMaxAngleOffset { get; }
+		public static int VisualFieldMinElevationAngleOffset { get; }
+		public static int VisualFieldMaxElevationAngleOffset { get; }
+		public static int VisualFieldPeripheralRangeOffset { get; }
+		public static int VisualFieldCenterAngleOffset { get; }
+
+		static int CTaskTreePedOffset { get; }
+
+		static int CEventCountOffset { get; }
+
+		static int CEventStackOffset { get; }
+
+		#endregion
+
+		#endregion
+
+		#region -- Model Info --
+
+		[StructLayout(LayoutKind.Sequential)]
+		struct HashNode
+		{
+			internal int hash;
+			internal ushort data;
+			internal ushort padding;
+			internal HashNode* next;
+		}
+
+		enum ModelInfoClassType
+		{
+			Invalid = 0,
+			Object = 1,
+			Mlo = 2,
+			Time = 3,
+			Weapon = 4,
+			Vehicle = 5,
+			Ped = 6
+		}
+		enum VehicleStructClassType
+		{
+			None = -1,
+			Automobile = 0x0,
+			Plane = 0x1,
+			Trailer = 0x2,
+			QuadBike = 0x3,
+			SubmarineCar = 0x5,
+			AmphibiousAutomobile = 0x6,
+			AmphibiousQuadBike = 0x7,
+			Heli = 0x8,
+			Blimp = 0x9,
+			Autogyro = 0xA,
+			Bike = 0xB,
+			Bicycle = 0xC,
+			Boat = 0xD,
+			Train = 0xE,
+			Submarine = 0xF
+		}
+		[Flags]
+		public enum VehicleFlag1 : ulong
+		{
+			Big = 0x2,
+			IsVan = 0x20,
+			CanStandOnTop = 0x10000000,
+			LawEnforcement = 0x80000000,
+			EmergencyService = 0x100000000,
+			AllowsRappel = 0x8000000000,
+			IsElectric = 0x80000000000,
+			IsOffroadVehicle = 0x1000000000000,
+			IsBus = 0x400000000000000,
+		}
+		[Flags]
+		public enum VehicleFlag2 : ulong
+		{
+			IsTank = 0x200,
+			HasBulletProofGlass = 0x1000,
+			HasLowriderHydraulics = 0x80000000000000,
+			HasLowriderDonkHydraulics = 0x800000000000000,
+		}
+
+		[StructLayout(LayoutKind.Explicit, Size = 0x400)]
+		struct CModelList
+		{
+			[FieldOffset(0x0)]
+			internal fixed uint modelMemberIndices[0x100];
+		}
+
+		[StructLayout(LayoutKind.Explicit, Size = 0xB8)]
+		struct PedPersonality
+		{
+			[FieldOffset(0x7C)]
+			internal bool isMale;
+			[FieldOffset(0x7D)]
+			internal bool isHuman;
+			[FieldOffset(0x7F)]
+			internal bool isGang;
+		}
+
+		static int vehicleMakeNameOffsetInModelInfo;
+		static int VehicleTypeOffsetInModelInfo;
+		static int handlingIndexOffsetInModelInfo;
+		static int pedPersonalityIndexOffsetInModelInfo;
+		static UInt32 modelNum1;
+		static UInt64 modelNum2;
+		static UInt64 modelNum3;
+		static UInt64 modelNum4;
+		static UInt64 modelHashTable;
+		static UInt16 modelHashEntries;
+		static ulong* modelInfoArrayPtr;
+		static ulong* cStreamingAddr;
+		static ulong* pedPersonalitiesArrayAddr;
+
+		static IntPtr FindCModelInfo(int modelHash)
+		{
+			for (HashNode* cur = ((HashNode**)modelHashTable)[(uint)(modelHash) % modelHashEntries]; cur != null; cur = cur->next)
+			{
+				if (cur->hash != modelHash)
+					continue;
+
+				ushort data = cur->data;
+				bool bitTest = ((*(int*)(modelNum2 + (ulong)(4 * data >> 5))) & (1 << (data & 0x1F))) != 0;
+				if (data < modelNum1 && bitTest)
+				{
+					ulong addr1 = modelNum4 + modelNum3 * data;
+					if (addr1 != 0)
+					{
+						long* address = (long*)(*(ulong*)(addr1));
+						return new IntPtr(address);
+					}
+				}
+			}
+
+			return IntPtr.Zero;
+		}
+		static ModelInfoClassType GetModelInfoClass(IntPtr address)
+		{
+			if (address != IntPtr.Zero)
+			{
+				return ((ModelInfoClassType)((*(byte*)((ulong)address.ToInt64() + 157) & 0x1F)));
+			}
+
+			return ModelInfoClassType.Invalid;
+		}
+		static VehicleStructClassType GetVehicleStructClass(IntPtr modelInfoAddress)
+		{
+			if (GetModelInfoClass(modelInfoAddress) == ModelInfoClassType.Vehicle)
+			{
+				int typeInt = (*(int*)((byte*)modelInfoAddress.ToPointer() + VehicleTypeOffsetInModelInfo));
+
+				// Normalize the value to vehicle type range for b944 or later versions if current game version is earlier than b944.
+				// The values for CAmphibiousAutomobile and CAmphibiousQuadBike were inserted between those for CSubmarineCar and CHeli in b944.
+				if (GetGameVersion() < 28 && typeInt >= 6)
+					typeInt += 2;
+
+				return (VehicleStructClassType)typeInt;
+			}
+
+			return VehicleStructClassType.None;
+		}
+		public static int GetVehicleType(int modelHash)
+		{
+			var modelInfo = FindCModelInfo(modelHash);
+
+			if (modelInfo == IntPtr.Zero)
+				return -1;
+
+			return (int)GetVehicleStructClass(modelInfo);
+		}
+		static IntPtr GetModelInfo(IntPtr entityAddress)
+		{
+			if (entityAddress != IntPtr.Zero)
+			{
+				return new IntPtr(*(long*)((ulong)entityAddress.ToInt64() + 0x20));
+			}
+
+			return IntPtr.Zero;
+		}
+		static int GetModelHashFromFwArcheType(IntPtr fwArcheTypeAddress)
+		{
+			if (fwArcheTypeAddress != IntPtr.Zero)
+			{
+				return (*(int*)((ulong)fwArcheTypeAddress.ToInt64() + 0x18));
+			}
+
+			return 0;
+		}
+		public static int GetModelHashFromEntity(IntPtr entityAddress)
+		{
+			if (entityAddress != IntPtr.Zero)
+			{
+				var modelInfoAddress = GetModelInfo(entityAddress);
+				if (modelInfoAddress != IntPtr.Zero)
+				{
+					return GetModelHashFromFwArcheType(modelInfoAddress);
+				}
+			}
+
+			return 0;
+		}
+		static bool IsFwArcheTypeAFragment(IntPtr fwArcheTypeAddress)
+		{
+			if (fwArcheTypeAddress != IntPtr.Zero)
+			{
+				// The game can't draw fragment entities properly if this value is not 1
+				return (*(byte*)((ulong)fwArcheTypeAddress.ToInt64() + 0x60) == 1);
+			}
+
+			return false;
+		}
+		public static bool IsModelAFragment(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+			if (modelInfo == IntPtr.Zero)
+				return false;
+
+			return IsFwArcheTypeAFragment(modelInfo);
+		}
+
+		static IntPtr GetModelInfoByIndex(uint index)
+		{
+			if (modelInfoArrayPtr == null || index < 0)
+				return IntPtr.Zero;
+
+			ulong modelInfoArrayFirstElemPtr = *modelInfoArrayPtr;
+
+			return new IntPtr(*(long*)(modelInfoArrayFirstElemPtr + index * 0x8));
+		}
+		public static List<int> GetLoadedAppropriateVehicleHashes()
+		{
+			return GetLoadedHashesOfModelList(0x2D00);
+		}
+		public static List<int> GetLoadedAppropriatePedHashes()
+		{
+			return GetLoadedHashesOfModelList(0x4504);
+		}
+		internal static List<int> GetLoadedHashesOfModelList(int startOffsetOfCStreaming)
+		{
+			if (modelInfoArrayPtr == null || cStreamingAddr == null)
+				return new List<int>();
+
+			var resultList = new List<int>();
+
+			const int MAX_MODEL_LIST_ELEMENT_COUNT = 256;
+			var modelSet = (CModelList*)((ulong)cStreamingAddr + (uint)startOffsetOfCStreaming);
+			for (uint i = 0; i < MAX_MODEL_LIST_ELEMENT_COUNT; i++)
+			{
+				uint indexOfModelInfo = modelSet->modelMemberIndices[i];
+
+				if (indexOfModelInfo == 0xFFFF)
+					break;
+
+				resultList.Add(GetModelHashFromFwArcheType(GetModelInfoByIndex(indexOfModelInfo)));
+			}
+
+			return resultList;
+		}
+
+
+		public static bool IsModelAPed(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+			return GetModelInfoClass(modelInfo) == ModelInfoClassType.Ped;
+		}
+		public static bool IsModelABlimp(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+			return GetVehicleStructClass(modelInfo) == VehicleStructClassType.Blimp;
+		}
+		public static bool IsModelAMotorcycle(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+			return GetVehicleStructClass(modelInfo) == VehicleStructClassType.Bike;
+		}
+		public static bool IsModelASubmarine(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+			return GetVehicleStructClass(modelInfo) == VehicleStructClassType.Submarine;
+		}
+		public static bool IsModelASubmarineCar(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+			return GetVehicleStructClass(modelInfo) == VehicleStructClassType.SubmarineCar;
+		}
+		public static bool IsModelATrailer(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+			return GetVehicleStructClass(modelInfo) == VehicleStructClassType.Trailer;
+		}
+		public static bool IsModelAMlo(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+			return GetModelInfoClass(modelInfo) == ModelInfoClassType.Mlo;
+		}
+
+		public static string GetVehicleMakeName(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+
+			if (GetModelInfoClass(modelInfo) == ModelInfoClassType.Vehicle)
+			{
+				return PtrToStringUTF8(modelInfo + vehicleMakeNameOffsetInModelInfo);
+			}
+
+			return "CARNOTFOUND";
+		}
+
+		public static bool HasVehicleFlag(int modelHash, VehicleFlag1 flag) => HasVehicleFlagInternal(modelHash, (ulong)flag, 0x0);
+		public static bool HasVehicleFlag(int modelHash, VehicleFlag2 flag) => HasVehicleFlagInternal(modelHash, (ulong)flag, 0x8);
+		private static bool HasVehicleFlagInternal(int modelHash, ulong flag, int flagOffset)
+		{
+			if (FirstVehicleFlagsOffset == 0)
+				return false;
+
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+
+			if (GetModelInfoClass(modelInfo) == ModelInfoClassType.Vehicle)
+			{
+				var modelFlags = *(ulong*)(modelInfo + FirstVehicleFlagsOffset + flagOffset).ToPointer();
+				return (modelFlags & flag) != 0;
+			}
+
+			return false;
+		}
+
+		public static ReadOnlyCollection<int> WeaponModels { get; }
+		public static ReadOnlyCollection<ReadOnlyCollection<int>> VehicleModels { get; }
+		public static ReadOnlyCollection<ReadOnlyCollection<int>> VehicleModelsGroupedByType { get; }
+		public static ReadOnlyCollection<int> PedModels { get; }
+
+
+		static delegate* unmanaged[Stdcall]<IntPtr, ulong> GetHandlingDataByHash;
+		static delegate* unmanaged[Stdcall]<int, ulong> GetHandlingDataByIndex;
+
+		public static IntPtr GetHandlingDataByModelHash(int modelHash)
+		{
+			IntPtr modelInfo = FindCModelInfo(modelHash);
+			if (GetModelInfoClass(modelInfo) != ModelInfoClassType.Vehicle)
+				return IntPtr.Zero;
+
+			int handlingIndex = *(int*)(modelInfo + handlingIndexOffsetInModelInfo).ToPointer();
+			return new IntPtr((long)GetHandlingDataByIndex(handlingIndex));
+		}
+		public static IntPtr GetHandlingDataByHandlingNameHash(int handlingNameHash)
+		{
+			return new IntPtr((long)GetHandlingDataByHash(new IntPtr(&handlingNameHash)));
+		}
+
+		private static PedPersonality* GetPedPersonalityElementAddress(IntPtr modelInfoAddress)
+		{
+			if (modelInfoAddress == IntPtr.Zero ||
+				pedPersonalitiesArrayAddr == null ||
+				pedPersonalityIndexOffsetInModelInfo == 0 ||
+				*(ulong*)pedPersonalitiesArrayAddr == 0)
+				return null;
+
+			if (GetModelInfoClass(modelInfoAddress) != ModelInfoClassType.Ped)
+				return null;
+
+			// This values is not likely to be changed in further updates
+			const int PED_PERSONALITY_ELEMENT_SIZE = 0xB8;
+
+			var indexOfPedPersonality = *(ushort*)(modelInfoAddress + pedPersonalityIndexOffsetInModelInfo).ToPointer();
+			return (PedPersonality*)(*(ulong*)pedPersonalitiesArrayAddr + (uint)(indexOfPedPersonality * PED_PERSONALITY_ELEMENT_SIZE));
+		}
+		public static bool IsModelAMalePed(int modelHash)
+		{
+			var pedPersonalityAddress = GetPedPersonalityElementAddress(FindCModelInfo(modelHash));
+
+			if (pedPersonalityAddress == null)
+				return false;
+
+			return pedPersonalityAddress->isMale;
+		}
+		public static bool IsModelAFemalePed(int modelHash)
+		{
+			var pedPersonalityAddress = GetPedPersonalityElementAddress(FindCModelInfo(modelHash));
+
+			if (pedPersonalityAddress == null)
+				return false;
+
+			return !pedPersonalityAddress->isMale;
+		}
+		public static bool IsModelHumanPed(int modelHash)
+		{
+			var pedPersonalityAddress = GetPedPersonalityElementAddress(FindCModelInfo(modelHash));
+
+			if (pedPersonalityAddress == null)
+				return false;
+
+			return pedPersonalityAddress->isHuman;
+		}
+		public static bool IsModelAnAnimalPed(int modelHash)
+		{
+			var pedPersonalityAddress = GetPedPersonalityElementAddress(FindCModelInfo(modelHash));
+
+			if (pedPersonalityAddress == null)
+				return false;
+
+			return !pedPersonalityAddress->isHuman;
+		}
+		public static bool IsModelAGangPed(int modelHash)
+		{
+			var pedPersonalityAddress = GetPedPersonalityElementAddress(FindCModelInfo(modelHash));
+
+			if (pedPersonalityAddress == null)
+				return false;
+
+			return pedPersonalityAddress->isGang;
+		}
+
+		#endregion
+
+		#region -- Entity Pools --
+
+		[StructLayout(LayoutKind.Explicit)]
+		struct FwScriptGuidPool
+		{
+			// The max count value should be at least 3072 as long as ScriptHookV is installed.
+			// Without ScriptHookV, the default value is hardcoded and may be different between different game versions (the value is 300 in b372 and 700 in b2824).
+			// The default value (when running without ScriptHookV) can be found by searching the dumped exe or the game memory with "D7 A8 11 73" (0x7311A8D7).
+			[FieldOffset(0x10)]
+			internal uint maxCount;
+			[FieldOffset(0x14)]
+			internal int itemSize;
+			[FieldOffset(0x18)]
+			internal int firstEmptySlot;
+			[FieldOffset(0x1C)]
+			internal int emptySlots;
+			[FieldOffset(0x20)]
+			internal uint itemCount;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			internal bool IsFull()
+			{
+				return maxCount - (itemCount & 0x3FFFFFFF) <= 256;
+			}
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		struct VehiclePool
+		{
+			[FieldOffset(0x00)]
+			internal ulong* poolAddress;
+			[FieldOffset(0x08)]
+			internal uint size;
+			[FieldOffset(0x30)]
+			internal uint* bitArray;
+			[FieldOffset(0x60)]
+			internal uint itemCount;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			internal bool IsValid(uint i)
+			{
+				return ((bitArray[i >> 5] >> ((int)i & 0x1F)) & 1) != 0;
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			internal ulong GetAddress(uint i)
+			{
+				return poolAddress[i];
+			}
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		struct GenericPool
+		{
+			[FieldOffset(0x00)]
+			public ulong poolStartAddress;
+			[FieldOffset(0x08)]
+			public IntPtr byteArray;
+			[FieldOffset(0x10)]
+			public uint size;
+			[FieldOffset(0x14)]
+			public uint itemSize;
+			[FieldOffset(0x20)]
+			public ushort itemCount;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public bool IsValid(uint index)
+			{
+				return Mask(index) != 0;
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public bool IsHandleValid(int handle)
+			{
+				uint handleUInt = (uint)handle;
+				var index = handleUInt >> 8;
+				return GetCounter(index) == (handleUInt & 0xFFu);
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public ulong GetAddress(uint index)
+			{
+				return ((Mask(index) & (poolStartAddress + index * itemSize)));
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public IntPtr GetAddressFromHandle(int handle)
+			{
+				return IsHandleValid(handle) ? new IntPtr((long)GetAddress((uint)handle >> 8)) : IntPtr.Zero;
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public int GetGuidHandleByIndex(uint index)
+			{
+				return IsValid(index) ? (int)((index << 8) + GetCounter(index)) : 0;
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public int GetGuidHandleFromAddress(ulong address)
+			{
+				if (address < poolStartAddress || address >= poolStartAddress + size * itemSize)
+					return 0;
+
+				var offset = address - poolStartAddress;
+				if (offset % itemSize != 0)
+					return 0;
+
+				var indexOfPool = (uint)(offset / itemSize);
+				return (int)((indexOfPool << 8) + GetCounter(indexOfPool));
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			private byte GetCounter(uint index)
+			{
+				unsafe
+				{
+					byte* byteArrayPtr = (byte*)byteArray.ToPointer();
+					return (byte)(byteArrayPtr[index] & 0x7F);
+				}
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			private ulong Mask(uint index)
+			{
+				unsafe
+				{
+					byte* byteArrayPtr = (byte*)byteArray.ToPointer();
+					long num1 = byteArrayPtr[index] & 0x80;
+					return (ulong)(~((num1 | -num1) >> 63));
+				}
+			}
+		}
+
+		static ulong* FwScriptGuidPoolAddress;
+		static ulong* PedPoolAddress;
+		static ulong* ObjectPoolAddress;
+		static ulong* PickupObjectPoolAddress;
+		static ulong* VehiclePoolAddress;
+		static ulong* BuildingPoolAddress;
+		static ulong* AnimatedBuildingPoolAddress;
+		static ulong* InteriorInstPoolAddress;
+		static ulong* InteriorProxyPoolAddress;
+
+		static ulong* ProjectilePoolAddress;
+		static int* ProjectileCountAddress;
+
+		// if the entity is a ped and they are in a vehicle, the vehicle position will be returned instead (just like GET_ENTITY_COORDS does)
+		static delegate* unmanaged[Stdcall]<ulong, float*, ulong> EntityPosFunc;
+		// should be rage::fwScriptGuid::CreateGuid
+		static delegate* unmanaged[Stdcall]<ulong, int> CreateGuid;
+
+		internal sealed class FwScriptGuidPoolTask : IScriptTask
+		{
+			internal enum PoolType
+			{
+				Generic,
+				Vehicle,
+				Projectile,
+			}
+
+			#region Fields
+			internal PoolType _poolType;
+			internal IntPtr _poolAddress;
+
+			internal bool doPosCheck = false;
+			internal bool doModelCheck = false;
+			internal float radiusSquared;
+			internal float[] position;
+			internal HashSet<int> modelHashes;
+			internal int[] resultHandles = Array.Empty<int>();
+
+			#endregion
+
+			internal FwScriptGuidPoolTask(PoolType type, IntPtr poolAddress)
+			{
+				_poolType = type;
+				_poolAddress = poolAddress;
+			}
+			internal FwScriptGuidPoolTask(PoolType type, IntPtr poolAddress, int[] modelHashes) : this(type, poolAddress)
+			{
+				if (modelHashes != null && modelHashes.Length > 0)
+				{
+					doModelCheck = true;
+					this.modelHashes = new HashSet<int>(modelHashes);
+				}
+			}
+			internal FwScriptGuidPoolTask(PoolType type, IntPtr poolAddress, float[] position, float radiusSquared, int[] modelHashes = null) : this(type, poolAddress)
+			{
+				doPosCheck = true;
+				this.radiusSquared = radiusSquared;
+				this.position = position;
+
+				if (modelHashes != null && modelHashes.Length > 0)
+				{
+					doModelCheck = true;
+					this.modelHashes = new HashSet<int>(modelHashes);
+				}
+			}
+
+			public void Run()
+			{
+				if (*NativeMemory.FwScriptGuidPoolAddress == 0)
+					return;
+
+				FwScriptGuidPool* fwScriptGuidPool = (FwScriptGuidPool*)(*NativeMemory.FwScriptGuidPoolAddress);
+
+				switch (_poolType)
+				{
+					case PoolType.Generic:
+						GenericPool* genericPool = (GenericPool*)_poolAddress;
+						resultHandles = GetGuidHandlesFromGenericPool(fwScriptGuidPool, genericPool);
+						break;
+
+					case PoolType.Vehicle:
+						VehiclePool* vehiclePool = (VehiclePool*)_poolAddress;
+						resultHandles = GetGuidHandlesFromVehiclePool(fwScriptGuidPool, vehiclePool);
+						break;
+
+					case PoolType.Projectile:
+						int projectilesCount = NativeMemory.GetProjectileCount();
+						int projectileCapacity = NativeMemory.GetProjectileCapacity();
+						ulong* projectilePoolAddress = (ulong*)_poolAddress;
+
+						resultHandles = GetGuidHandlesFromProjectilePool(fwScriptGuidPool, projectilePoolAddress, projectilesCount, projectileCapacity);
+						break;
+				}
+			}
+
+			int[] GetGuidHandlesFromGenericPool(FwScriptGuidPool* fwScriptGuidPool, GenericPool* genericPool)
+			{
+				List<int> resultList = new List<int>(genericPool->itemCount);
+
+				uint genericPoolSize = genericPool->size;
+				for (uint i = 0; i < genericPoolSize; i++)
+				{
+					if (fwScriptGuidPool->IsFull())
+						throw new InvalidOperationException("The fwScriptGuid pool is full. The pool must be extended to retrieve all entity handles.");
+
+					if (!genericPool->IsValid(i))
+					{
+						continue;
+					}
+
+					ulong address = genericPool->GetAddress(i);
+
+					if (doPosCheck && !CheckEntityDistance(address, position, radiusSquared))
+						continue;
+					if (doModelCheck && !CheckEntityModel(address, modelHashes))
+						continue;
+
+					int createdHandle = NativeMemory.CreateGuid(address);
+					resultList.Add(createdHandle);
+				}
+
+				return resultList.ToArray();
+			}
+
+			int[] GetGuidHandlesFromVehiclePool(FwScriptGuidPool* fwScriptGuidPool, VehiclePool* vehiclePool)
+			{
+				List<int> resultList = new List<int>((int)vehiclePool->itemCount);
+
+				uint poolSize = vehiclePool->size;
+				for (uint i = 0; i < poolSize; i++)
+				{
+					if (fwScriptGuidPool->IsFull())
+						throw new InvalidOperationException("The fwScriptGuid pool is full. The pool must be extended to retrieve all vehicle handles.");
+
+					if (!vehiclePool->IsValid(i))
+					{
+						continue;
+					}
+
+					ulong address = vehiclePool->GetAddress(i);
+
+					if (doPosCheck && !CheckEntityDistance(address, position, radiusSquared))
+						continue;
+					if (doModelCheck && !CheckEntityModel(address, modelHashes))
+						continue;
+
+					int createdHandle = NativeMemory.CreateGuid(address);
+					resultList.Add(createdHandle);
+				}
+
+				return resultList.ToArray();
+			}
+
+			int[] GetGuidHandlesFromProjectilePool(FwScriptGuidPool* fwScriptGuidPool, ulong* projectilePool, int itemCount, int maxItemCount)
+			{
+				int projectilesLeft = itemCount;
+				int projectileCapacity = maxItemCount;
+
+				List<int> resultList = new List<int>(itemCount);
+
+				for (uint i = 0; (projectilesLeft > 0 && i < projectileCapacity); i++)
+				{
+					if (fwScriptGuidPool->IsFull())
+						throw new InvalidOperationException("The fwScriptGuid pool is full. The pool must be extended to retrieve all projectile handles.");
+
+					ulong entityAddress = (ulong)ReadAddress(new IntPtr(projectilePool + i)).ToInt64();
+					if (entityAddress == 0)
+						continue;
+
+					projectilesLeft--;
+
+					if (doPosCheck && !CheckEntityDistance(entityAddress, position, radiusSquared))
+						continue;
+					if (doModelCheck && !CheckEntityModel(entityAddress, modelHashes))
+						continue;
+
+					int createdHandle = NativeMemory.CreateGuid(entityAddress);
+					resultList.Add(createdHandle);
+				}
+
+				return resultList.ToArray();
+			}
+
+			static bool CheckEntityDistance(ulong address, float[] position, float radiusSquared)
+			{
+				float* entityPosition = stackalloc float[4];
+
+				NativeMemory.EntityPosFunc(address, entityPosition);
+				float x = position[0] - entityPosition[0];
+				float y = position[1] - entityPosition[1];
+				float z = position[2] - entityPosition[2];
+
+				float distanceSquared = (x * x) + (y * y) + (z * z);
+				if (distanceSquared > radiusSquared)
+					return false;
+
+				return true;
+			}
+
+			static bool CheckEntityModel(ulong address, HashSet<int> modelHashes)
+			{
+				int modelHash = GetModelHashFromEntity(new IntPtr((long)address));
+				if (!modelHashes.Contains(modelHash))
+					return false;
+
+				return true;
+			}
+		}
+
+		internal class GetEntityHandleTask : IScriptTask
+		{
+			#region Fields
+			internal ulong entityAddress;
+			internal int returnEntityHandle;
+			#endregion
+
+			internal GetEntityHandleTask(IntPtr entityAddress)
+			{
+				this.entityAddress = (ulong)entityAddress.ToInt64();
+			}
+
+			public void Run()
+			{
+				returnEntityHandle = NativeMemory.CreateGuid(entityAddress);
+			}
+		}
+
+		public static int GetVehicleCount()
+		{
+			if (*VehiclePoolAddress != 0)
+			{
+				VehiclePool* pool = *(VehiclePool**)(*VehiclePoolAddress);
+				return (int)pool->itemCount;
+			}
+			return 0;
+		}
+
+		public static int GetPedCount() => PedPoolAddress != null ? GetGenericPoolCount(*PedPoolAddress) : 0;
+		public static int GetObjectCount() => ObjectPoolAddress != null ? GetGenericPoolCount(*ObjectPoolAddress) : 0;
+		public static int GetPickupObjectCount() => PickupObjectPoolAddress != null ? GetGenericPoolCount(*PickupObjectPoolAddress) : 0;
+		public static int GetBuildingCount() => BuildingPoolAddress != null ? GetGenericPoolCount(*BuildingPoolAddress) : 0;
+		public static int GetAnimatedBuildingCount() => AnimatedBuildingPoolAddress != null ? GetGenericPoolCount(*AnimatedBuildingPoolAddress) : 0;
+		public static int GetInteriorInstCount() => InteriorInstPoolAddress != null ? GetGenericPoolCount(*InteriorInstPoolAddress) : 0;
+		public static int GetInteriorProxyCount() => InteriorProxyPoolAddress != null ? GetGenericPoolCount(*InteriorProxyPoolAddress) : 0;
+		public static int GetProjectileCount() => ProjectileCountAddress != null ? *ProjectileCountAddress : 0;
+		static int GetGenericPoolCount(ulong address)
+		{
+			GenericPool* pool = (GenericPool*)(address);
+			return (int)pool->itemCount;
+		}
+
+		public static int GetVehicleCapacity()
+		{
+			if (*VehiclePoolAddress != 0)
+			{
+				VehiclePool* pool = *(VehiclePool**)(*VehiclePoolAddress);
+				return (int)pool->size;
+			}
+			return 0;
+		}
+		public static int GetPedCapacity() => PedPoolAddress != null ? GetGenericPoolCapacity(*PedPoolAddress) : 0;
+		public static int GetObjectCapacity() => ObjectPoolAddress != null ? GetGenericPoolCapacity(*ObjectPoolAddress) : 0;
+		public static int GetPickupObjectCapacity() => PickupObjectPoolAddress != null ? GetGenericPoolCapacity(*PickupObjectPoolAddress) : 0;
+		public static int GetBuildingCapacity() => BuildingPoolAddress != null ? GetGenericPoolCapacity(*BuildingPoolAddress) : 0;
+		public static int GetAnimatedBuildingCapacity() => AnimatedBuildingPoolAddress != null ? GetGenericPoolCapacity(*AnimatedBuildingPoolAddress) : 0;
+		public static int GetInteriorInstCapacity() => InteriorInstPoolAddress != null ? GetGenericPoolCapacity(*InteriorInstPoolAddress) : 0;
+		public static int GetInteriorProxyCapacity() => InteriorProxyPoolAddress != null ? GetGenericPoolCapacity(*InteriorProxyPoolAddress) : 0;
+		//the max number of projectile has not been changed from 50
+		public static int GetProjectileCapacity() => 50;
+		static int GetGenericPoolCapacity(ulong address)
+		{
+			GenericPool* pool = (GenericPool*)(address);
+			return (int)pool->size;
+		}
+
+		public static int[] GetPedHandles(int[] modelHashes = null)
+		{
+			return GetGuidsInGenericPool(NativeMemory.PedPoolAddress, modelHashes);
+		}
+		public static int[] GetPedHandles(float[] position, float radius, int[] modelHashes = null)
+		{
+			return GetGuidsInGenericPool(NativeMemory.PedPoolAddress, position, radius, modelHashes);
+		}
+
+		public static int[] GetPropHandles(int[] modelHashes = null)
+		{
+			return GetGuidsInGenericPool(NativeMemory.ObjectPoolAddress, modelHashes);
+		}
+		public static int[] GetPropHandles(float[] position, float radius, int[] modelHashes = null)
+		{
+			return GetGuidsInGenericPool(NativeMemory.ObjectPoolAddress, position, radius, modelHashes);
+		}
+
+		public static int[] GetEntityHandles()
+		{
+			int[] vehicleHandles = GetVehicleHandles();
+			int[] pedHandles = GetPedHandles();
+			int[] propHandles = GetPropHandles();
+
+			return BuildOneArrayFromElementsOfEntityHandleArrays(vehicleHandles, pedHandles, propHandles);
+		}
+		public static int[] GetEntityHandles(float[] position, float radius)
+		{
+			var vehicleHandles = GetVehicleHandles(position, radius);
+			var pedHandles = GetPedHandles(position, radius);
+			var propHandles = GetPropHandles(position, radius);
+
+			return BuildOneArrayFromElementsOfEntityHandleArrays(vehicleHandles, pedHandles, propHandles);
+		}
+
+		private static int[] BuildOneArrayFromElementsOfEntityHandleArrays(int[] vehicleHandles, int[] pedHandles, int[] propHandles)
+		{
+			int entityHandleCount = vehicleHandles.Length + pedHandles.Length + propHandles.Length;
+			int[] entityHandles = new int[entityHandleCount];
+
+			Array.Copy(vehicleHandles, 0, entityHandles, 0, vehicleHandles.Length);
+			Array.Copy(pedHandles, 0, entityHandles, vehicleHandles.Length, pedHandles.Length);
+			Array.Copy(propHandles, 0, entityHandles, vehicleHandles.Length + pedHandles.Length, propHandles.Length);
+
+			return entityHandles;
+		}
+
+		public static int[] GetVehicleHandles(int[] modelHashes = null)
+		{
+			if (*NativeMemory.VehiclePoolAddress == 0)
+				return Array.Empty<int>();
+
+			IntPtr vehiclePool = new IntPtr(*(VehiclePool**)(*NativeMemory.VehiclePoolAddress));
+
+			var task = new FwScriptGuidPoolTask(FwScriptGuidPoolTask.PoolType.Vehicle, vehiclePool, modelHashes);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.resultHandles;
+		}
+		public static int[] GetVehicleHandles(float[] position, float radius, int[] modelHashes = null)
+		{
+			if (*NativeMemory.VehiclePoolAddress == 0)
+				return Array.Empty<int>();
+
+			IntPtr vehiclePool = new IntPtr(*(VehiclePool**)(*NativeMemory.VehiclePoolAddress));
+
+			var task = new FwScriptGuidPoolTask(FwScriptGuidPoolTask.PoolType.Vehicle, vehiclePool, position, radius * radius);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.resultHandles;
+		}
+
+		public static int[] GetPickupObjectHandles()
+		{
+			return GetGuidsInGenericPool(NativeMemory.PickupObjectPoolAddress);
+		}
+		public static int[] GetPickupObjectHandles(float[] position, float radius)
+		{
+			return GetGuidsInGenericPool(NativeMemory.PickupObjectPoolAddress, position, radius);
+		}
+		public static int[] GetProjectileHandles()
+		{
+			if (NativeMemory.ProjectilePoolAddress == null)
+				return Array.Empty<int>();
+
+			var task = new FwScriptGuidPoolTask(FwScriptGuidPoolTask.PoolType.Projectile, new IntPtr(NativeMemory.ProjectilePoolAddress));
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.resultHandles;
+		}
+		public static int[] GetProjectileHandles(float[] position, float radius)
+		{
+			if (NativeMemory.ProjectilePoolAddress == null)
+				return Array.Empty<int>();
+
+			var task = new FwScriptGuidPoolTask(FwScriptGuidPoolTask.PoolType.Projectile, new IntPtr(NativeMemory.ProjectilePoolAddress), position, radius * radius);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.resultHandles;
+		}
+
+		private static int[] GetGuidsInGenericPool(ulong* ptrOfPoolPtr)
+		{
+			IntPtr genericPool = new IntPtr((GenericPool*)(*ptrOfPoolPtr));
+
+			if (genericPool == IntPtr.Zero)
+				return Array.Empty<int>();
+
+			var task = new FwScriptGuidPoolTask(FwScriptGuidPoolTask.PoolType.Generic, genericPool);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.resultHandles;
+		}
+		private static int[] GetGuidsInGenericPool(ulong* ptrOfPoolPtr, int[] modelHashes)
+		{
+			IntPtr genericPool = new IntPtr((GenericPool*)(*ptrOfPoolPtr));
+
+			if (genericPool == IntPtr.Zero)
+				return Array.Empty<int>();
+
+			var task = new FwScriptGuidPoolTask(FwScriptGuidPoolTask.PoolType.Generic, genericPool, modelHashes);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.resultHandles;
+		}
+		private static int[] GetGuidsInGenericPool(ulong* ptrOfPoolPtr, float[] position, float radius, int[] modelHashes = null)
+		{
+			IntPtr genericPool = new IntPtr((GenericPool*)(*ptrOfPoolPtr));
+
+			if (genericPool == IntPtr.Zero)
+				return Array.Empty<int>();
+
+			var task = new FwScriptGuidPoolTask(FwScriptGuidPoolTask.PoolType.Generic, genericPool, position, radius * radius, modelHashes);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.resultHandles;
+		}
+
+		public static int[] GetBuildingHandles()
+		{
+			if (BuildingPoolAddress == null)
+				return Array.Empty<int>();
+
+			return GetHandlesInGenericPool(*NativeMemory.BuildingPoolAddress);
+		}
+
+		public static int[] GetBuildingHandles(float[] position, float radius)
+		{
+			if (BuildingPoolAddress == null)
+				return Array.Empty<int>();
+
+			return GetCEntityHandlesInRange(*NativeMemory.BuildingPoolAddress, position, radius);
+		}
+
+		public static int[] GetAnimatedBuildingHandles()
+		{
+			if (AnimatedBuildingPoolAddress == null)
+				return Array.Empty<int>();
+
+			return GetHandlesInGenericPool(*NativeMemory.AnimatedBuildingPoolAddress);
+		}
+
+		public static int[] GetAnimatedBuildingHandles(float[] position, float radius)
+		{
+			if (AnimatedBuildingPoolAddress == null)
+				return Array.Empty<int>();
+
+			return GetCEntityHandlesInRange(*NativeMemory.AnimatedBuildingPoolAddress, position, radius);
+		}
+
+		public static int[] GetInteriorInstHandles()
+		{
+			if (InteriorInstPoolAddress == null)
+				return Array.Empty<int>();
+
+			return GetHandlesInGenericPool(*NativeMemory.InteriorInstPoolAddress);
+		}
+
+		public static int[] GetInteriorInstHandles(float[] position, float radius)
+		{
+			if (InteriorInstPoolAddress == null)
+				return Array.Empty<int>();
+
+			return GetCEntityHandlesInRange(*NativeMemory.InteriorInstPoolAddress, position, radius);
+		}
+
+		public static int[] GetInteriorProxyHandles()
+		{
+			if (InteriorProxyPoolAddress == null)
+				return Array.Empty<int>();
+
+			return GetHandlesInGenericPool(*NativeMemory.InteriorProxyPoolAddress);
+		}
+
+		public static int[] GetInteriorProxyHandles(float[] position, float radius)
+		{
+			if (InteriorProxyPoolAddress == null)
+				return Array.Empty<int>();
+
+			GenericPool* pool = (GenericPool*)(*NativeMemory.InteriorProxyPoolAddress);
+
+			// CInteriorProxy is not a subclass of CEntity and position data is placed at different offset
+			var returnHandles = new List<int>();
+			var poolSize = pool->size;
+			float radiusSquared = radius * radius;
+			for (uint i = 0; i < poolSize; i++)
+			{
+				if (!pool->IsValid(i))
+					continue;
+
+				var address = pool->GetAddress(i);
+
+				float x = *(float*)(address + 0x70) - position[0];
+				float y = *(float*)(address + 0x74) - position[1];
+				float z = *(float*)(address + 0x78) - position[2];
+
+				float distanceSquared = (x * x) + (y * y) + (z * z);
+				if (distanceSquared > radiusSquared)
+					continue;
+
+				returnHandles.Add(pool->GetGuidHandleByIndex(i));
+			}
+
+			return returnHandles.ToArray();
+		}
+
+		public static int GetEntityHandleFromAddress(IntPtr address)
+		{
+			var task = new GetEntityHandleTask(address);
+
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.returnEntityHandle;
+		}
+
+		public static bool BuildingHandleExists(int handle) => BuildingPoolAddress != null ? ((GenericPool*)(*BuildingPoolAddress))->IsHandleValid(handle) : false;
+		public static bool AnimatedBuildingHandleExists(int handle) => AnimatedBuildingPoolAddress != null ? ((GenericPool*)(*AnimatedBuildingPoolAddress))->IsHandleValid(handle) : false;
+		public static bool InteriorInstHandleExists(int handle) => InteriorInstPoolAddress != null ? ((GenericPool*)(*InteriorInstPoolAddress))->IsHandleValid(handle) : false;
+		public static bool InteriorProxyHandleExists(int handle) => InteriorProxyPoolAddress != null ? ((GenericPool*)(*InteriorProxyPoolAddress))->IsHandleValid(handle) : false;
+
+		static int[] GetHandlesInGenericPool(ulong poolAddress)
+		{
+			GenericPool* pool = (GenericPool*)poolAddress;
+
+			var returnHandles = new List<int>(pool->itemCount);
+			var poolSize = pool->size;
+			for (uint i = 0; i < poolSize; i++)
+			{
+				if (pool->IsValid(i))
+				{
+					returnHandles.Add(pool->GetGuidHandleByIndex(i));
+				}
+			}
+
+			return returnHandles.ToArray();
+		}
+
+		static int[] GetCEntityHandlesInRange(ulong poolAddress, float[] position, float radius)
+		{
+			GenericPool* pool = (GenericPool*)poolAddress;
+
+			var returnHandles = new List<int>();
+			var poolSize = pool->size;
+			float radiusSquared = radius * radius;
+			float* entityPosition = stackalloc float[4];
+			for (uint i = 0; i < poolSize; i++)
+			{
+				if (!pool->IsValid(i))
+					continue;
+
+				var address = pool->GetAddress(i);
+
+				NativeMemory.EntityPosFunc(address, entityPosition);
+				float x = entityPosition[0] - position[0];
+				float y = entityPosition[1] - position[1];
+				float z = entityPosition[2] - position[2];
+
+				float distanceSquared = (x * x) + (y * y) + (z * z);
+				if (distanceSquared > radiusSquared)
+					continue;
+
+				returnHandles.Add(pool->GetGuidHandleByIndex(i));
+			}
+
+			return returnHandles.ToArray();
+		}
+
+		static int CalculateAppropriateExtendedArrayLength(int[] array, int targetElementCount)
+		{
+			return (array.Length * 2 > targetElementCount) ? array.Length * 2 : targetElementCount * 2;
+		}
+
+		#endregion
+
+		#region -- Radar Blip Pool --
+
+		static ulong* RadarBlipPoolAddress;
+		static int* PossibleRadarBlipCountAddress;
+		static int* UnkFirstRadarBlipIndexAddress;
+		static int* NorthRadarBlipHandleAddress;
+		static int* CenterRadarBlipHandleAddress;
+
+		static bool CheckBlip(ulong blipAddress, float[] position, float radius, params int[] spriteTypes)
+		{
+			if (spriteTypes.Length > 0)
+			{
+				int spriteIndex = *(int*)(blipAddress + 0x40);
+				if (!Array.Exists(spriteTypes, x => x == spriteIndex))
+					return false;
+			}
+
+			if (position != null && radius > 0f)
+			{
+				float* blipPosition = stackalloc float[3];
+
+				blipPosition[0] = *(float*)(blipAddress + 0x10);
+				blipPosition[1] = *(float*)(blipAddress + 0x14);
+				blipPosition[2] = *(float*)(blipAddress + 0x18);
+
+				float x = blipPosition[0] - position[0];
+				float y = blipPosition[1] - position[1];
+				float z = blipPosition[2] - position[2];
+				float distanceSquared = (x * x) + (y * y) + (z * z);
+				float radiusSquared = radius * radius;
+
+				if (distanceSquared > radiusSquared)
+					return false;
+			}
+
+			return true;
+		}
+
+		// The equivalent function is called in 2 functions (which is for the north and player blip) used in GET_NUMBER_OF_ACTIVE_BLIPS
+		private static short GetBlipIndexIfHandleIsValid(int handle)
+		{
+			if (handle == 0)
+			{
+				return -1;
+			}
+			ushort blipIndex = (ushort)handle;
+			ulong blipAddress = *(RadarBlipPoolAddress + blipIndex);
+			if (blipAddress == 0)
+			{
+				return -1;
+			}
+
+			int blipCreationIncrement = (handle >> 0x10);
+			if (blipCreationIncrement != *(int*)(blipAddress + 0x8))
+			{
+				return -1;
+			}
+
+			return (short)blipIndex;
+		}
+		public static int[] GetNonCriticalRadarBlipHandles(params int[] spriteTypes)
+		{
+			return GetNonCriticalRadarBlipHandles(null, 0f, spriteTypes);
+		}
+		public static int[] GetNonCriticalRadarBlipHandles(float[] position = null, float radius = 0f, params int[] spriteTypes)
+		{
+			if (RadarBlipPoolAddress == null)
+			{
+				return new int[0];
+			}
+
+			int possibleBlipCount = *PossibleRadarBlipCountAddress;
+			int unkFirstBlipIndex = *UnkFirstRadarBlipIndexAddress;
+			int northBlipIndex = GetBlipIndexIfHandleIsValid(*NorthRadarBlipHandleAddress);
+			int centerBlipIndex = GetBlipIndexIfHandleIsValid(*CenterRadarBlipHandleAddress);
+
+			var handles = new List<int>(possibleBlipCount);
+
+			// Skip the 3 critical blips, just like GET_FIRST_BLIP_INFO_ID does
+			// The 3 critical blips is the north blip, the center blip, and the unknown simple blip (placeholder?).
+			for (int i = 0; i < possibleBlipCount; i++)
+			{
+				ulong address = *(RadarBlipPoolAddress + i);
+
+				if (address == 0 || i == unkFirstBlipIndex || i == northBlipIndex || i == centerBlipIndex)
+					continue;
+
+				if (CheckBlip(address, position, radius, spriteTypes))
+				{
+					ushort blipCreationIncrement = *(ushort*)(address + 8);
+					handles.Add((int)((blipCreationIncrement << 0x10) + (uint)i));
+				}
+			}
+
+			return handles.ToArray();
+		}
+
+		public static int GetNorthBlip() => NorthRadarBlipHandleAddress != null ? *NorthRadarBlipHandleAddress : 0;
+
+		public static IntPtr GetBlipAddress(int handle)
+		{
+			if (RadarBlipPoolAddress == null)
+			{
+				return IntPtr.Zero;
+			}
+
+			int poolIndexOfHandle = handle & 0xFFFF;
+			int possibleBlipCount = *PossibleRadarBlipCountAddress;
+
+			if (poolIndexOfHandle >= possibleBlipCount)
+			{
+				return IntPtr.Zero;
+			}
+
+			ulong address = *(RadarBlipPoolAddress + poolIndexOfHandle);
+
+			if (address != 0 && IsBlipCreationIncrementValid(address, handle))
+				return new IntPtr((long)address);
+
+			return IntPtr.Zero;
+
+			bool IsBlipCreationIncrementValid(ulong blipAddress, int blipHandle) => *(ushort*)(blipAddress + 8) == (((uint)blipHandle >> 0x10));
+		}
+
+		#endregion
+
+		#region -- CScriptResource Data --
+
+		internal enum CScriptResourceTypeNameIndex
+		{
+			Checkpoint = 6
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		struct CGameScriptResource
+		{
+			[FieldOffset(0x0)]
+			internal ulong* vTable;
+			[FieldOffset(0x8)]
+			internal CScriptResourceTypeNameIndex resourceTypeNameIndex;
+			[FieldOffset(0xC)]
+			internal int counterOfPool;
+			[FieldOffset(0x10)]
+			internal int indexOfPool;
+			[FieldOffset(0x18)]
+			internal CGameScriptResource* next;
+			[FieldOffset(0x20)]
+			internal CGameScriptResource* prev;
+		}
+
+		internal class GetAllCScriptResourceHandlesTask : IScriptTask
+		{
+			#region Fields
+			internal CScriptResourceTypeNameIndex typeNameIndex;
+			internal int[] returnHandles = Array.Empty<int>();
+
+			const int MAX_CHECKPOINT_COUNT = 64; // hard coded in the exe
+			static readonly int[] _cScriptResourceHandleBuffer = new int[MAX_CHECKPOINT_COUNT];
+			#endregion
+
+			internal GetAllCScriptResourceHandlesTask(CScriptResourceTypeNameIndex typeNameIndex)
+			{
+				this.typeNameIndex = typeNameIndex;
+			}
+
+			public void Run()
+			{
+				var cGameScriptHandlerAddress = GetCGameScriptHandlerAddressFunc();
+
+				if (cGameScriptHandlerAddress == 0)
+					return;
+
+				int elementCount = 0;
+				var firstRegisteredScriptResourceItem = *(CGameScriptResource**)(cGameScriptHandlerAddress + 48);
+				for (CGameScriptResource* item = firstRegisteredScriptResourceItem; item != null; item = item->next)
+				{
+					if (item->resourceTypeNameIndex != typeNameIndex)
+						continue;
+
+					_cScriptResourceHandleBuffer[elementCount++] = item->counterOfPool;
+				}
+
+				if (elementCount == 0)
+					return;
+
+				returnHandles = new int[elementCount];
+				Array.Copy(_cScriptResourceHandleBuffer, returnHandles, elementCount);
+			}
+		}
+
+		internal class GetCScriptResourceAddressTask : IScriptTask
+		{
+			#region Fields
+			internal int targetHandle;
+			internal ulong* poolAddress;
+			internal int elementSize;
+			internal IntPtr returnAddress;
+			#endregion
+
+			internal GetCScriptResourceAddressTask(int handle, ulong* poolAddress, int elementSize)
+			{
+				this.targetHandle = handle;
+				this.poolAddress = poolAddress;
+				this.elementSize = elementSize;
+			}
+
+			public void Run()
+			{
+				var cGameScriptHandlerAddress = GetCGameScriptHandlerAddressFunc();
+
+				if (cGameScriptHandlerAddress == 0)
+					return;
+
+				var firstRegisteredScriptResourceItem = *(CGameScriptResource**)(cGameScriptHandlerAddress + 48);
+				for (CGameScriptResource* item = firstRegisteredScriptResourceItem; item != null; item = item->next)
+				{
+					if (item->counterOfPool == targetHandle)
+					{
+						returnAddress = new IntPtr((long)((byte*)(poolAddress) + item->indexOfPool * elementSize));
+						break;
+					}
+				}
+			}
+		}
+
+		#endregion
+
+		#region -- Checkpoint Pool --
+
+		static ulong* CheckpointPoolAddress;
+
+		static delegate* unmanaged[Stdcall]<ulong> GetCGameScriptHandlerAddressFunc;
+
+		public static int[] GetCheckpointHandles()
+		{
+			var task = new GetAllCScriptResourceHandlesTask(CScriptResourceTypeNameIndex.Checkpoint);
+
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.returnHandles;
+		}
+
+		public static IntPtr GetCheckpointAddress(int handle)
+		{
+			var task = new GetCScriptResourceAddressTask(handle, CheckpointPoolAddress, 0x60);
+
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.returnAddress;
+		}
+
+		#endregion
+
+		#region -- Waypoint Info Array --
+
+		static ulong* waypointInfoArrayStartAddress;
+		static ulong* waypointInfoArrayEndAddress;
+		static delegate* unmanaged[Stdcall]<ulong> GetLocalPlayerPedAddressFunc;
+
+		public static int GetWaypointBlip()
+		{
+			if (waypointInfoArrayStartAddress == null || waypointInfoArrayEndAddress == null)
+				return 0;
+
+			int playerPedModelHash = 0;
+			ulong playerPedAddress = GetLocalPlayerPedAddressFunc();
+
+			if (playerPedAddress != 0)
+			{
+				playerPedModelHash = GetModelHashFromEntity(new IntPtr((long)playerPedAddress));
+			}
+
+			ulong waypointInfoAddress = (ulong)waypointInfoArrayStartAddress;
+			for (; waypointInfoAddress < (ulong)waypointInfoArrayEndAddress; waypointInfoAddress += 0x18)
+			{
+				int modelHash = *(int*)waypointInfoAddress;
+
+				if (modelHash == playerPedModelHash)
+				{
+					return *(int*)(waypointInfoAddress + 4);
+				}
+			}
+
+			return 0;
+		}
+
+		#endregion
+
+		#region -- Pool Addresses --
+
+		static delegate* unmanaged[Stdcall]<int, ulong> GetPtfxAddressFunc;
+		// should be CGameScriptHandler::GetScriptEntity
+		static delegate* unmanaged[Stdcall]<int, ulong> GetScriptEntity;
+		static delegate* unmanaged[Stdcall]<int, ulong> GetPlayerAddressFunc;
+
+		public static IntPtr GetPtfxAddress(int handle)
+		{
+			return new IntPtr((long)GetPtfxAddressFunc(handle));
+		}
+		public static IntPtr GetEntityAddress(int handle)
+		{
+			return new IntPtr((long)GetScriptEntity(handle));
+		}
+		public static IntPtr GetPlayerAddress(int handle)
+		{
+			return new IntPtr((long)GetPlayerAddressFunc(handle));
+		}
+
+		public static IntPtr GetBuildingAddress(int handle)
+		{
+			if (BuildingPoolAddress == null)
+				return IntPtr.Zero;
+
+			return ((GenericPool*)(*NativeMemory.BuildingPoolAddress))->GetAddressFromHandle(handle);
+		}
+		public static IntPtr GetAnimatedBuildingAddress(int handle)
+		{
+			if (AnimatedBuildingPoolAddress == null)
+				return IntPtr.Zero;
+
+			return ((GenericPool*)(*NativeMemory.AnimatedBuildingPoolAddress))->GetAddressFromHandle(handle);
+		}
+		public static IntPtr GetInteriorInstAddress(int handle)
+		{
+			if (InteriorInstPoolAddress == null)
+				return IntPtr.Zero;
+
+			return ((GenericPool*)(*NativeMemory.InteriorInstPoolAddress))->GetAddressFromHandle(handle);
+		}
+		public static IntPtr GetInteriorProxyAddress(int handle)
+		{
+			if (InteriorProxyPoolAddress == null)
+				return IntPtr.Zero;
+
+			return ((GenericPool*)(*NativeMemory.InteriorProxyPoolAddress))->GetAddressFromHandle(handle);
+		}
+
+		#endregion
+
+		#region -- Projectile Offsets --
+		public static int ProjectileAmmoInfoOffset { get; }
+		public static int ProjectileOwnerOffset { get; }
+		#endregion
+
+		#region -- Projectile Functions --
+
+		static delegate* unmanaged[Stdcall]<IntPtr, int, void> ExplodeProjectileFunc;
+
+		public static void ExplodeProjectile(IntPtr projectileAddress)
+		{
+			var task = new ExplodeProjectileTask(projectileAddress);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+		}
+
+		internal class ExplodeProjectileTask : IScriptTask
+		{
+			#region Fields
+			internal IntPtr projectileAddress;
+			#endregion
+
+			internal ExplodeProjectileTask(IntPtr projectileAddress)
+			{
+				this.projectileAddress = projectileAddress;
+			}
+
+			public void Run()
+			{
+				ExplodeProjectileFunc(projectileAddress, 0);
+			}
+		}
+
+		#endregion
+
+		#region -- Interior Offsets --
+
+		public static ulong* InteriorProxyPtrFromGameplayCamAddress { get; }
+		public static int InteriorInstPtrInInteriorProxyOffset { get; }
+
+		public static int GetAssociatedInteriorInstHandleFromInteriorProxy(int interiorProxyHandle)
+		{
+			if (InteriorInstPtrInInteriorProxyOffset == 0 || InteriorInstPoolAddress == null)
+				return 0;
+
+			var interiorProxyAddress = GetInteriorProxyAddress(interiorProxyHandle);
+			if (interiorProxyAddress == IntPtr.Zero)
+				return 0;
+
+			var interiorInstAddress = *(ulong*)(interiorProxyAddress + InteriorInstPtrInInteriorProxyOffset).ToPointer();
+			if (interiorInstAddress == 0)
+				return 0;
+
+			return ((GenericPool*)(*NativeMemory.InteriorInstPoolAddress))->GetGuidHandleFromAddress(interiorInstAddress);
+		}
+		public static int GetInteriorProxyHandleFromInteriorInst(int interiorInstHandle)
+		{
+			if (InteriorProxyPoolAddress == null)
+				return 0;
+
+			var interiorInstAddress = GetInteriorInstAddress(interiorInstHandle);
+			if (interiorInstAddress == IntPtr.Zero)
+				return 0;
+
+			var interiorProxyAddress = *(ulong*)(interiorInstAddress + 0x188).ToPointer();
+			if (interiorProxyAddress == 0)
+				return 0;
+
+			return ((GenericPool*)(*NativeMemory.InteriorProxyPoolAddress))->GetGuidHandleFromAddress(interiorProxyAddress);
+		}
+		public static int GetInteriorProxyHandleFromGameplayCam()
+		{
+			if (InteriorProxyPtrFromGameplayCamAddress == null || InteriorInstPoolAddress == null)
+				return 0;
+
+			var interiorProxyAddress = *InteriorProxyPtrFromGameplayCamAddress;
+			if (interiorProxyAddress == 0)
+				return 0;
+
+			return ((GenericPool*)(*NativeMemory.InteriorProxyPoolAddress))->GetGuidHandleFromAddress(interiorProxyAddress);
+		}
+
+		#endregion
+
+		#region -- Weapon Info And Ammo Info --
+
+		[StructLayout(LayoutKind.Explicit, Size = 0xC)]
+		struct RageAtArrayPtr
+		{
+			[FieldOffset(0x0)]
+			internal ulong* data;
+			[FieldOffset(0x8)]
+			internal ushort size;
+			[FieldOffset(0xA)]
+			internal ushort capacity;
+
+			internal ulong GetElementAddress(int i)
+			{
+				return data[i];
+			}
+		}
+
+		static RageAtArrayPtr* weaponAndAmmoInfoArrayPtr;
+		static HashSet<uint> disallowWeaponHashSetForHumanPedsOnFoot = new HashSet<uint>()
+		{
+			0x1B79F17,  /* weapon_briefcase_02 */
+			0x166218FF, /* weapon_passenger_rocket */
+			0x32A888BD, /* weapon_tranquilizer */
+			0x687652CE, /* weapon_stinger */
+			0x6D5E2801, /* weapon_bird_crap */
+			0x88C78EB7, /* weapon_briefcase */
+			0xFDBADCED, /* weapon_digiscanner */
+		};
+
+		static uint* weaponComponentArrayCountAddr;
+		// Store the offset instead of the calculated address for compatibility with mods like Weapon Limits Adjuster by alexguirre (although Weapon Limits Adjuster allocates a new array in the very beginning).
+		static ulong offsetForCWeaponComponentArrayAddr;
+		static int weaponAttachPointsStartOffset;
+		static int weaponAttachPointsArrayCountOffset;
+		static int weaponAttachPointElementComponentCountOffset;
+		static int weaponAttachPointElementSize;
+
+		static int weaponInfoHumanNameHashOffset;
+
+		[StructLayout(LayoutKind.Explicit, Size = 0x20)]
+		struct ItemInfo
+		{
+			[FieldOffset(0x0)]
+			internal ulong* vTable;
+			[FieldOffset(0x10)]
+			internal uint nameHash;
+			[FieldOffset(0x14)]
+			internal uint modelHash;
+			[FieldOffset(0x18)]
+			internal uint audioHash;
+			[FieldOffset(0x1C)]
+			internal uint slot;
+
+			internal uint GetClassNameHash()
+			{
+				// In the b2802 or a later exe, the function returns a hash value (not a pointer value)
+				if (GetGameVersion() >= 80)
+				{
+					// The function is for the game version b2802 or later ones.
+					// This one directly returns a hash value (not a pointer value) unlike the previous function.
+					var GetClassNameHashFunc = (delegate* unmanaged[Stdcall]<uint>)(vTable[2]);
+					return GetClassNameHashFunc();
+				}
+				else
+				{
+					// The function is for game versions prior to b2802.
+					// The function uses rax and rdx registers in newer versions prior to b2802 (probably since b2189), and it uses only rax register in older versions.
+					// The function returns the address where the class name hash is in all versions prior to (the address will be the outVal address in newer versions).
+					var GetClassNameAddressHashFunc = (delegate* unmanaged[Stdcall]<ulong, uint*, uint*>)(vTable[2]);
+
+					uint outVal = 0;
+					var returnValueAddress = GetClassNameAddressHashFunc(0, &outVal);
+					return *returnValueAddress;
+				}
+			}
+		}
+
+		[StructLayout(LayoutKind.Explicit, Size = 0x48)]
+		struct WeaponComponentInfo
+		{
+			[FieldOffset(0x0)]
+			internal ulong* vTable;
+			[FieldOffset(0x10)]
+			internal uint nameHash;
+			[FieldOffset(0x14)]
+			internal uint modelHash;
+			[FieldOffset(0x18)]
+			internal uint locNameHash;
+			[FieldOffset(0x1C)]
+			internal uint locDescHash;
+			[FieldOffset(0x40)]
+			internal bool shownOnWheel;
+			[FieldOffset(0x41)]
+			internal bool createObject;
+			[FieldOffset(0x42)]
+			internal bool applyWeaponTint;
+		}
+
+		static ItemInfo* FindItemInfoFromWeaponAndAmmoInfoArray(uint nameHash)
+		{
+			if (weaponAndAmmoInfoArrayPtr == null)
+			{
+				return null;
+			}
+
+			var weaponAndAmmoInfoElementCount = weaponAndAmmoInfoArrayPtr->size;
+
+			if (weaponAndAmmoInfoElementCount == 0)
+				return null;
+
+			int low = 0, high = weaponAndAmmoInfoElementCount - 1;
+			while (true)
+			{
+				int indexToRead = (low + high) >> 1;
+				var weaponOrAmmoInfo = (ItemInfo*)weaponAndAmmoInfoArrayPtr->GetElementAddress(indexToRead);
+
+				if (weaponOrAmmoInfo->nameHash == nameHash)
+					return weaponOrAmmoInfo;
+
+				// The array is sorted in ascending order
+				if (weaponOrAmmoInfo->nameHash <= nameHash)
+					low = indexToRead + 1;
+				else
+					high = indexToRead - 1;
+
+				if (low > high)
+					return null;
+			}
+		}
+
+		static ItemInfo* FindWeaponInfo(uint nameHash)
+		{
+			var itemInfoPtr = FindItemInfoFromWeaponAndAmmoInfoArray(nameHash);
+
+			if (itemInfoPtr == null)
+				return null;
+
+			var classNameHash = itemInfoPtr->GetClassNameHash();
+
+			const uint CWEAPONINFO_NAME_HASH = 0x861905B4;
+			if (classNameHash == CWEAPONINFO_NAME_HASH)
+				return itemInfoPtr;
+
+			return null;
+		}
+
+		static WeaponComponentInfo* FindWeaponComponentInfo(uint nameHash)
+		{
+			var cWeaponComponentArrayFirstPtr = (ulong*)((byte*)offsetForCWeaponComponentArrayAddr + 4 + *(int*)offsetForCWeaponComponentArrayAddr);
+			var arrayCount = weaponComponentArrayCountAddr != null ? *(uint*)weaponComponentArrayCountAddr : 0;
+			if (cWeaponComponentArrayFirstPtr == null || arrayCount == 0)
+			{
+				return null;
+			}
+
+			int low = 0, high = (int)arrayCount - 1;
+			while (true)
+			{
+				int indexToRead = (low + high) >> 1;
+				var weaponComponentInfo = (WeaponComponentInfo*)cWeaponComponentArrayFirstPtr[indexToRead];
+
+				if (weaponComponentInfo->nameHash == nameHash)
+					return weaponComponentInfo;
+
+				// The array is sorted in ascending order
+				if (weaponComponentInfo->nameHash <= nameHash)
+					low = indexToRead + 1;
+				else
+					high = indexToRead - 1;
+
+				if (low > high)
+					return null;
+			}
+		}
+
+		public static bool IsHashValidAsWeaponHash(uint weaponHash) => FindWeaponInfo(weaponHash) != null;
+
+		public static uint GetAttachmentPointHash(uint weaponHash, uint componentHash)
+		{
+			var weaponInfo = FindWeaponInfo(weaponHash);
+
+			if (weaponInfo == null)
+				return 0xFFFFFFFF;
+
+			var weaponAttachPointsAddr = (byte*)weaponInfo + weaponAttachPointsStartOffset;
+			var weaponAttachPointsCount = *(int*)(weaponAttachPointsAddr + weaponAttachPointsArrayCountOffset);
+			var weaponAttachPointElementStartAddr = (byte*)(weaponAttachPointsAddr);
+
+			for (int i = 0; i < weaponAttachPointsCount; i++)
+			{
+				var weaponAttachPointElementAddr = weaponAttachPointElementStartAddr + (i * weaponAttachPointElementSize) + 0x8;
+				int componentItemsCount = *(int*)(weaponAttachPointElementAddr + weaponAttachPointElementComponentCountOffset);
+
+				if (componentItemsCount <= 0)
+					continue;
+
+				for (int j = 0; j < componentItemsCount; j++)
+				{
+					var componentHashInItemArray = *(uint*)(weaponAttachPointElementAddr + j * 0x8);
+					if (componentHashInItemArray == componentHash)
+						return *(uint*)(weaponAttachPointElementStartAddr + i * weaponAttachPointElementSize);
+				}
+			}
+
+			return 0xFFFFFFFF;
+		}
+
+		public static List<uint> GetAllWeaponHashesForHumanPeds()
+		{
+			if (weaponAndAmmoInfoArrayPtr == null)
+			{
+				return new List<uint>();
+			}
+
+			var weaponAndAmmoInfoElementCount = weaponAndAmmoInfoArrayPtr->size;
+			var resultList = new List<uint>();
+
+			for (int i = 0; i < weaponAndAmmoInfoElementCount; i++)
+			{
+				var weaponOrAmmoInfo = (ItemInfo*)weaponAndAmmoInfoArrayPtr->GetElementAddress(i);
+
+				if (!CanPedEquip(weaponOrAmmoInfo) && !disallowWeaponHashSetForHumanPedsOnFoot.Contains(weaponOrAmmoInfo->nameHash))
+					continue;
+
+				var classNameHash = weaponOrAmmoInfo->GetClassNameHash();
+
+				const uint CWEAPONINFO_NAME_HASH = 0x861905B4;
+				if (classNameHash == CWEAPONINFO_NAME_HASH)
+					resultList.Add(weaponOrAmmoInfo->nameHash);
+			}
+
+			return resultList;
+
+			bool CanPedEquip(ItemInfo* weaponInfoAddress)
+			{
+				return weaponInfoAddress->modelHash != 0 && weaponInfoAddress->slot != 0;
+			}
+		}
+
+		public static List<uint> GetAllWeaponComponentHashes()
+		{
+			var cWeaponComponentArrayFirstPtr = (ulong*)((byte*)offsetForCWeaponComponentArrayAddr + 4 + *(int*)offsetForCWeaponComponentArrayAddr);
+			var arrayCount = weaponComponentArrayCountAddr != null ? *(uint*)weaponComponentArrayCountAddr : 0;
+			var resultList = new List<uint>();
+
+			for (uint i = 0; i < arrayCount; i++)
+			{
+				var cWeaponComponentInfo = cWeaponComponentArrayFirstPtr[i];
+				var weaponComponentNameHash = *(uint*)(cWeaponComponentInfo + 0x10);
+				resultList.Add(weaponComponentNameHash);
+			}
+
+			return resultList;
+		}
+
+		public static List<uint> GetAllCompatibleWeaponComponentHashes(uint weaponHash)
+		{
+			var weaponInfo = FindWeaponInfo(weaponHash);
+
+			if (weaponInfo == null)
+				return new List<uint>();
+
+			var returnList = new List<uint>();
+
+			var weaponAttachPointsAddr = (byte*)weaponInfo + weaponAttachPointsStartOffset;
+			var weaponAttachPointsCount = *(int*)(weaponAttachPointsAddr + weaponAttachPointsArrayCountOffset);
+			var weaponAttachPointElementStartAddr = (byte*)(weaponAttachPointsAddr + 0x8);
+			for (int i = 0; i < weaponAttachPointsCount; i++)
+			{
+				var weaponAttachPointElementAddr = weaponAttachPointElementStartAddr + i * weaponAttachPointElementSize;
+				int componentItemsCount = *(int*)(weaponAttachPointElementAddr + weaponAttachPointElementComponentCountOffset);
+
+				if (componentItemsCount <= 0)
+					continue;
+
+				for (int j = 0; j < componentItemsCount; j++)
+				{
+					returnList.Add(*(uint*)(weaponAttachPointElementAddr + j * 0x8));
+				}
+			}
+
+			return returnList;
+		}
+
+		public static uint GetHumanNameHashOfWeaponInfo(uint weaponHash)
+		{
+			var weaponInfo = FindWeaponInfo(weaponHash);
+
+			if (weaponInfo == null)
+				// hashed value of WT_INVALID
+				return 0xBFED8500;
+
+			return *(uint*)((byte*)weaponInfo + weaponInfoHumanNameHashOffset);
+		}
+
+		public static uint GetHumanNameHashOfWeaponComponentInfo(uint weaponComponentHash)
+		{
+			var weaponComponentInfo = FindWeaponComponentInfo(weaponComponentHash);
+
+			if (weaponComponentInfo == null)
+				// hashed value of WCT_INVALID
+				return 0xDE4BE9F8;
+
+			return weaponComponentInfo->locNameHash;
+		}
+
+		#endregion
+
+		#region -- Fragment Object for Entity --
+
+		static int getFragInstVFuncOffset;
+		static delegate* unmanaged[Stdcall]<FragInst*, int, FragInst*> detachFragmentPartByIndexFunc;
+		static ulong** phSimulatorInstPtr;
+		static int colliderCapacityOffset;
+		static int colliderCountOffset;
+
+		[StructLayout(LayoutKind.Explicit, Size = 0xC0)]
+		internal unsafe struct FragInst
+		{
+			[FieldOffset(0x68)]
+			internal FragCacheEntry* fragCacheEntry;
+			[FieldOffset(0x78)]
+			internal GtaFragType* gtaFragType;
+			[FieldOffset(0xB8)]
+			internal uint unkType;
+
+			internal FragPhysicsLOD* GetAppropriateFragPhysicsLOD()
+			{
+				var fragPhysicsLODGroup = gtaFragType->fragPhysicsLODGroup;
+				if (fragPhysicsLODGroup == null)
+					return null;
+
+				switch (unkType)
+				{
+					case 0:
+					case 1:
+					case 2:
+						return fragPhysicsLODGroup->GetFragPhysicsLODByIndex((int)unkType);
+					default:
+						return fragPhysicsLODGroup->GetFragPhysicsLODByIndex(0);
+				}
+			}
+		}
+		[StructLayout(LayoutKind.Explicit)]
+		internal unsafe struct FragCacheEntry
+		{
+			[FieldOffset(0x178)] internal CrSkeleton* crSkeleton;
+		}
+		[StructLayout(LayoutKind.Explicit)]
+		internal struct GtaFragType
+		{
+			[FieldOffset(0x30)]
+			internal FragDrawable* fragDrawable;
+			[FieldOffset(0xF0)]
+			internal FragPhysicsLODGroup* fragPhysicsLODGroup;
+		}
+		[StructLayout(LayoutKind.Explicit)]
+		internal struct FragDrawable
+		{
+			[FieldOffset(0x18)]
+			internal CrSkeletonData* crSkeletonData;
+		}
+		[StructLayout(LayoutKind.Explicit)]
+		internal struct FragPhysicsLODGroup
+		{
+			[FieldOffset(0x10)]
+			internal fixed ulong fragPhysicsLODAddresses[3];
+
+			internal FragPhysicsLOD* GetFragPhysicsLODByIndex(int index) => (FragPhysicsLOD*)((ulong*)fragPhysicsLODAddresses[index]);
+		}
+		[StructLayout(LayoutKind.Explicit)]
+		internal struct FragPhysicsLOD
+		{
+			[FieldOffset(0xD0)]
+			internal ulong fragTypeChildArr;
+			[FieldOffset(0x11E)]
+			internal byte fragmentGroupCount;
+
+			internal FragTypeChild* GetFragTypeChild(int index)
+			{
+				if (index >= fragmentGroupCount)
+					return null;
+
+				return (FragTypeChild*)*((ulong*)fragTypeChildArr + index);
+			}
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		internal struct FragTypeChild
+		{
+			[FieldOffset(0x10)]
+			internal ushort boneIndex;
