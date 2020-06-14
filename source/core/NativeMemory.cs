@@ -4019,3 +4019,477 @@ namespace SHVDN
 		{
 			[FieldOffset(0x10)]
 			internal ushort boneIndex;
+			[FieldOffset(0x12)]
+			internal ushort boneId;
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		internal unsafe struct CrSkeleton
+		{
+			[FieldOffset(0x00)] internal CrSkeletonData* skeletonData;
+			// object matrices (entity-local space)
+			[FieldOffset(0x10)] internal ulong boneObjectMatrixArrayPtr;
+			// global matrices (world space)
+			[FieldOffset(0x18)] internal ulong boneGlobalMatrixArrayPtr;
+			[FieldOffset(0x20)] internal int boneCount;
+
+			public IntPtr GetBoneObjectMatrixAddress(int boneIndex)
+			{
+				return new IntPtr((long)(boneObjectMatrixArrayPtr + ((uint)boneIndex * 0x40)));
+			}
+
+			public IntPtr GetBoneGlobalMatrixAddress(int boneIndex)
+			{
+				return new IntPtr((long)(boneGlobalMatrixArrayPtr + ((uint)boneIndex * 0x40)));
+			}
+		}
+
+		[StructLayout(LayoutKind.Explicit, Size = 0x50)]
+		internal struct CrBoneData
+		{
+			// Rotation (quaternion) is between 0x0 - 0x10
+			// Translation (vector3) is between 0x10 - 0x1C
+			// Scale (vector3?) is between 0x20 - 0x2C
+			[FieldOffset(0x30)]
+			internal ushort nextSiblingBoneIndex;
+			[FieldOffset(0x32)]
+			internal ushort parentBoneIndex;
+			[FieldOffset(0x38)]
+			internal IntPtr namePtr;
+			[FieldOffset(0x42)]
+			internal ushort boneIndex;
+			[FieldOffset(0x44)]
+			internal ushort boneId;
+
+			internal string Name => namePtr == default ? null : Marshal.PtrToStringAnsi(namePtr);
+		};
+
+		[StructLayout(LayoutKind.Explicit)]
+		internal unsafe struct CrSkeletonData
+		{
+			[FieldOffset(0x10)] internal PgHashMap boneHashMap;
+			[FieldOffset(0x20)] internal CrBoneData* boneData;
+			[FieldOffset(0x5E)] internal ushort boneCount;
+
+			/// <summary>
+			/// Gets the bone index from specified bone id. Note that bone indexes are sequential values and bone ids are not sequential ones.
+			/// </summary>
+			public int GetBoneIndexByBoneId(int boneId)
+			{
+				if (boneHashMap.elementCount == 0)
+				{
+					if (boneId < boneCount)
+						return boneId;
+
+					return -1;
+				}
+
+				if (boneHashMap.bucketCount == 0)
+					return -1;
+
+				if (boneHashMap.Get((uint)boneId, out var returnBoneId))
+				{
+					return returnBoneId;
+				}
+
+				return -1;
+			}
+
+			/// <summary>
+			/// Gets the bone id from specified bone index. Note that bone indexes are sequential values and bone ids are not sequential ones.
+			/// </summary>
+			internal int GetBoneIdByIndex(int boneIndex)
+			{
+				if (boneIndex < 0 || boneIndex >= boneCount)
+					return -1;
+
+				return ((CrBoneData*)((ulong)boneData + (uint)sizeof(CrBoneData) * (uint)boneIndex))->boneId;
+			}
+
+			/// <summary>
+			/// Gets the next sibling bone index of specified bone index.
+			/// </summary>
+			internal (int boneIndex, int boneId) GetNextSiblingBoneIndexAndId(int boneIndex)
+			{
+				if (boneIndex < 0 || boneIndex >= boneCount)
+					return (-1, -1);
+
+				var crBoneData = ((CrBoneData*)((ulong)boneData + (uint)sizeof(CrBoneData) * (uint)boneIndex));
+				var nextSiblingBoneIndex = crBoneData->nextSiblingBoneIndex;
+				if (nextSiblingBoneIndex == 0xFFFF)
+				{
+					return (-1, -1);
+				}
+				return (nextSiblingBoneIndex, crBoneData->boneId);
+			}
+
+			/// <summary>
+			/// Gets the next parent bone index of specified bone index.
+			/// </summary>
+			internal (int boneIndex, int boneId) GetParentBoneIndexAndId(int boneIndex)
+			{
+				if (boneIndex < 0 || boneIndex >= boneCount)
+					return (-1, -1);
+
+				var crBoneData = ((CrBoneData*)((ulong)boneData + (uint)sizeof(CrBoneData) * (uint)boneIndex));
+				var parentBoneIndex = crBoneData->parentBoneIndex;
+				if (parentBoneIndex == 0xFFFF)
+				{
+					return (-1, -1);
+				}
+				return (parentBoneIndex, crBoneData->boneId);
+			}
+
+			/// <summary>
+			/// Gets the bone name string from specified bone index.
+			/// </summary>
+			internal string GetBoneName(int boneIndex)
+			{
+				if (boneIndex < 0 || boneIndex >= boneCount)
+					return null;
+
+				return ((CrBoneData*)((ulong)boneData + (uint)sizeof(CrBoneData) * (uint)boneIndex))->Name;
+			}
+		}
+
+		[StructLayout(LayoutKind.Sequential, Pack = 4)]
+		internal struct HashEntry
+		{
+			internal uint hash;
+			internal int data;
+			internal HashEntry* next;
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		internal unsafe struct PgHashMap
+		{
+			[FieldOffset(0x0)]
+			internal ulong* buckets;
+			[FieldOffset(0x8)]
+			internal ushort bucketCount;
+			[FieldOffset(0xA)]
+			internal ushort elementCount;
+
+			internal ulong GetBucketAddress(int index)
+			{
+				return buckets[index];
+			}
+
+			internal bool Get(uint hash, out int value)
+			{
+				var firstEntryAddr = (ulong*)GetBucketAddress((int)(hash % bucketCount));
+				for (var hashEntry = (HashEntry*)firstEntryAddr; hashEntry != null; hashEntry = hashEntry->next)
+				{
+					if (hash == hashEntry->hash)
+					{
+						value = hashEntry->data;
+						return true;
+					}
+				}
+
+				value = default;
+				return false;
+			}
+		}
+
+		internal class DetachFragmentPartByIndexTask : IScriptTask
+		{
+			#region Fields
+			internal FragInst* fragInst;
+			internal int fragmentGroupIndex;
+			internal bool wasNewFragInstCreated;
+			#endregion
+
+			internal DetachFragmentPartByIndexTask(FragInst* fragInst, int fragmentGroupIndex)
+			{
+				this.fragInst = fragInst;
+				this.fragmentGroupIndex = fragmentGroupIndex;
+			}
+
+			public void Run()
+			{
+				wasNewFragInstCreated = detachFragmentPartByIndexFunc(fragInst, fragmentGroupIndex) != null;
+			}
+		}
+
+		public static int GetFragmentGroupCountFromEntity(IntPtr entityAddress)
+		{
+			var fragInst = GetFragInstAddressOfEntity(entityAddress);
+			if (fragInst == null)
+				return 0;
+
+			return GetFragmentGroupCountOfFragInst(fragInst);
+		}
+
+		public static bool DetachFragmentPartByIndex(IntPtr entityAddress, int fragmentGroupIndex)
+		{
+			if (fragmentGroupIndex < 0)
+				return false;
+
+			// If the entity collider count is at the capacity, the game can crash for trying to create the new entity while no free collider slots are available
+			if (GetEntityColliderCount() >= GetEntityColliderCapacity())
+				return false;
+
+			var fragInst = GetFragInstAddressOfEntity(entityAddress);
+			if (fragInst == null)
+				return false;
+
+			var fragmentGroupCount = GetFragmentGroupCountOfFragInst(fragInst);
+			if (fragmentGroupIndex >= fragmentGroupCount)
+				return false;
+
+			var task = new DetachFragmentPartByIndexTask(fragInst, fragmentGroupIndex);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			return task.wasNewFragInstCreated;
+		}
+
+		public static int GetFragmentGroupIndexByEntityBoneIndex(IntPtr entityAddress, int boneIndex)
+		{
+			if ((boneIndex & 0x80000000) != 0) // boneIndex cant be negative
+				return -1;
+
+			var fragInst = GetFragInstAddressOfEntity(entityAddress);
+			if (fragInst == null)
+				return -1;
+
+
+			var crSkeletonData = fragInst->gtaFragType->fragDrawable->crSkeletonData;
+			if (crSkeletonData == null)
+				return -1;
+
+			var boneCount = crSkeletonData->boneCount;
+			if (boneIndex >= boneCount)
+				return -1;
+
+			var fragPhysicsLOD = fragInst->GetAppropriateFragPhysicsLOD();
+			if (fragPhysicsLOD == null)
+				return -1;
+
+			var fragmentGroupCount = fragPhysicsLOD->fragmentGroupCount;
+
+			for (int i = 0; i < fragmentGroupCount; i++)
+			{
+				var fragTypeChild = fragPhysicsLOD->GetFragTypeChild(i);
+
+				if (fragTypeChild == null)
+					continue;
+
+				if (boneIndex == crSkeletonData->GetBoneIndexByBoneId(fragTypeChild->boneId))
+					return i;
+			}
+
+			return -1;
+		}
+
+		public static int GetEntityColliderCapacity()
+		{
+			if (*phSimulatorInstPtr == null)
+				return 0;
+
+			return *(int*)((byte*)*phSimulatorInstPtr + colliderCapacityOffset);
+		}
+
+		public static int GetEntityColliderCount()
+		{
+			if (*phSimulatorInstPtr == null)
+				return 0;
+
+			return *(int*)((byte*)*phSimulatorInstPtr + colliderCountOffset);
+		}
+
+		public static bool IsEntityFragmentObject(IntPtr entityAddress)
+		{
+			// For CObject, a valid address will be returned only when a certain flag is set. For CPed and CVehicle, a valid address will always be returned.
+			return GetFragInstAddressOfEntity(entityAddress) != null;
+		}
+
+		private static FragInst* GetFragInstAddressOfEntity(IntPtr entityAddress)
+		{
+			var vFuncAddr = *(ulong*)(*(ulong*)entityAddress.ToPointer() + (uint)getFragInstVFuncOffset);
+			var getFragInstFunc = (delegate* unmanaged[Stdcall]<IntPtr, FragInst*>)(vFuncAddr);
+
+			return getFragInstFunc(entityAddress);
+		}
+
+		private static int GetFragmentGroupCountOfFragInst(FragInst* fragInst)
+		{
+			var fragPhysicsLOD = fragInst->GetAppropriateFragPhysicsLOD();
+			return fragPhysicsLOD != null ? fragPhysicsLOD->fragmentGroupCount : 0;
+		}
+
+
+		#endregion
+
+		#region -- NaturalMotion Euphoria --
+
+		// These CNmParameter functions can also be called as virtual functions for your information
+		static delegate* unmanaged[Stdcall]<ulong, IntPtr, int, byte> SetNmParameterInt;
+		static delegate* unmanaged[Stdcall]<ulong, IntPtr, bool, byte> SetNmParameterBool;
+		static delegate* unmanaged[Stdcall]<ulong, IntPtr, float, byte> SetNmParameterFloat;
+		static delegate* unmanaged[Stdcall]<ulong, IntPtr, IntPtr, byte> SetNmParameterString;
+		static delegate* unmanaged[Stdcall]<ulong, IntPtr, float, float, float, byte> SetNmParameterVector;
+
+		static delegate* unmanaged[Stdcall]<ulong, ulong, int, ulong> InitMessageMemoryFunc;
+		static delegate* unmanaged[Stdcall]<ulong, IntPtr, ulong, void> SendNmMessageToPedFunc;
+		static delegate* unmanaged[Stdcall]<ulong, CTask*> GetActiveTaskFunc;
+
+		static int fragInstNMGtaOffset;
+		static int cTaskNMScriptControlTypeIndex;
+		static int cEventSwitch2NMTypeIndex;
+		static uint getEventTypeIndexVFuncOffset;
+		static uint fragInstNMGtaGetUnkValVFuncOffset;
+
+		[StructLayout(LayoutKind.Explicit, Size = 0x38)]
+		struct CTask
+		{
+			[FieldOffset(0x34)]
+			internal ushort taskTypeIndex;
+		}
+
+		public static bool IsTaskNMScriptControlOrEventSwitch2NMActive(IntPtr pedAddress)
+		{
+			ulong phInstGtaAddress = *(ulong*)(pedAddress + 0x30);
+
+			if (phInstGtaAddress == 0)
+				return false;
+
+			ulong fragInstNMGtaAddress = *(ulong*)(pedAddress + fragInstNMGtaOffset);
+
+			if (phInstGtaAddress == fragInstNMGtaAddress && !IsPedInjured((byte*)pedAddress))
+			{
+				// This virtual function will return -1 if phInstGta is not a NM one
+				var fragInstNMGtaGetUnkValVFunc = (delegate* unmanaged[Stdcall]<ulong, int>)(new IntPtr((long)*(ulong*)(*(ulong*)fragInstNMGtaAddress + fragInstNMGtaGetUnkValVFuncOffset)));
+				if (fragInstNMGtaGetUnkValVFunc(fragInstNMGtaAddress) != -1)
+				{
+					var PedIntelligenceAddr = *(ulong*)(pedAddress + PedIntelligenceOffset);
+
+					var activeTask = GetActiveTaskFunc(*(ulong*)((byte*)PedIntelligenceAddr + CTaskTreePedOffset));
+					if (activeTask != null && activeTask->taskTypeIndex == cTaskNMScriptControlTypeIndex)
+					{
+						return true;
+					}
+					else
+					{
+						int eventCount = *(int*)((byte*)PedIntelligenceAddr + CEventCountOffset);
+						for (int i = 0; i < eventCount; i++)
+						{
+							var eventAddress = *(ulong*)((byte*)PedIntelligenceAddr + CEventStackOffset + 8 * ((i + *(int*)((byte*)PedIntelligenceAddr + (CEventCountOffset - 4)) + 1) % 16));
+							if (eventAddress != 0)
+							{
+								var getEventTypeIndexVirtualFunc = (delegate* unmanaged[Stdcall]<ulong, int>)(*(ulong*)(*(ulong*)eventAddress + getEventTypeIndexVFuncOffset));
+								if (getEventTypeIndexVirtualFunc(eventAddress) == cEventSwitch2NMTypeIndex)
+								{
+									var taskInEvent = *(CTask**)(eventAddress + 0x28);
+									if (taskInEvent != null)
+									{
+										if (taskInEvent->taskTypeIndex == cTaskNMScriptControlTypeIndex)
+										{
+											return true;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+
+		static bool IsPedInjured(byte* pedAddress) => *(float*)(pedAddress + 0x280) < *(float*)(pedAddress + InjuryHealthThresholdOffset);
+
+		static private void SetNMParameters(ulong messageMemory, Dictionary<string, (int value, Type type)> boolIntFloatParameters, Dictionary<string, object> stringVector3ArrayParameters)
+		{
+			if (boolIntFloatParameters != null)
+			{
+				foreach (var arg in boolIntFloatParameters)
+				{
+					IntPtr name = ScriptDomain.CurrentDomain.PinString(arg.Key);
+
+					(var argValue, var argType) = arg.Value;
+
+					if (argType == typeof(float))
+					{
+						var argValueConverted = *(float*)(&argValue);
+						NativeMemory.SetNmParameterFloat(messageMemory, name, argValueConverted);
+					}
+					else if (argType == typeof(bool))
+					{
+						var argValueConverted = argValue != 0 ? true : false;
+						NativeMemory.SetNmParameterBool(messageMemory, name, argValueConverted);
+					}
+					else if (argType == typeof(int))
+					{
+						NativeMemory.SetNmParameterInt(messageMemory, name, argValue);
+					}
+				}
+			}
+
+			if ((stringVector3ArrayParameters != null))
+			{
+				foreach (var arg in stringVector3ArrayParameters)
+				{
+					IntPtr name = ScriptDomain.CurrentDomain.PinString(arg.Key);
+
+					var argValue = arg.Value;
+					if (argValue is float[] vector3ArgValue)
+						NativeMemory.SetNmParameterVector(messageMemory, name, vector3ArgValue[0], vector3ArgValue[1], vector3ArgValue[2]);
+					else if (argValue is string stringArgValue)
+						NativeMemory.SetNmParameterString(messageMemory, name, ScriptDomain.CurrentDomain.PinString(stringArgValue));
+				}
+			}
+		}
+
+		internal class NmMessageTask : IScriptTask
+		{
+			#region Fields
+			int targetHandle;
+			string messageName;
+			Dictionary<string, (int value, Type type)> boolIntFloatParameters;
+			Dictionary<string, object> stringVector3ArrayParameters;
+			#endregion
+
+			internal NmMessageTask(int target, string messageName, Dictionary<string, (int value, Type type)> boolIntFloatParameters, Dictionary<string, object> stringVector3ArrayParameters)
+			{
+				targetHandle = target;
+				this.messageName = messageName;
+				this.boolIntFloatParameters = boolIntFloatParameters;
+				this.stringVector3ArrayParameters = stringVector3ArrayParameters;
+			}
+
+			public void Run()
+			{
+				byte* _PedAddress = (byte*)NativeMemory.GetEntityAddress(targetHandle).ToPointer();
+
+				if (_PedAddress == null)
+					return;
+
+				if (!IsTaskNMScriptControlOrEventSwitch2NMActive(new IntPtr(_PedAddress)))
+					return;
+
+				ulong messageMemory = (ulong)AllocCoTaskMem(0x1218).ToInt64();
+				if (messageMemory == 0)
+					return;
+				InitMessageMemoryFunc(messageMemory, messageMemory + 0x18, 0x40);
+
+				SetNMParameters(messageMemory, boolIntFloatParameters, stringVector3ArrayParameters);
+
+				ulong fragInstNMGtaAddress = *(ulong*)(_PedAddress + fragInstNMGtaOffset);
+				IntPtr messageStringPtr = ScriptDomain.CurrentDomain.PinString(messageName);
+				SendNmMessageToPedFunc((ulong)fragInstNMGtaAddress, messageStringPtr, messageMemory);
+
+				FreeCoTaskMem(new IntPtr((long)messageMemory));
+			}
+		}
+
+		public static void SendNmMessage(int targetHandle, string messageName, Dictionary<string, (int value, Type type)> boolIntFloatParameters, Dictionary<string, object> stringVector3ArrayParameters)
+		{
+			var task = new NmMessageTask(targetHandle, messageName, boolIntFloatParameters, stringVector3ArrayParameters);
+			ScriptDomain.CurrentDomain.ExecuteTask(task);
+		}
+
+		#endregion
+	}
+}
