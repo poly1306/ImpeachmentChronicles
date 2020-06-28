@@ -105,4 +105,60 @@ namespace GTA
 		Gang2,
 		Gang3,
 		/// <summary>
-		/// This color is always the same as <see cref="BlipColor.
+		/// This color is always the same as <see cref="BlipColor.Blue"></see>, the only difference is color index.
+		/// </summary>
+		Blue3 = 67,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.Blue"></see>, the only difference is color index.
+		/// </summary>
+		Blue4,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.Green"></see>, the only difference is color index.
+		/// </summary>
+		Green2,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.Yellow"></see>, the only difference is color index.
+		/// </summary>
+		Yellow4,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.Yellow"></see>, the only difference is color index.
+		/// </summary>
+		Yellow5,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.White"></see>, the only difference is color index.
+		/// </summary>
+		White2,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.Yellow"></see>, the only difference is color index.
+		/// </summary>
+		Yellow6,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.Blue"></see>, the only difference is color index.
+		/// </summary>
+		Blue5,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.Red"></see>, the only difference is color index.
+		/// </summary>
+		Red4,
+		RedDark,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.Blue"></see>, the only difference is color index.
+		/// </summary>
+		Blue6,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.BlueDark"></see>, the only difference is color index.
+		/// </summary>
+		BlueDark2,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.RedDark"></see>, the only difference is color index.
+		/// </summary>
+		RedDark2,
+		MenuYellow,
+		SimpleBlipDefault,
+		Waypoint,
+		/// <summary>
+		/// This color is always the same as <see cref="BlipColor.Blue"></see>, the only difference is color index.
+		/// </summary>
+		Blue7,
+	}
+}
