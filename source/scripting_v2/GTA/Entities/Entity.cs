@@ -524,3 +524,83 @@ namespace GTA
 		#endregion
 
 		#region Forces
+
+		public void ApplyForce(Vector3 direction)
+		{
+			ApplyForce(direction, Vector3.Zero, ForceType.MaxForceRot2);
+		}
+		public void ApplyForce(Vector3 direction, Vector3 rotation)
+		{
+			ApplyForce(direction, rotation, ForceType.MaxForceRot2);
+		}
+		public void ApplyForce(Vector3 direction, Vector3 rotation, ForceType forceType)
+		{
+			Function.Call(Hash.APPLY_FORCE_TO_ENTITY, Handle, (int)forceType, direction.X, direction.Y, direction.Z, rotation.X, rotation.Y, rotation.Z, false, false, true, true, false, true);
+		}
+		public void ApplyForceRelative(Vector3 direction)
+		{
+			ApplyForceRelative(direction, Vector3.Zero, ForceType.MaxForceRot2);
+		}
+		public void ApplyForceRelative(Vector3 direction, Vector3 rotation)
+		{
+			ApplyForceRelative(direction, Rotation, ForceType.MaxForceRot2);
+		}
+		public void ApplyForceRelative(Vector3 direction, Vector3 rotation, ForceType forceType)
+		{
+			Function.Call(Hash.APPLY_FORCE_TO_ENTITY, Handle, (int)forceType, direction.X, direction.Y, direction.Z, rotation.X, rotation.Y, rotation.Z, false, true, true, true, false, true);
+		}
+
+		#endregion
+
+		public void MarkAsNoLongerNeeded()
+		{
+			int handle = Handle;
+			unsafe
+			{
+				Function.Call(Hash.SET_ENTITY_AS_NO_LONGER_NEEDED, &handle);
+			}
+		}
+
+		public void Delete()
+		{
+			int handle = Handle;
+			Function.Call(Hash.SET_ENTITY_AS_MISSION_ENTITY, handle, false, true);
+			unsafe
+			{
+				Function.Call(Hash.DELETE_ENTITY, &handle);
+			}
+		}
+
+		public bool Exists()
+		{
+			return Function.Call<bool>(Hash.DOES_ENTITY_EXIST, Handle);
+		}
+		public static bool Exists(Entity entity)
+		{
+			return entity != null && entity.Exists();
+		}
+
+		public bool Equals(Entity obj)
+		{
+			return !(obj is null) && Handle == obj.Handle;
+		}
+		public override bool Equals(object obj)
+		{
+			return !(obj is null) && obj.GetType() == GetType() && Equals((Entity)obj);
+		}
+
+		public static bool operator ==(Entity left, Entity right)
+		{
+			return left is null ? right is null : left.Equals(right);
+		}
+		public static bool operator !=(Entity left, Entity right)
+		{
+			return !(left == right);
+		}
+
+		public override int GetHashCode()
+		{
+			return Handle.GetHashCode();
+		}
+	}
+}
