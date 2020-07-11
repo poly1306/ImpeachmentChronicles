@@ -60,3 +60,39 @@ namespace GTA
 		}
 
 		public bool IsClosed
+		{
+			get; private set;
+		}
+
+		public Tasks AddTask
+		{
+			get
+			{
+				if (IsClosed)
+				{
+					throw new Exception("You can't add tasks to a closed sequence!");
+				}
+
+				Count++;
+				return nullPed.Task;
+			}
+		}
+
+		public void Close()
+		{
+			Close(false);
+		}
+		public void Close(bool repeat)
+		{
+			if (IsClosed)
+			{
+				return;
+			}
+
+			Function.Call(Hash.SET_SEQUENCE_TO_REPEAT, Handle, repeat);
+			Function.Call(Hash.CLOSE_SEQUENCE_TASK, Handle);
+
+			IsClosed = true;
+		}
+	}
+}
