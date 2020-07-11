@@ -109,4 +109,106 @@ namespace GTA
 			set => Function.Call(Hash.SET_GROUP_SEPARATION_RANGE, Handle, value);
 		}
 
-		public FormationType Formation
+		public FormationType FormationType
+		{
+			set => Function.Call(Hash.SET_GROUP_FORMATION, Handle, (int)value);
+		}
+
+		public void Add(Ped ped, bool leader)
+		{
+			Function.Call(leader ? Hash.SET_PED_AS_GROUP_LEADER : Hash.SET_PED_AS_GROUP_MEMBER, ped.Handle, Handle);
+		}
+		public void Remove(Ped ped)
+		{
+			Function.Call(Hash.REMOVE_PED_FROM_GROUP, ped.Handle);
+		}
+		public bool Contains(Ped ped)
+		{
+			return Function.Call<bool>(Hash.IS_PED_GROUP_MEMBER, ped.Handle, Handle);
+		}
+
+		public Ped Leader => Function.Call<Ped>(Hash._0x5CCE68DBD5FE93EC, Handle);
+
+		public Ped GetMember(int index)
+		{
+			return Function.Call<Ped>(Hash.GET_PED_AS_GROUP_MEMBER, Handle, index);
+		}
+
+		public Ped[] ToArray(bool includingLeader)
+		{
+			return ToList(includingLeader).ToArray();
+		}
+
+		public List<Ped> ToList(bool includingLeader)
+		{
+			var result = new List<Ped>();
+
+			if (includingLeader)
+			{
+				Ped leader = Leader;
+
+				if (Entity.Exists(leader))
+				{
+					result.Add(leader);
+				}
+			}
+
+			for (int i = 0; i < MemberCount; i++)
+			{
+				Ped member = GetMember(i);
+
+				if (Entity.Exists(member))
+				{
+					result.Add(member);
+				}
+			}
+
+			return result;
+		}
+
+		public bool Exists()
+		{
+			return Function.Call<bool>(Hash.DOES_GROUP_EXIST, Handle);
+		}
+		public static bool Exists(PedGroup pedGroup)
+		{
+			return pedGroup != null && pedGroup.Exists();
+		}
+
+		public bool Equals(PedGroup obj)
+		{
+			return !(obj is null) && Handle == obj.Handle;
+		}
+		public override bool Equals(object obj)
+		{
+			return !(obj is null) && obj.GetType() == GetType() && Equals((PedGroup)obj);
+		}
+
+		public static bool operator ==(PedGroup left, PedGroup right)
+		{
+			return left is null ? right is null : left.Equals(right);
+		}
+		public static bool operator !=(PedGroup left, PedGroup right)
+		{
+			return !(left == right);
+		}
+
+		public override int GetHashCode()
+		{
+			return Handle.GetHashCode();
+		}
+
+		public IEnumerator GetEnumerator2()
+		{
+			return GetEnumerator();
+		}
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+		public virtual IEnumerator<Ped> GetEnumerator()
+		{
+			return new enumerator(this);
+		}
+	}
+}
