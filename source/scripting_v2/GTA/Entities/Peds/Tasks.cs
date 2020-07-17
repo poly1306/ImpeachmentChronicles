@@ -143,4 +143,65 @@ namespace GTA
 		}
 		public void GoTo(Entity target, Vector3 offset, int timeout)
 		{
-		
+			Function.Call(Hash.TASK_GOTO_ENTITY_OFFSET_XY, _ped.Handle, target.Handle, timeout, offset.X, offset.Y, offset.Z, 1.0f, true);
+		}
+		public void GoTo(Vector3 position)
+		{
+			GoTo(position, false, -1);
+		}
+		public void GoTo(Vector3 position, bool ignorePaths)
+		{
+			GoTo(position, ignorePaths, -1);
+		}
+		public void GoTo(Vector3 position, bool ignorePaths, int timeout)
+		{
+			if (ignorePaths)
+			{
+				Function.Call(Hash.TASK_GO_STRAIGHT_TO_COORD, _ped.Handle, position.X, position.Y, position.Z, 1.0f, timeout, 0.0f /* heading */, 0.0f);
+			}
+			else
+			{
+				Function.Call(Hash.TASK_FOLLOW_NAV_MESH_TO_COORD, _ped.Handle, position.X, position.Y, position.Z, 1.0f, timeout, 0.0f, 0, 0.0f);
+			}
+		}
+		public void FollowToOffsetFromEntity(Entity target, Vector3 offset, int timeout, float stoppingRange)
+		{
+			FollowToOffsetFromEntity(target, offset, 1.0f, timeout, stoppingRange, true);
+		}
+		public void FollowToOffsetFromEntity(Entity target, Vector3 offset, float movementSpeed, int timeout, float stoppingRange, bool persistFollowing)
+		{
+			Function.Call(Hash.TASK_FOLLOW_NAV_MESH_TO_COORD, _ped.Handle, target.Handle, offset.X, offset.Y, offset.Z, movementSpeed, timeout, stoppingRange, persistFollowing);
+		}
+		public void GuardCurrentPosition()
+		{
+			Function.Call(Hash.TASK_GUARD_CURRENT_POSITION, _ped.Handle, 15.0f, 10.0f, true);
+		}
+		public void HandsUp(int duration)
+		{
+			Function.Call(Hash.TASK_HANDS_UP, _ped.Handle, duration, 0, -1, false);
+		}
+		public void Jump()
+		{
+			Function.Call(Hash.TASK_JUMP, _ped.Handle, true);
+		}
+		public void LeaveVehicle()
+		{
+			Function.Call(Hash.TASK_LEAVE_ANY_VEHICLE, _ped.Handle, 0, 0 /* flags */);
+		}
+		public void LeaveVehicle(Vehicle vehicle, bool closeDoor)
+		{
+			Function.Call(Hash.TASK_LEAVE_VEHICLE, _ped.Handle, vehicle.Handle, closeDoor ? 0 : 1 << 8);
+		}
+		public void LeaveVehicle(LeaveVehicleFlags flags)
+		{
+			Function.Call(Hash.TASK_LEAVE_ANY_VEHICLE, _ped.Handle, 0, (int)(flags));
+		}
+		public void LeaveVehicle(Vehicle vehicle, LeaveVehicleFlags flags)
+		{
+			Function.Call(Hash.TASK_LEAVE_VEHICLE, _ped.Handle, vehicle.Handle, (int)(flags));
+		}
+		public void LookAt(Entity target)
+		{
+			LookAt(target, -1);
+		}
+		public void LookAt(Entity target, int du
