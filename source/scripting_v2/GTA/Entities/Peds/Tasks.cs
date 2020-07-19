@@ -204,4 +204,57 @@ namespace GTA
 		{
 			LookAt(target, -1);
 		}
-		public void LookAt(Entity target, int du
+		public void LookAt(Entity target, int duration)
+		{
+			Function.Call(Hash.TASK_LOOK_AT_ENTITY, _ped.Handle, target.Handle, duration, 0 /* flags */, 2);
+		}
+		public void LookAt(Vector3 position)
+		{
+			LookAt(position, -1);
+		}
+		public void LookAt(Vector3 position, int duration)
+		{
+			Function.Call(Hash.TASK_LOOK_AT_COORD, _ped.Handle, position.X, position.Y, position.Z, duration, 0 /* flags */, 2);
+		}
+		public void ParachuteTo(Vector3 position)
+		{
+			Function.Call(Hash.TASK_PARACHUTE_TO_TARGET, _ped.Handle, position.X, position.Y, position.Z);
+		}
+		public void ParkVehicle(Vehicle vehicle, Vector3 position, float heading)
+		{
+			Function.Call(Hash.TASK_VEHICLE_PARK, _ped.Handle, vehicle.Handle, position.X, position.Y, position.Z, heading, 1, 20.0f, false);
+		}
+		public void ParkVehicle(Vehicle vehicle, Vector3 position, float heading, float radius)
+		{
+			Function.Call(Hash.TASK_VEHICLE_PARK, _ped.Handle, vehicle.Handle, position.X, position.Y, position.Z, heading, 1, radius, false);
+		}
+		public void ParkVehicle(Vehicle vehicle, Vector3 position, float heading, float radius, bool keepEngineOn)
+		{
+			Function.Call(Hash.TASK_VEHICLE_PARK, _ped.Handle, vehicle.Handle, position.X, position.Y, position.Z, heading, 1, radius, keepEngineOn);
+		}
+		public void PerformSequence(TaskSequence sequence)
+		{
+			if (!sequence.IsClosed)
+			{
+				sequence.Close();
+			}
+
+			ClearAll();
+
+			_ped.BlockPermanentEvents = true;
+
+			Function.Call(Hash.TASK_PERFORM_SEQUENCE, _ped.Handle, sequence.Handle);
+		}
+		public void PlayAnimation(string animDict, string animName, float speed, int duration, bool loop, float playbackRate)
+		{
+			PlayAnimation(animDict, animName, speed, -8.0f, duration, loop ? AnimationFlags.Loop : AnimationFlags.None, playbackRate);
+		}
+		public void PlayAnimation(string animDict, string animName)
+		{
+			PlayAnimation(animDict, animName, 8.0f, -8.0f, -1, AnimationFlags.None, 0.0f);
+		}
+		public void PlayAnimation(string animDict, string animName, float blendInSpeed, int duration, AnimationFlags flags)
+		{
+			PlayAnimation(animDict, animName, blendInSpeed, -8.0f, duration, flags, 0.0f);
+		}
+		public void PlayAnimation(string animDict, string animName, float blendInSpeed, float blendOutSpeed, int duration, AnimationFlags flags, float playba
