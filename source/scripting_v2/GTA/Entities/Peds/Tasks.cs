@@ -257,4 +257,79 @@ namespace GTA
 		{
 			PlayAnimation(animDict, animName, blendInSpeed, -8.0f, duration, flags, 0.0f);
 		}
-		public void PlayAnimation(string animDict, string animName, float blendInSpeed, float blendOutSpeed, int duration, AnimationFlags flags, float playba
+		public void PlayAnimation(string animDict, string animName, float blendInSpeed, float blendOutSpeed, int duration, AnimationFlags flags, float playbackRate)
+		{
+			Function.Call(Hash.REQUEST_ANIM_DICT, animDict);
+
+			var endtime = DateTime.UtcNow + new TimeSpan(0, 0, 0, 0, 1000);
+
+			while (!Function.Call<bool>(Hash.HAS_ANIM_DICT_LOADED, animDict))
+			{
+				Script.Yield();
+
+				if (DateTime.UtcNow >= endtime)
+				{
+					return;
+				}
+			}
+
+			Function.Call(Hash.TASK_PLAY_ANIM, _ped.Handle, animDict, animName, blendInSpeed, blendOutSpeed, duration, (int)(flags), playbackRate, 0, 0, 0);
+		}
+		public void PutAwayMobilePhone()
+		{
+			Function.Call(Hash.TASK_USE_MOBILE_PHONE, _ped.Handle, false);
+		}
+		public void PutAwayParachute()
+		{
+			Function.Call(Hash.TASK_PARACHUTE, _ped.Handle, false);
+		}
+		public void ReactAndFlee(Ped ped)
+		{
+			Function.Call(Hash.TASK_REACT_AND_FLEE_PED, _ped.Handle, ped.Handle);
+		}
+		public void ReloadWeapon()
+		{
+			Function.Call(Hash.TASK_RELOAD_WEAPON, _ped.Handle, true);
+		}
+		public void RunTo(Vector3 position)
+		{
+			RunTo(position, false, -1);
+		}
+		public void RunTo(Vector3 position, bool ignorePaths)
+		{
+			RunTo(position, ignorePaths, -1);
+		}
+		public void RunTo(Vector3 position, bool ignorePaths, int timeout)
+		{
+			if (ignorePaths)
+			{
+				Function.Call(Hash.TASK_GO_STRAIGHT_TO_COORD, _ped.Handle, position.X, position.Y, position.Z, 4.0f, timeout, 0.0f /* heading */, 0.0f);
+			}
+			else
+			{
+				Function.Call(Hash.TASK_FOLLOW_NAV_MESH_TO_COORD, _ped.Handle, position.X, position.Y, position.Z, 4.0f, timeout, 0.0f, 0, 0.0f);
+			}
+		}
+		public void ShootAt(Ped target)
+		{
+			ShootAt(target, -1, FiringPattern.Default);
+		}
+		public void ShootAt(Ped target, int duration)
+		{
+			ShootAt(target, duration, FiringPattern.Default);
+		}
+		public void ShootAt(Ped target, int duration, FiringPattern pattern)
+		{
+			Function.Call(Hash.TASK_SHOOT_AT_ENTITY, _ped.Handle, target.Handle, duration, (int)(pattern));
+		}
+		public void ShootAt(Vector3 position)
+		{
+			ShootAt(position, -1, FiringPattern.Default);
+		}
+		public void ShootAt(Vector3 position, int duration)
+		{
+			ShootAt(position, duration, FiringPattern.Default);
+		}
+		public void ShootAt(Vector3 position, int duration, FiringPattern pattern)
+		{
+			Fun
