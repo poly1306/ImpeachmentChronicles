@@ -400,4 +400,48 @@ namespace GTA
 		}
 		public void VehicleShootAtPed(Ped target)
 		{
-			Function
+			Function.Call(Hash.TASK_VEHICLE_SHOOT_AT_PED, _ped.Handle, target.Handle, 20.0f);
+		}
+		public void Wait(int duration)
+		{
+			Function.Call(Hash.TASK_PAUSE, _ped.Handle, duration);
+		}
+		public void WanderAround()
+		{
+			Function.Call(Hash.TASK_WANDER_STANDARD, _ped.Handle, 0, 0);
+		}
+		public void WanderAround(Vector3 position, float radius)
+		{
+			Function.Call(Hash.TASK_WANDER_IN_AREA, _ped.Handle, position.X, position.Y, position.Z, radius, 0.0f, 0.0f);
+		}
+		public void WarpIntoVehicle(Vehicle vehicle, VehicleSeat seat)
+		{
+			Function.Call(Hash.TASK_WARP_PED_INTO_VEHICLE, _ped.Handle, vehicle.Handle, (int)(seat));
+		}
+		public void WarpOutOfVehicle(Vehicle vehicle)
+		{
+			Function.Call(Hash.TASK_LEAVE_VEHICLE, _ped.Handle, vehicle.Handle, 16);
+		}
+
+		public void ClearAll()
+		{
+			Function.Call(Hash.CLEAR_PED_TASKS, _ped.Handle);
+		}
+		public void ClearAllImmediately()
+		{
+			Function.Call(Hash.CLEAR_PED_TASKS_IMMEDIATELY, _ped.Handle);
+		}
+		public void ClearLookAt()
+		{
+			Function.Call(Hash.TASK_CLEAR_LOOK_AT, _ped.Handle);
+		}
+		public void ClearSecondary()
+		{
+			Function.Call(Hash.CLEAR_PED_SECONDARY_TASK, _ped.Handle);
+		}
+		public void ClearAnimation(string animSet, string animName)
+		{
+			Function.Call(Hash.STOP_ANIM_TASK, _ped.Handle, animSet, animName, -4.0f);
+		}
+	}
+}
