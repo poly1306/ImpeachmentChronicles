@@ -332,4 +332,72 @@ namespace GTA
 		}
 		public void ShootAt(Vector3 position, int duration, FiringPattern pattern)
 		{
-			Fun
+			Function.Call(Hash.TASK_SHOOT_AT_COORD, _ped.Handle, position.X, position.Y, position.Z, duration, (int)(pattern));
+		}
+		public void ShuffleToNextVehicleSeat(Vehicle vehicle)
+		{
+			Function.Call(Hash.TASK_SHUFFLE_TO_NEXT_VEHICLE_SEAT, _ped.Handle, vehicle.Handle);
+		}
+		public void Skydive()
+		{
+			Function.Call(Hash.TASK_SKY_DIVE, _ped.Handle);
+		}
+		public void SlideTo(Vector3 position, float heading)
+		{
+			Function.Call(Hash.TASK_PED_SLIDE_TO_COORD, _ped.Handle, position.X, position.Y, position.Z, heading, 0.7f);
+		}
+		public void StandStill(int duration)
+		{
+			Function.Call(Hash.TASK_STAND_STILL, _ped.Handle, duration);
+		}
+		public void StartScenario(string name)
+		{
+			Function.Call(Hash.TASK_START_SCENARIO_IN_PLACE, _ped.Handle, name, 0, 1);
+		}
+		public void StartScenario(string name, Vector3 position)
+		{
+			StartScenario(name, position, 0.0f);
+		}
+		public void StartScenario(string name, Vector3 position, float heading)
+		{
+			Function.Call(Hash.TASK_START_SCENARIO_AT_POSITION, _ped.Handle, name, position.X, position.Y, position.Z, heading, 0, 0, 1);
+		}
+		public void SwapWeapon()
+		{
+			Function.Call(Hash.TASK_SWAP_WEAPON, _ped.Handle, false);
+		}
+		public void TurnTo(Entity target)
+		{
+			TurnTo(target, -1);
+		}
+		public void TurnTo(Entity target, int duration)
+		{
+			Function.Call(Hash.TASK_TURN_PED_TO_FACE_ENTITY, _ped.Handle, target.Handle, duration);
+		}
+		public void TurnTo(Vector3 position)
+		{
+			TurnTo(position, -1);
+		}
+		public void TurnTo(Vector3 position, int duration)
+		{
+			Function.Call(Hash.TASK_TURN_PED_TO_FACE_COORD, _ped.Handle, position.X, position.Y, position.Z, duration);
+		}
+		public void UseMobilePhone()
+		{
+			Function.Call(Hash.TASK_USE_MOBILE_PHONE, _ped.Handle, true);
+		}
+		public void UseMobilePhone(int duration)
+		{
+			Function.Call(Hash.TASK_USE_MOBILE_PHONE_TIMED, _ped.Handle, duration);
+		}
+		public void UseParachute()
+		{
+			Function.Call(Hash.TASK_PARACHUTE, _ped.Handle, true);
+		}
+		public void VehicleChase(Ped target)
+		{
+			Function.Call(Hash.TASK_VEHICLE_CHASE, _ped.Handle, target.Handle);
+		}
+		public void VehicleShootAtPed(Ped target)
+		{
+			Function
