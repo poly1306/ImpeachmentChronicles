@@ -98,4 +98,100 @@ namespace GTA
 			DirtLevel = 0.0f;
 		}
 
-		public bool IsExtr
+		public bool IsExtraOn(int extra)
+		{
+			return Function.Call<bool>(Hash.IS_VEHICLE_EXTRA_TURNED_ON, Handle, extra);
+		}
+
+		public bool ExtraExists(int extra)
+		{
+			return Function.Call<bool>(Hash.DOES_EXTRA_EXIST, Handle, extra);
+		}
+
+		public void ToggleExtra(int extra, bool toggle)
+		{
+			Function.Call(Hash.SET_VEHICLE_EXTRA, Handle, extra, !toggle);
+		}
+
+		public string NumberPlate
+		{
+			get => Function.Call<string>(Hash.GET_VEHICLE_NUMBER_PLATE_TEXT, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_NUMBER_PLATE_TEXT, Handle, value);
+		}
+
+		public NumberPlateMounting NumberPlateMounting => (NumberPlateMounting)Function.Call<int>(Hash.GET_VEHICLE_PLATE_TYPE, Handle);
+
+		public NumberPlateType NumberPlateType
+		{
+			get => (NumberPlateType)Function.Call<int>(Hash.GET_VEHICLE_NUMBER_PLATE_TEXT_INDEX, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_NUMBER_PLATE_TEXT_INDEX, Handle, (int)value);
+		}
+
+		public VehicleColor PrimaryColor
+		{
+			get
+			{
+				int color1, color2;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_COLOURS, Handle, &color1, &color2);
+				}
+
+				return (VehicleColor)color1;
+			}
+			set
+			{
+				int color1, color2;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_COLOURS, Handle, &color1, &color2);
+				}
+				Function.Call(Hash.SET_VEHICLE_COLOURS, Handle, (int)value, color2);
+			}
+		}
+
+		public VehicleColor SecondaryColor
+		{
+			get
+			{
+				int color1, color2;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_COLOURS, Handle, &color1, &color2);
+				}
+
+				return (VehicleColor)color2;
+			}
+			set
+			{
+				int color1, color2;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_COLOURS, Handle, &color1, &color2);
+				}
+				Function.Call(Hash.SET_VEHICLE_COLOURS, Handle, color1, (int)value);
+			}
+		}
+
+		public VehicleColor RimColor
+		{
+			get
+			{
+				int pearlescentColor, rimColor;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_EXTRA_COLOURS, Handle, &pearlescentColor, &rimColor);
+				}
+				return (VehicleColor)rimColor;
+			}
+			set => Function.Call(Hash.SET_VEHICLE_EXTRA_COLOURS, Handle, (int)PearlescentColor, (int)value);
+		}
+
+		public VehicleColor PearlescentColor
+		{
+			get
+			{
+				int pearlescentColor, rimColor;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_EXTRA_COLOURS, Handle, &pearlescen
