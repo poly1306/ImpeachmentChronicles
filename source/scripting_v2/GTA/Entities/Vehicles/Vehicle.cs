@@ -272,4 +272,113 @@ namespace GTA
 				}
 				return Color.FromArgb(r, g, b);
 			}
-			set => Function.Call(Hash.SET_VEHICLE_CUSTOM_PRIMARY_COLOUR, Handle, value.R, value.G, val
+			set => Function.Call(Hash.SET_VEHICLE_CUSTOM_PRIMARY_COLOUR, Handle, value.R, value.G, value.B);
+		}
+		public Color CustomSecondaryColor
+		{
+			get
+			{
+				int r, g, b;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_CUSTOM_SECONDARY_COLOUR, Handle, &r, &g, &b);
+				}
+				return Color.FromArgb(r, g, b);
+			}
+			set => Function.Call(Hash.SET_VEHICLE_CUSTOM_SECONDARY_COLOUR, Handle, value.R, value.G, value.B);
+		}
+
+		public Color NeonLightsColor
+		{
+			get
+			{
+				int r, g, b;
+				unsafe
+				{
+					Function.Call(Hash._GET_VEHICLE_NEON_LIGHTS_COLOUR, Handle, &r, &g, &b);
+				}
+				return Color.FromArgb(r, g, b);
+			}
+			set => Function.Call(Hash._SET_VEHICLE_NEON_LIGHTS_COLOUR, Handle, value.R, value.G, value.B);
+		}
+
+		public Color TireSmokeColor
+		{
+			get
+			{
+				int r, g, b;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_TYRE_SMOKE_COLOR, Handle, &r, &g, &b);
+				}
+				return Color.FromArgb(r, g, b);
+			}
+			set => Function.Call(Hash.SET_VEHICLE_TYRE_SMOKE_COLOR, Handle, value.R, value.G, value.B);
+		}
+
+		public int Livery
+		{
+			get
+			{
+				if (GetModCount(VehicleMod.Livery) >= 1)
+				{
+					return GetMod(VehicleMod.Livery);
+				}
+				else
+				{
+					return Function.Call<int>(Hash.GET_VEHICLE_LIVERY, Handle);
+				}
+			}
+			set
+			{
+				if (GetModCount(VehicleMod.Livery) >= 1)
+				{
+					SetMod(VehicleMod.Livery, value, false);
+				}
+				else
+				{
+					Function.Call(Hash.SET_VEHICLE_LIVERY, Handle, value);
+				}
+			}
+		}
+
+		public int LiveryCount
+		{
+			get
+			{
+				int bennysLiveryCount = GetModCount(VehicleMod.Livery);
+
+				if (bennysLiveryCount > 0)
+				{
+					return bennysLiveryCount;
+				}
+				else
+				{
+					return Function.Call<int>(Hash.GET_VEHICLE_LIVERY_COUNT, Handle);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Configuration
+
+		public bool IsStolen
+		{
+			get => Function.Call<bool>(Hash.IS_VEHICLE_STOLEN, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_IS_STOLEN, Handle, value);
+		}
+
+		public bool IsWanted
+		{
+			set => Function.Call(Hash.SET_VEHICLE_IS_WANTED, Handle, value);
+		}
+
+		public bool NeedsToBeHotwired
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.NeedsToBeHotwiredOffset == 0)
+				{
+					return f
