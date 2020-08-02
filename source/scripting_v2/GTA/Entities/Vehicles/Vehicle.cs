@@ -381,4 +381,88 @@ namespace GTA
 				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
 				if (address == IntPtr.Zero || SHVDN.NativeMemory.NeedsToBeHotwiredOffset == 0)
 				{
-					return f
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + SHVDN.NativeMemory.NeedsToBeHotwiredOffset, 2);
+			}
+			set => Function.Call(Hash.SET_VEHICLE_NEEDS_TO_BE_HOTWIRED, Handle, value);
+		}
+
+		public bool PreviouslyOwnedByPlayer
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.PreviouslyOwnedByPlayerOffset == 0)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + SHVDN.NativeMemory.PreviouslyOwnedByPlayerOffset, 1);
+			}
+			set => Function.Call(Hash.SET_VEHICLE_HAS_BEEN_OWNED_BY_PLAYER, Handle, value);
+		}
+
+		public string DisplayName => Function.Call<string>(Hash.GET_DISPLAY_NAME_FROM_VEHICLE_MODEL, Model.Hash);
+		public string FriendlyName => Game.GetGXTEntry(DisplayName);
+
+		public VehicleClass ClassType => Function.Call<VehicleClass>(Hash.GET_VEHICLE_CLASS, Handle);
+
+		#endregion
+
+		#region Health
+
+		public float BodyHealth
+		{
+			get => Function.Call<float>(Hash.GET_VEHICLE_BODY_HEALTH, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_BODY_HEALTH, Handle, value);
+		}
+
+		public float EngineHealth
+		{
+			get => Function.Call<float>(Hash.GET_VEHICLE_ENGINE_HEALTH, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_ENGINE_HEALTH, Handle, value);
+		}
+
+		public float PetrolTankHealth
+		{
+			get => Function.Call<float>(Hash.GET_VEHICLE_PETROL_TANK_HEALTH, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_PETROL_TANK_HEALTH, Handle, value);
+		}
+
+		#endregion
+
+		#region Radio
+
+		public bool IsRadioEnabled
+		{
+			set => Function.Call(Hash.SET_VEHICLE_RADIO_ENABLED, Handle, value);
+		}
+
+		public RadioStation RadioStation
+		{
+			set
+			{
+				if (value == RadioStation.RadioOff)
+				{
+					Function.Call(Hash.SET_VEH_RADIO_STATION, "OFF");
+				}
+				else if (Enum.IsDefined(typeof(RadioStation), value))
+				{
+					Function.Call(Hash.SET_VEH_RADIO_STATION, Game.radioNames[(int)value]);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Engine
+
+		public bool EngineRunning
+		{
+			get => Function.Call<bool>(Hash._IS_VEHICLE_ENGINE_ON, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_ENGINE_ON, Handle, value, true);
+		}
+
+		public bool Engin
