@@ -194,4 +194,82 @@ namespace GTA
 				int pearlescentColor, rimColor;
 				unsafe
 				{
-					Function.Call(Hash.GET_VEHICLE_EXTRA_COLOURS, Handle, &pearlescen
+					Function.Call(Hash.GET_VEHICLE_EXTRA_COLOURS, Handle, &pearlescentColor, &rimColor);
+				}
+				return (VehicleColor)pearlescentColor;
+			}
+			set => Function.Call(Hash.SET_VEHICLE_EXTRA_COLOURS, Handle, (int)value, (int)RimColor);
+		}
+
+		public VehicleColor DashboardColor
+		{
+			get
+			{
+				int dashboardColor;
+				unsafe
+				{
+					Function.Call((Hash)0xB7635E80A5C31BFF, Handle, &dashboardColor);
+				}
+				return (VehicleColor)dashboardColor;
+			}
+			set => Function.Call((Hash)0x6089CDF6A57F326C, Handle, (int)value);
+		}
+
+		public VehicleColor TrimColor
+		{
+			get
+			{
+				int trimColor;
+				unsafe
+				{
+					Function.Call((Hash)0x7D1464D472D32136, Handle, &trimColor);
+				}
+				return (VehicleColor)trimColor;
+			}
+			set => Function.Call((Hash)0xF40DD601A65F7F19, Handle, (int)value);
+		}
+
+		public int ColorCombination
+		{
+			get => Function.Call<int>(Hash.GET_VEHICLE_COLOUR_COMBINATION, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_COLOUR_COMBINATION, Handle, value);
+		}
+
+		public int ColorCombinationCount => Function.Call<int>(Hash.GET_NUMBER_OF_VEHICLE_COLOURS, Handle);
+
+		public VehicleWheelType WheelType
+		{
+			get => (VehicleWheelType)Function.Call<int>(Hash.GET_VEHICLE_WHEEL_TYPE, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_WHEEL_TYPE, Handle, (int)value);
+		}
+
+		public VehicleWindowTint WindowTint
+		{
+			get => (VehicleWindowTint)Function.Call<int>(Hash.GET_VEHICLE_WINDOW_TINT, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_WINDOW_TINT, Handle, (int)value);
+		}
+
+		public bool IsPrimaryColorCustom => Function.Call<bool>(Hash.GET_IS_VEHICLE_PRIMARY_COLOUR_CUSTOM, Handle);
+		public bool IsSecondaryColorCustom => Function.Call<bool>(Hash.GET_IS_VEHICLE_SECONDARY_COLOUR_CUSTOM, Handle);
+
+		public void ClearCustomPrimaryColor()
+		{
+			Function.Call(Hash.CLEAR_VEHICLE_CUSTOM_PRIMARY_COLOUR, Handle);
+		}
+		public void ClearCustomSecondaryColor()
+		{
+			Function.Call(Hash.CLEAR_VEHICLE_CUSTOM_SECONDARY_COLOUR, Handle);
+		}
+
+		public Color CustomPrimaryColor
+		{
+			get
+			{
+				int r, g, b;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_CUSTOM_PRIMARY_COLOUR, Handle, &r, &g, &b);
+				}
+				return Color.FromArgb(r, g, b);
+			}
+			set => Function.Call(Hash.SET_VEHICLE_CUSTOM_PRIMARY_COLOUR, Handle, value.R, value.G, val
