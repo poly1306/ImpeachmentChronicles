@@ -465,4 +465,93 @@ namespace GTA
 			set => Function.Call(Hash.SET_VEHICLE_ENGINE_ON, Handle, value, true);
 		}
 
-		public bool Engin
+		public bool EngineCanDegrade
+		{
+			set => Function.Call(Hash.SET_VEHICLE_ENGINE_CAN_DEGRADE, Handle, value);
+		}
+
+		public float EnginePowerMultiplier
+		{
+			set => Function.Call(Hash._SET_VEHICLE_ENGINE_POWER_MULTIPLIER, Handle, value);
+		}
+
+		public float EngineTorqueMultiplier
+		{
+			set => Function.Call(Hash._SET_VEHICLE_ENGINE_TORQUE_MULTIPLIER, Handle, value);
+		}
+
+		public float FuelLevel
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.FuelLevelOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.FuelLevelOffset);
+			}
+			set
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.FuelLevelOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.FuelLevelOffset, value);
+			}
+		}
+
+		#endregion
+
+		#region Performance & Driving
+
+		public int HighGear
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.HighGearOffset == 0)
+				{
+					return 0;
+				}
+
+				return SHVDN.NativeMemory.ReadByte(address + SHVDN.NativeMemory.HighGearOffset);
+			}
+			set
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.HighGearOffset == 0)
+				{
+					return;
+				}
+
+				if (Game.Version >= GameVersion.VER_1_0_1604_0_STEAM)
+				{
+					if (value > 10)
+					{
+						throw new ArgumentOutOfRangeException("value", "Values must be between 0 and 10, inclusive.");
+					}
+				}
+				else if (value > 7)
+				{
+					throw new ArgumentOutOfRangeException("value", "Values must be between 0 and 7, inclusive.");
+				}
+
+				SHVDN.NativeMemory.WriteByte(address + SHVDN.NativeMemory.HighGearOffset, (byte)value);
+			}
+		}
+
+		public int CurrentGear
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.GearOffset == 0)
+				{
+					return 0;
+				}
+
+				return SHVDN.NativeMemory.ReadByt
