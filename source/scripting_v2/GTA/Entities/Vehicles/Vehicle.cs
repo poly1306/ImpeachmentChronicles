@@ -554,4 +554,94 @@ namespace GTA
 					return 0;
 				}
 
-				return SHVDN.NativeMemory.ReadByt
+				return SHVDN.NativeMemory.ReadByte(address + SHVDN.NativeMemory.GearOffset);
+			}
+		}
+
+		public float MaxBraking => Function.Call<float>(Hash.GET_VEHICLE_MAX_BRAKING, Handle);
+
+		public float MaxTraction => Function.Call<float>(Hash.GET_VEHICLE_MAX_TRACTION, Handle);
+
+		public float Speed
+		{
+			get => Function.Call<float>(Hash.GET_ENTITY_SPEED, Handle);
+			set
+			{
+				if (Model.IsTrain)
+				{
+					Function.Call(Hash.SET_TRAIN_SPEED, Handle, value);
+					Function.Call(Hash.SET_TRAIN_CRUISE_SPEED, Handle, value);
+				}
+				else
+				{
+					Function.Call(Hash.SET_VEHICLE_FORWARD_SPEED, Handle, value);
+				}
+			}
+		}
+
+		public float WheelSpeed
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.WheelSpeedOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.WheelSpeedOffset);
+			}
+		}
+
+		public float CurrentRPM
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.CurrentRPMOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.CurrentRPMOffset);
+			}
+			set
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.CurrentRPMOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.CurrentRPMOffset, value);
+			}
+		}
+
+		public float Acceleration
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.AccelerationOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.AccelerationOffset);
+			}
+		}
+
+		[Obsolete("Vehicle.Steering is obsolete, please use Vehicle.SteeringScale instead.")]
+		public float Steering => SteeringScale;
+
+		public float SteeringAngle
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.SteeringAngleOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return (
