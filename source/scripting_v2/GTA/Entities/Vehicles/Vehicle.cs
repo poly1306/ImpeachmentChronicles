@@ -644,4 +644,97 @@ namespace GTA
 					return 0.0f;
 				}
 
-				return (
+				return (float)(SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.SteeringAngleOffset) * (180.0 / System.Math.PI));
+			}
+			set
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.SteeringAngleOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.SteeringAngleOffset, (float)(value * (System.Math.PI / 180.0)));
+			}
+		}
+
+		public float SteeringScale
+		{
+			get
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.SteeringScaleOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.SteeringScaleOffset);
+			}
+			set
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.SteeringScaleOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.SteeringScaleOffset, value);
+			}
+		}
+
+		#endregion
+
+		#region Alarm
+
+		public bool HasAlarm
+		{
+			set => Function.Call(Hash.SET_VEHICLE_ALARM, Handle, value);
+		}
+
+		public bool AlarmActive => Function.Call<bool>(Hash.IS_VEHICLE_ALARM_ACTIVATED, Handle);
+
+		public void StartAlarm()
+		{
+			Function.Call(Hash.START_VEHICLE_ALARM, Handle);
+		}
+
+		#endregion
+
+		#region Siren & Horn
+
+		public bool HasSiren => HasBone("siren1");
+
+		public bool SirenActive
+		{
+			get => Function.Call<bool>(Hash.IS_VEHICLE_SIREN_ON, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_SIREN, Handle, value);
+		}
+
+		public bool IsSirenSilent
+		{
+			// Sets if the siren is silent actually
+			set => Function.Call(Hash.DISABLE_VEHICLE_IMPACT_EXPLOSION_ACTIVATION, Handle, value);
+		}
+
+		public void SoundHorn(int duration)
+		{
+			int heldDownHash = Game.GenerateHash("HELDDOWN");
+			Function.Call(Hash.START_VEHICLE_HORN, Handle, duration, heldDownHash, 0);
+		}
+
+		#endregion
+
+		#region Lights
+
+		public bool LightsOn
+		{
+			get
+			{
+				bool lightState1, lightState2;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_LIGHTS_STATE, Handle, &lightState1, &lightState2);
+				}
+				return lightState1;
+			}
+			set =
