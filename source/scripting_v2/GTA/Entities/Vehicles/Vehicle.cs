@@ -824,4 +824,83 @@ namespace GTA
 					return;
 				}
 
-				SHVDN.NativeMemory.SetBit(address +
+				SHVDN.NativeMemory.SetBit(address + SHVDN.NativeMemory.IsHeadlightDamagedOffset, 0, value);
+			}
+		}
+
+		public bool RightHeadLightBroken
+		{
+			get => Function.Call<bool>(Hash._IS_HEADLIGHT_R_BROKEN, Handle);
+			set
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.IsHeadlightDamagedOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address + SHVDN.NativeMemory.IsHeadlightDamagedOffset, 1, value);
+			}
+		}
+
+		public bool IsRearBumperBrokenOff => Function.Call<bool>(Hash.IS_VEHICLE_BUMPER_BROKEN_OFF, Handle, false);
+
+		public bool IsFrontBumperBrokenOff => Function.Call<bool>(Hash.IS_VEHICLE_BUMPER_BROKEN_OFF, Handle, true);
+
+		public bool IsAxlesStrong
+		{
+			set => Function.Call<bool>(Hash.SET_VEHICLE_HAS_STRONG_AXLES, Handle, value);
+		}
+
+		public bool CanTiresBurst
+		{
+			get => Function.Call<bool>(Hash.GET_VEHICLE_TYRES_CAN_BURST, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_TYRES_CAN_BURST, Handle, value);
+		}
+
+		public bool CanWheelsBreak
+		{
+			set => Function.Call(Hash.SET_VEHICLE_WHEELS_CAN_BREAK, Handle, value);
+		}
+
+		public bool CanBeVisiblyDamaged
+		{
+			set => Function.Call(Hash.SET_VEHICLE_CAN_BE_VISIBLY_DAMAGED, Handle, value);
+		}
+
+		public bool DropsMoneyOnExplosion
+		{
+			set => Function.Call(Hash._0x068F64F2470F9656, Handle, value);
+		}
+
+		public void FixTire(int wheel)
+		{
+			Function.Call(Hash.SET_VEHICLE_TYRE_FIXED, Handle, wheel);
+		}
+		public void BurstTire(int wheel)
+		{
+			Function.Call(Hash.SET_VEHICLE_TYRE_BURST, Handle, wheel, 1, 1000.0f);
+		}
+		public bool IsTireBurst(int wheel)
+		{
+			return Function.Call<bool>(Hash.IS_VEHICLE_TYRE_BURST, Handle, wheel, false);
+		}
+
+		public void ApplyDamage(Vector3 loc, float damageAmount, float radius)
+		{
+			Function.Call(Hash.SET_VEHICLE_DAMAGE, loc.X, loc.Y, loc.Z, damageAmount, radius, true);
+		}
+
+		#endregion
+
+		#region Doors & Locks
+
+		public bool HasRoof => Function.Call<bool>(Hash.DOES_VEHICLE_HAVE_ROOF, Handle);
+
+		public VehicleRoofState RoofState
+		{
+			get => Function.Call<VehicleRoofState>(Hash.GET_CONVERTIBLE_ROOF_STATE, Handle);
+			set
+			{
+				switch (value)
+		
