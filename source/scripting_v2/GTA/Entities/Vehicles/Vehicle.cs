@@ -737,4 +737,91 @@ namespace GTA
 				}
 				return lightState1;
 			}
-			set =
+			set => Function.Call(Hash.SET_VEHICLE_LIGHTS, Handle, value ? 3 : 4);
+		}
+
+		public bool HighBeamsOn
+		{
+			get
+			{
+				bool lightState1, lightState2;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_LIGHTS_STATE, Handle, &lightState1, &lightState2);
+				}
+				return lightState2;
+			}
+			set => Function.Call(Hash.SET_VEHICLE_FULLBEAM, Handle, value);
+		}
+
+		public bool InteriorLightOn
+		{
+			set => Function.Call(Hash.SET_VEHICLE_INTERIORLIGHT, Handle, value);
+		}
+
+		public bool SearchLightOn
+		{
+			get => Function.Call<bool>(Hash.IS_VEHICLE_SEARCHLIGHT_ON, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_SEARCHLIGHT, Handle, value, 0);
+		}
+
+		public bool TaxiLightOn
+		{
+			get => Function.Call<bool>(Hash.IS_TAXI_LIGHT_ON, Handle);
+			set => Function.Call(Hash.SET_TAXI_LIGHTS, Handle, value);
+		}
+
+		public bool LeftIndicatorLightOn
+		{
+			set => Function.Call(Hash.SET_VEHICLE_INDICATOR_LIGHTS, Handle, true, value);
+		}
+
+		public bool RightIndicatorLightOn
+		{
+			set => Function.Call(Hash.SET_VEHICLE_INDICATOR_LIGHTS, Handle, false, value);
+		}
+
+		public bool BrakeLightsOn
+		{
+			set => Function.Call(Hash.SET_VEHICLE_BRAKE_LIGHTS, Handle, value);
+		}
+
+		public bool IsNeonLightsOn(VehicleNeonLight light)
+		{
+			return Function.Call<bool>(Hash._IS_VEHICLE_NEON_LIGHT_ENABLED, Handle, (int)(light));
+		}
+
+		public void SetNeonLightsOn(VehicleNeonLight light, bool on)
+		{
+			Function.Call(Hash._SET_VEHICLE_NEON_LIGHT_ENABLED, Handle, (int)(light), on);
+		}
+
+		public float LightsMultiplier
+		{
+			set => Function.Call(Hash.SET_VEHICLE_LIGHT_MULTIPLIER, Handle, value);
+		}
+
+		#endregion
+
+		#region Damaging
+
+		public bool IsDamaged => Function.Call<bool>(Hash._IS_VEHICLE_DAMAGED, Handle);
+
+		public bool IsDriveable
+		{
+			get => Function.Call<bool>(Hash.IS_VEHICLE_DRIVEABLE, Handle, 0);
+			set => Function.Call(Hash.SET_VEHICLE_UNDRIVEABLE, Handle, !value);
+		}
+
+		public bool LeftHeadLightBroken
+		{
+			get => Function.Call<bool>(Hash._IS_HEADLIGHT_L_BROKEN, Handle);
+			set
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(Handle);
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.IsHeadlightDamagedOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address +
