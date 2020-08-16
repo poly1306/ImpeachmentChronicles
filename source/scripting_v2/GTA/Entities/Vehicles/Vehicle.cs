@@ -903,4 +903,75 @@ namespace GTA
 			set
 			{
 				switch (value)
-		
+				{
+					case VehicleRoofState.Closed:
+						Function.Call(Hash.RAISE_CONVERTIBLE_ROOF, Handle, true);
+						Function.Call(Hash.RAISE_CONVERTIBLE_ROOF, Handle, false);
+						break;
+					case VehicleRoofState.Closing:
+						Function.Call(Hash.RAISE_CONVERTIBLE_ROOF, Handle, false);
+						break;
+					case VehicleRoofState.Opened:
+						Function.Call(Hash.LOWER_CONVERTIBLE_ROOF, Handle, true);
+						Function.Call(Hash.LOWER_CONVERTIBLE_ROOF, Handle, false);
+						break;
+					case VehicleRoofState.Opening:
+						Function.Call(Hash.LOWER_CONVERTIBLE_ROOF, Handle, false);
+						break;
+				}
+			}
+		}
+
+		public VehicleLockStatus LockStatus
+		{
+			get => Function.Call<VehicleLockStatus>(Hash.GET_VEHICLE_DOOR_LOCK_STATUS, Handle);
+			set => Function.Call(Hash.SET_VEHICLE_DOORS_LOCKED, Handle, (int)value);
+		}
+
+		public VehicleLandingGear LandingGear
+		{
+			get => (VehicleLandingGear)Function.Call<int>(Hash._GET_VEHICLE_LANDING_GEAR, Handle);
+			set => Function.Call(Hash._SET_VEHICLE_LANDING_GEAR, Handle, (int)value);
+		}
+
+		public VehicleDoor[] GetDoors()
+		{
+			var doors = new List<VehicleDoor>();
+			if (HasBone("door_dside_f"))
+				doors.Add(VehicleDoor.FrontLeftDoor);
+			if (HasBone("door_pside_f"))
+				doors.Add(VehicleDoor.FrontRightDoor);
+			if (HasBone("door_dside_r"))
+				doors.Add(VehicleDoor.BackLeftDoor);
+			if (HasBone("door_pside_r"))
+				doors.Add(VehicleDoor.BackRightDoor);
+			if (HasBone("bonnet"))
+				doors.Add(VehicleDoor.Hood);
+			if (HasBone("hood"))
+				doors.Add(VehicleDoor.Trunk);
+			return doors.ToArray();
+		}
+
+		public void OpenDoor(VehicleDoor door, bool loose, bool instantly)
+		{
+			Function.Call(Hash.SET_VEHICLE_DOOR_OPEN, Handle, (int)(door), loose, instantly);
+		}
+
+		public void CloseDoor(VehicleDoor door, bool instantly)
+		{
+			Function.Call(Hash.SET_VEHICLE_DOOR_SHUT, Handle, (int)(door), instantly);
+		}
+
+		public bool IsDoorOpen(VehicleDoor door)
+		{
+			return Function.Call<float>(Hash.GET_VEHICLE_DOOR_ANGLE_RATIO, Handle, (int)(door)) > 0.0f;
+		}
+
+		public void BreakDoor(VehicleDoor door)
+		{
+			Function.Call(Hash.SET_VEHICLE_DOOR_BROKEN, Handle, (int)(door));
+		}
+
+		public bool IsDoorBroken(VehicleDoor door)
+		{
+			return Function.Call<
