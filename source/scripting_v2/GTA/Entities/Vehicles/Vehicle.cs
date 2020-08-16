@@ -974,4 +974,105 @@ namespace GTA
 
 		public bool IsDoorBroken(VehicleDoor door)
 		{
-			return Function.Call<
+			return Function.Call<bool>(Hash.IS_VEHICLE_DOOR_DAMAGED, Handle, (int)(door));
+		}
+
+		public float GetDoorAngleRatio(VehicleDoor door)
+		{
+			return Function.Call<float>(Hash.GET_VEHICLE_DOOR_ANGLE_RATIO, Handle, (int)(door));
+		}
+
+		public void SetDoorBreakable(VehicleDoor door, bool isBreakable)
+		{
+			Function.Call(Hash._SET_VEHICLE_DOOR_BREAKABLE, Handle, (int)(door), isBreakable);
+		}
+
+		public void FixWindow(VehicleWindow window)
+		{
+			Function.Call(Hash.FIX_VEHICLE_WINDOW, Handle, (int)(window));
+		}
+
+		public void SmashWindow(VehicleWindow window)
+		{
+			Function.Call(Hash.SMASH_VEHICLE_WINDOW, Handle, (int)(window));
+		}
+
+		public void RollUpWindow(VehicleWindow window)
+		{
+			Function.Call(Hash.ROLL_UP_WINDOW, Handle, (int)(window));
+		}
+
+		public void RollDownWindow(VehicleWindow window)
+		{
+			Function.Call(Hash.ROLL_DOWN_WINDOW, Handle, (int)(window));
+		}
+
+		public void RollDownWindows()
+		{
+			Function.Call(Hash.ROLL_DOWN_WINDOWS, Handle);
+		}
+
+		public void RemoveWindow(VehicleWindow window)
+		{
+			Function.Call(Hash.REMOVE_VEHICLE_WINDOW, Handle, (int)(window));
+		}
+
+		#endregion
+
+		#region Burnout
+
+		public bool IsInBurnout()
+		{
+			return Function.Call<bool>(Hash.IS_VEHICLE_IN_BURNOUT, Handle);
+		}
+
+		public bool HandbrakeOn
+		{
+			set => Function.Call(Hash.SET_VEHICLE_HANDBRAKE, Handle, value);
+		}
+
+		#endregion
+
+		#region Occupants
+
+		public Ped Driver => GetPedOnSeat(VehicleSeat.Driver);
+
+		public Ped GetPedOnSeat(VehicleSeat seat)
+		{
+			return Function.Call<Ped>(Hash.GET_PED_IN_VEHICLE_SEAT, Handle, (int)(seat));
+		}
+
+		public Ped[] Occupants
+		{
+			get
+			{
+				Ped driver = Driver;
+
+				int arraySize = Entity.Exists(driver) ? PassengerCount + 1 : PassengerCount;
+				Ped[] occupantsArray = new Ped[arraySize];
+				int occupantIndex = 0;
+
+				if (arraySize == 0)
+				{
+					return occupantsArray;
+				}
+
+				if (Entity.Exists(driver))
+				{
+					occupantsArray[0] = driver;
+					++occupantIndex;
+				}
+
+				for (int i = 0, seats = PassengerSeats; i < seats; i++)
+				{
+					Ped ped = GetPedOnSeat((VehicleSeat)i);
+
+					if (!Entity.Exists(ped))
+					{
+						continue;
+					}
+
+					occupantsArray[occupantIndex] = ped;
+					++occupantIndex;
+
+					if (occupantIndex >= arrayS
