@@ -1075,4 +1075,98 @@ namespace GTA
 					occupantsArray[occupantIndex] = ped;
 					++occupantIndex;
 
-					if (occupantIndex >= arrayS
+					if (occupantIndex >= arraySize)
+					{
+						return occupantsArray;
+					}
+				}
+
+				return occupantsArray;
+			}
+		}
+
+		public Ped[] Passengers
+		{
+			get
+			{
+				var passengersArray = new Ped[PassengerCount];
+				int passengerIndex = 0;
+
+				if (passengersArray.Length == 0)
+				{
+					return passengersArray;
+				}
+
+				for (int i = 0, seats = PassengerSeats; i < seats; i++)
+				{
+					Ped ped = GetPedOnSeat((VehicleSeat)i);
+
+					if (!Entity.Exists(ped))
+					{
+						continue;
+					}
+
+					passengersArray[passengerIndex] = ped;
+					++passengerIndex;
+
+					if (passengerIndex >= passengersArray.Length)
+					{
+						return passengersArray;
+					}
+				}
+
+				return passengersArray;
+			}
+		}
+
+		public int PassengerCount => Function.Call<int>(Hash.GET_VEHICLE_NUMBER_OF_PASSENGERS, Handle, false, true);
+
+		public int PassengerSeats => Function.Call<int>(Hash.GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS, Handle);
+
+		public Ped CreatePedOnSeat(VehicleSeat seat, GTA.Model model)
+		{
+			if (!model.IsPed || !model.Request(1000))
+			{
+				return null;
+			}
+
+			return Function.Call<Ped>(Hash.CREATE_PED_INSIDE_VEHICLE, Handle, 26, model.Hash, (int)seat, 1, 1);
+		}
+
+		public Ped CreateRandomPedOnSeat(VehicleSeat seat)
+		{
+			if (seat == VehicleSeat.Driver)
+			{
+				return Function.Call<Ped>(Hash.CREATE_RANDOM_PED_AS_DRIVER, Handle, true);
+			}
+			else
+			{
+				Ped ped = Function.Call<Ped>(Hash.CREATE_RANDOM_PED, 0.0f, 0.0f, 0.0f);
+				Function.Call(Hash.SET_PED_INTO_VEHICLE, ped.Handle, Handle, (int)seat);
+
+				return ped;
+			}
+		}
+
+		public bool IsSeatFree(VehicleSeat seat)
+		{
+			return Function.Call<bool>(Hash.IS_VEHICLE_SEAT_FREE, Handle, (int)seat);
+		}
+
+		#endregion
+
+		#region Positioning
+
+		public bool IsStopped => Function.Call<bool>(Hash.IS_VEHICLE_STOPPED, Handle);
+
+		public bool IsStoppedAtTrafficLights => Function.Call<bool>(Hash.IS_VEHICLE_STOPPED_AT_TRAFFIC_LIGHTS, Handle);
+
+		public bool IsOnAllWheels => Function.Call<bool>(Hash.IS_VEHICLE_ON_ALL_WHEELS, Handle);
+
+		public bool PlaceOnGround()
+		{
+			return Function.Call<bool>(Hash.SET_VEHICLE_ON_GROUND_PROPERLY, Handle);
+		}
+
+		public void PlaceOnNextStreet()
+		{
