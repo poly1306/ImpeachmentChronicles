@@ -1170,3 +1170,98 @@ namespace GTA
 
 		public void PlaceOnNextStreet()
 		{
+			Vector3 pos = Position;
+			OutputArgument outPos = new OutputArgument();
+
+			for (int i = 1; i < 40; i++)
+			{
+				float heading;
+				float val;
+				unsafe
+				{
+					Function.Call(Hash.GET_NTH_CLOSEST_VEHICLE_NODE_WITH_HEADING, pos.X, pos.Y, pos.Z, i, outPos, &heading, &val, 1, 0x40400000, 0);
+				}
+				Vector3 newPos = outPos.GetResult<Vector3>();
+
+				if (!Function.Call<bool>(Hash.IS_POINT_OBSCURED_BY_A_MISSION_ENTITY, newPos.X, newPos.Y, newPos.Z, 5.0f, 5.0f, 5.0f, 0))
+				{
+					Position = newPos;
+					PlaceOnGround();
+					Heading = heading;
+					break;
+				}
+			}
+		}
+
+		public bool ProvidesCover
+		{
+			set => Function.Call(Hash.SET_VEHICLE_PROVIDES_COVER, Handle, value);
+		}
+
+		#endregion
+
+		#region Towing
+
+		public bool HasForks => HasBone("forks");
+
+		public bool HasTowArm => HasBone("tow_arm");
+
+		public float TowingCraneRaisedAmount
+		{
+			set => Function.Call(Hash._SET_TOW_TRUCK_CRANE_RAISED, Handle, value);
+		}
+
+		public void TowVehicle(Vehicle vehicle, bool rear)
+		{
+			Function.Call(Hash.ATTACH_VEHICLE_TO_TOW_TRUCK, Handle, vehicle.Handle, rear, 0.0f, 0.0f, 0.0f);
+		}
+
+		public void DetachFromTowTruck()
+		{
+			Function.Call(Hash.DETACH_VEHICLE_FROM_ANY_TOW_TRUCK, Handle);
+		}
+
+		public void DetachTowedVehicle()
+		{
+			Vehicle vehicle = TowedVehicle;
+
+			if (Entity.Exists(vehicle))
+			{
+				Function.Call(Hash.DETACH_VEHICLE_FROM_TOW_TRUCK, Handle, vehicle.Handle);
+			}
+		}
+
+		public Vehicle TowedVehicle => Function.Call<Vehicle>(Hash.GET_ENTITY_ATTACHED_TO_TOW_TRUCK, Handle);
+
+		#endregion
+
+		#region Carbobob
+
+		public bool HasBombBay => HasBone("door_hatch_l") && HasBone("door_hatch_r");
+
+		public void OpenBombBay()
+		{
+			if (HasBombBay)
+			{
+				Function.Call(Hash._OPEN_VEHICLE_BOMB_BAY, Handle);
+			}
+		}
+		public void CloseBombBay()
+		{
+			if (HasBombBay)
+			{
+				Function.Call(Hash._0x3556041742A0DC74, Handle);
+			}
+		}
+
+		public void SetHeliYawPitchRollMult(float mult)
+		{
+			if (IsVehicleHeliOrBlimp(Handle) && mult >= 0.0f && mult <= 1.0f)
+			{
+				Function.Call(Hash._0x6E0859B530A365CC, Handle, mult);
+			}
+
+			bool IsVehicleHeliOrBlimp(int handle)
+			{
+				var address = SHVDN.NativeMemory.GetEntityAddress(handle);
+				if (address == IntPtr.Ze
