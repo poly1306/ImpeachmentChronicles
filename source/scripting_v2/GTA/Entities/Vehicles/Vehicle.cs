@@ -1264,4 +1264,73 @@ namespace GTA
 			bool IsVehicleHeliOrBlimp(int handle)
 			{
 				var address = SHVDN.NativeMemory.GetEntityAddress(handle);
-				if (address == IntPtr.Ze
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleTypeOffsetInCVehicle == 0)
+				{
+					return false;
+				}
+
+				var vehicleTypeValue = (uint)SHVDN.NativeMemory.ReadInt32(address + SHVDN.NativeMemory.VehicleTypeOffsetInCVehicle);
+				return (vehicleTypeValue - 8) <= 1;
+			}
+		}
+
+		public void DropCargobobHook(CargobobHook hookType)
+		{
+			if (Model.IsCargobob)
+			{
+				Function.Call(Hash._0x7BEB0C7A235F6F3B, Handle, (int)(hookType));
+			}
+		}
+
+		public void RemoveCargobobHook()
+		{
+			if (Model.IsCargobob)
+			{
+				Function.Call(Hash._0x9768CF648F54C804, Handle);
+			}
+		}
+
+		public bool IsCargobobHookActive()
+		{
+			if (Model.IsCargobob)
+			{
+				return Function.Call<bool>(Hash._0x1821D91AD4B56108, Handle) || Function.Call<bool>(Hash._0x6E08BF5B3722BAC9, Handle);
+			}
+
+			return false;
+		}
+		public bool IsCargobobHookActive(CargobobHook hookType)
+		{
+			if (Model.IsCargobob)
+			{
+				switch (hookType)
+				{
+					case CargobobHook.Hook:
+						return Function.Call<bool>(Hash._0x1821D91AD4B56108, Handle);
+					case CargobobHook.Magnet:
+						return Function.Call<bool>(Hash._0x6E08BF5B3722BAC9, Handle);
+				}
+			}
+
+			return false;
+		}
+
+		public void CargoBobMagnetGrabVehicle()
+		{
+			if (IsCargobobHookActive(CargobobHook.Magnet))
+			{
+				Function.Call(Hash._0x9A665550F8DA349B, Handle, true);
+			}
+		}
+
+		public void CargoBobMagnetReleaseVehicle()
+		{
+			if (IsCargobobHookActive(CargobobHook.Magnet))
+			{
+				Function.Call(Hash._0x9A665550F8DA349B, Handle, false);
+			}
+		}
+
+		#endregion
+	}
+}
