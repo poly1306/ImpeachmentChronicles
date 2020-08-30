@@ -1,3 +1,4 @@
+
 //
 // Copyright (C) 2015 crosire & contributors
 // License: https://github.com/crosire/scripthookvdotnet#license
@@ -5,10 +6,11 @@
 
 namespace GTA
 {
-	public enum VehicleToggleMod
+	public enum VehicleWindow
 	{
-		Turbo = 18,
-		TireSmoke = 20,
-		XenonHeadlights = 22,
+		FrontLeftWindow,
+		FrontRightWindow,
+		BackLeftWindow,
+		BackRightWindow,
 	}
 }

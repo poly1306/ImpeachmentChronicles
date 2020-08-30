@@ -1,3 +1,4 @@
+
 //
 // Copyright (C) 2015 crosire & contributors
 // License: https://github.com/crosire/scripthookvdotnet#license
@@ -5,10 +6,12 @@
 
 namespace GTA
 {
-	public enum VehicleToggleMod
+	public enum Font
 	{
-		Turbo = 18,
-		TireSmoke = 20,
-		XenonHeadlights = 22,
+		ChaletLondon,
+		HouseScript,
+		Monospace,
+		ChaletComprimeCologne = 4,
+		Pricedown = 7,
 	}
 }
