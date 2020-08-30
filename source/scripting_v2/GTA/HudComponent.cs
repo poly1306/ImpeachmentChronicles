@@ -54,4 +54,9 @@ namespace GTA
 		ReplayOptions = 45,
 		ReplayHelpText = 46,
 		ReplayMiscText = 47,
-		ReplayTopLine
+		ReplayTopLine = 48,
+		ReplayBottomLine = 49,
+		ReplayLeftBar = 50,
+		ReplayTimer = 51,
+	}
+}
