@@ -126,4 +126,83 @@ namespace GTA
 					float x = (float)(Width + offset.Width) / UI.WIDTH - w * 0.5f;
 					float y = (float)(HeaderHeight + offset.Height + ItemHeight * ItemDrawCount - ItemHeight / 2) / UI.HEIGHT;
 
-			
+					Function.Call(Hash.DRAW_SPRITE, "CommonMenu", "arrowright", x, y, w, h, 90.0f, 255, 255, 255, 255);
+				}
+			}
+			else
+			{
+				Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, "CommonMenu", 0);
+			}
+		}
+
+		public override void Initialize()
+		{
+			int currentY = HeaderHeight;
+			var itemSize = new Size(Width, ItemHeight);
+			for (int i = 0; i < ItemDrawCount; i++)
+			{
+				Items[i + CurrentScrollOffset].SetOriginAndSize(new Point(0, currentY), itemSize);
+				currentY += ItemHeight;
+			}
+
+			selectedIndex = 0;
+			footerDescription = Items[selectedIndex].Description;
+			Items[selectedIndex].Select();
+
+			int itemsHeight = ItemDrawCount * ItemHeight;
+			rectHeader = new UIRectangle(default, new Size(Width, HeaderHeight), HeaderColor);
+			if (HasFooter)
+			{
+				rectFooter = new UIRectangle(new Point(0, HeaderHeight + itemsHeight), new Size(Width, FooterHeight), FooterColor);
+			}
+
+			textHeader = new UIText(Caption,
+				HeaderCentered ? new Point(Width / 2, 0) : default,
+				HeaderTextScale,
+				HeaderTextColor,
+				HeaderFont,
+				HeaderCentered);
+
+			if (HasFooter)
+			{
+				textFooter = new UIText(footerDescription, FooterCentered ? new Point(Width / 2, HeaderHeight + itemsHeight) : new Point(0, HeaderHeight + itemsHeight), FooterTextScale, FooterTextColor, FooterFont, FooterCentered);
+			}
+		}
+
+		public override void OnOpen()
+		{
+		}
+		public override void OnClose()
+		{
+		}
+		public override void OnActivate()
+		{
+			if (selectedIndex < 0 || selectedIndex >= Items.Count)
+			{
+				return;
+			}
+
+			Items[selectedIndex].Activate();
+		}
+
+		public void OnChangeSelection(int newIndex)
+		{
+			if (newIndex < CurrentScrollOffset)
+			{
+				CurrentScrollOffset = newIndex - startScrollOffset - 1;
+			}
+			else if (newIndex > CurrentScrollOffset + ItemDrawCount)
+			{
+				CurrentScrollOffset = newIndex + startScrollOffset + 1 - ItemDrawCount;
+			}
+
+			Items[selectedIndex].Deselect();
+			selectedIndex = newIndex;
+			footerDescription = Items[selectedIndex].Description;
+			Items[selectedIndex].Select();
+
+			// Update footer
+			if (HasFooter)
+			{
+				int itemsHeight = Items.Count * ItemHeight;
+				textFooter = new UITex
