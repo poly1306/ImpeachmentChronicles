@@ -205,4 +205,112 @@ namespace GTA
 			if (HasFooter)
 			{
 				int itemsHeight = Items.Count * ItemHeight;
-				textFooter = new UITex
+				textFooter = new UIText(footerDescription, FooterCentered ? new Point(Width / 2, HeaderHeight + itemsHeight) : new Point(0, HeaderHeight + itemsHeight), FooterTextScale, FooterTextColor, FooterFont, FooterCentered);
+			}
+
+			SelectedIndexChanged(this, new SelectedIndexChangedArgs(selectedIndex));
+		}
+		public override void OnChangeItem(bool right)
+		{
+			if (selectedIndex < 0 || selectedIndex >= Items.Count)
+			{
+				return;
+			}
+
+			Items[selectedIndex].Change(right);
+		}
+		public override void OnChangeSelection(bool down)
+		{
+			int newIndex = down ? selectedIndex + 1 : selectedIndex - 1;
+			if (newIndex >= Items.Count)
+			{
+				newIndex = 0;
+			}
+
+			if (newIndex < 0)
+			{
+				newIndex = Items.Count - 1;
+			}
+
+			if (down)
+			{
+				if (newIndex - CurrentScrollOffset > ItemDrawCount - startScrollOffset - 1)
+				{
+					CurrentScrollOffset++;
+				}
+			}
+			else
+			{
+				if (newIndex - CurrentScrollOffset < startScrollOffset)
+				{
+					CurrentScrollOffset--;
+				}
+			}
+
+			OnChangeSelection(newIndex);
+		}
+
+		void OnChangeDrawLimit()
+		{
+			if (CurrentScrollOffset > MaxScrollOffset)
+			{
+				CurrentScrollOffset = MaxScrollOffset;
+			}
+			if (SelectedIndex < CurrentScrollOffset)
+			{
+				CurrentScrollOffset = SelectedIndex - startScrollOffset - 1;
+			}
+			else if (SelectedIndex > CurrentScrollOffset + ItemDrawCount)
+			{
+				CurrentScrollOffset = SelectedIndex + startScrollOffset + 1 - ItemDrawCount;
+			}
+
+			UpdateItemPositions();
+
+			if (SelectedIndex >= 0 && SelectedIndex < Items.Count)
+			{
+				Items[SelectedIndex].Select();
+			}
+		}
+
+		void UpdateItemPositions()
+		{
+		}
+
+		public int Width
+		{
+			get; set;
+		}
+		public int ItemHeight
+		{
+			get; set;
+		}
+
+		public int HeaderHeight
+		{
+			get; set;
+		}
+		public int FooterHeight
+		{
+			get; set;
+		}
+
+		public bool HasFooter
+		{
+			get; set;
+		}
+
+		public List<IMenuItem> Items { get; set; } = new List<IMenuItem>();
+
+		public int MaxDrawLimit
+		{
+			get => maxDrawLimit;
+			set
+			{
+				if (value < 6 || value > 20)
+				{
+					throw new ArgumentOutOfRangeException("MaxDrawLimit", "MaxDrawLimit must be between 6 and 20");
+				}
+
+				maxDrawLimit = value;
+				StartScrollOffset = StartScrollOffset; // Make sure value still fal
