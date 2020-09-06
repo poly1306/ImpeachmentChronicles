@@ -313,4 +313,61 @@ namespace GTA
 				}
 
 				maxDrawLimit = value;
-				StartScrollOffset = StartScrollOffset; // Make sure value still fal
+				StartScrollOffset = StartScrollOffset; // Make sure value still falls in correct range
+				OnChangeDrawLimit();
+			}
+		}
+
+		public int SelectedIndex
+		{
+			get => selectedIndex;
+			set => OnChangeSelection(value);
+		}
+
+		public int StartScrollOffset
+		{
+			get => startScrollOffset;
+			set
+			{
+				if (value < 0)
+				{
+					startScrollOffset = 0;
+				}
+				else if (value > MaxDrawLimit / 2 - 1)
+				{
+					startScrollOffset = MaxDrawLimit / 2 - 1;
+				}
+				else
+				{
+					startScrollOffset = value;
+				}
+			}
+		}
+
+		public event EventHandler<SelectedIndexChangedArgs> SelectedIndexChanged;
+
+		int ItemDrawCount => Items.Count < maxDrawLimit ? Items.Count : maxDrawLimit;
+		int MaxScrollOffset => Items.Count < ItemDrawCount ? 0 : Items.Count - ItemDrawCount;
+		int CurrentScrollOffset
+		{
+			get => scrollOffset;
+			set
+			{
+				if (value > MaxScrollOffset)
+				{
+					scrollOffset = MaxScrollOffset;
+				}
+				else if (value < 0)
+				{
+					scrollOffset = 0;
+				}
+				else
+				{
+					scrollOffset = value;
+				}
+
+				UpdateItemPositions();
+			}
+		}
+	}
+}
