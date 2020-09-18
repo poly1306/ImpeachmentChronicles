@@ -80,3 +80,103 @@ namespace GTA
 			}
 
 			button.Color = Parent.SelectedItemColor;
+			text.Color = Parent.SelectedTextColor;
+		}
+		public virtual void Deselect()
+		{
+			if (button == null)
+			{
+				return;
+			}
+
+			button.Color = Parent.UnselectedItemColor;
+			text.Color = Parent.UnselectedTextColor;
+		}
+		public virtual void Activate()
+		{
+		}
+
+		public virtual void Change(bool right)
+		{
+		}
+
+		public virtual void SetOriginAndSize(Point origin, Size size)
+		{
+			text = new UIText(
+				Caption,
+				Parent.ItemTextCentered ? new Point(origin.X + size.Width / 2 + Parent.TextOffset.X, origin.Y + Parent.TextOffset.Y) : new Point(origin.X + Parent.TextOffset.X, origin.Y + Parent.TextOffset.Y),
+				Parent.ItemTextScale,
+				Parent.UnselectedTextColor,
+				Parent.ItemFont,
+				Parent.ItemTextCentered);
+			button = new UIRectangle(
+				origin,
+				size,
+				Parent.UnselectedItemColor);
+
+			if (UnderlinedAbove)
+			{
+				underlineAbove = new UIRectangle(
+					new Point(origin.X, origin.Y),
+					new Size(size.Width, UnderlineHeight),
+					UnderlineColor);
+			}
+			if (UnderlinedBelow)
+			{
+				underlineBelow = new UIRectangle(
+					new Point(origin.X, origin.Y + size.Height - UnderlineHeight),
+					new Size(size.Width, 2),
+					UnderlineColor);
+			}
+		}
+
+		void UpdateText()
+		{
+			text.Caption = Caption;
+		}
+
+		public int UnderlineHeight
+		{
+			get;
+			set;
+		}
+
+		public bool UnderlinedAbove
+		{
+			get;
+			set;
+		}
+		public bool UnderlinedBelow
+		{
+			get;
+			set;
+		}
+
+		public Color UnderlineColor
+		{
+			get;
+			set;
+		}
+
+		public virtual string Caption
+		{
+			get => caption;
+			set
+			{
+				caption = value;
+				UpdateText();
+			}
+		}
+		public virtual string Description
+		{
+			get;
+			set;
+		}
+
+		public virtual MenuBase Parent
+		{
+			get;
+			set;
+		}
+	}
+}
