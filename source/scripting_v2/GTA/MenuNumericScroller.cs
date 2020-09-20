@@ -101,4 +101,93 @@ namespace GTA
 		{
 			text = new UIText(
 				string.Empty,
-				Parent.ItemTextCentered ? new Point(origin.X + size.W
+				Parent.ItemTextCentered ? new Point(origin.X + size.Width / 2 + Parent.TextOffset.X, origin.Y + Parent.TextOffset.Y) : new Point(origin.X + Parent.TextOffset.X, origin.Y + Parent.TextOffset.Y),
+				Parent.ItemTextScale,
+				Parent.UnselectedTextColor,
+				Parent.ItemFont,
+				Parent.ItemTextCentered);
+			button = new UIRectangle(
+				origin,
+				size,
+				Parent.UnselectedItemColor);
+
+			UpdateText();
+		}
+
+		void UpdateText()
+		{
+			double number = Min + Increment * TimesIncremented;
+			string numberString;
+
+			if (DecimalFigures == -1)
+			{
+				numberString = number.ToString();
+			}
+			else if (DecimalFigures == 0)
+			{
+				numberString = ((int)number).ToString();
+			}
+			else
+			{
+				numberString = number.ToString("F" + DecimalFigures);
+			}
+
+			text.Caption = Caption + " <" + numberString + ">";
+		}
+
+		public event EventHandler<MenuItemDoubleValueArgs> Changed;
+		public event EventHandler<MenuItemDoubleValueArgs> Activated;
+
+		public int DecimalFigures
+		{
+			get;
+			set;
+		}
+
+		public int TimesIncremented
+		{
+			get => timesIncremented;
+			set
+			{
+				timesIncremented = value;
+				UpdateText();
+			}
+		}
+
+		public double Min
+		{
+			get;
+			set;
+		}
+		public double Max
+		{
+			get;
+			set;
+		}
+
+		public double Value => timesIncremented * Increment;
+
+		public double Increment
+		{
+			get;
+			set;
+		}
+
+		public virtual string Caption
+		{
+			get;
+			set;
+		}
+		public virtual string Description
+		{
+			get;
+			set;
+		}
+
+		public virtual MenuBase Parent
+		{
+			get;
+			set;
+		}
+	}
+}
