@@ -121,4 +121,40 @@ namespace GTA
 				rectNo.Color = UnselectedItemColor;
 				rectYes.Color = SelectedItemColor;
 				textNo.Color = UnselectedTextColor;
-				textYes.Col
+				textYes.Color = SelectedTextColor;
+			}
+			else
+			{
+				rectNo.Color = SelectedItemColor;
+				rectYes.Color = UnselectedItemColor;
+				textNo.Color = SelectedTextColor;
+				textYes.Color = UnselectedTextColor;
+			}
+		}
+		public override void OnChangeSelection(bool down)
+		{
+		}
+
+		public event EventHandler<EventArgs> No;
+		public event EventHandler<EventArgs> Yes;
+
+		public int Width
+		{
+			get; set;
+		}
+		public int Height
+		{
+			get; set;
+		}
+		public int ButtonHeight
+		{
+			get; set;
+		}
+
+		/** Use Ok and Cancel instead of Yes and No */
+		public bool OkCancel
+		{
+			get; set;
+		}
+	}
+}
