@@ -102,4 +102,42 @@ namespace GTA
 				}
 				else if (argument is bool argBool)
 				{
-					Function.Call(Hash._PUSH_SCALEFORM_MOVIE_FUNCTION_PARAMETER_BOOL, argBool)
+					Function.Call(Hash._PUSH_SCALEFORM_MOVIE_FUNCTION_PARAMETER_BOOL, argBool);
+				}
+				else if (argument is ScaleformArgumentTXD argTxd)
+				{
+					Function.Call(Hash._PUSH_SCALEFORM_MOVIE_FUNCTION_PARAMETER_STRING, argTxd.txd);
+				}
+				else
+				{
+					throw new ArgumentException(string.Format("Unknown argument type {0} passed to scaleform with handle {1}.", argument.GetType().Name, Handle));
+				}
+			}
+
+			Function.Call(Hash._POP_SCALEFORM_MOVIE_FUNCTION_VOID);
+		}
+
+		public void Render2D()
+		{
+			Function.Call(Hash._0x0DF606929C105BE1, Handle, 255, 255, 255, 255, 0);
+		}
+		public void Render2DScreenSpace(PointF position, PointF size)
+		{
+			float x = position.X / UI.WIDTH;
+			float y = position.Y / UI.HEIGHT;
+			float w = size.X / UI.WIDTH;
+			float h = size.Y / UI.HEIGHT;
+
+			Function.Call(Hash.DRAW_SCALEFORM_MOVIE, Handle, x + (w * 0.5f), y + (h * 0.5f), w, h, 255, 255, 255, 255);
+		}
+
+		public void Render3D(Vector3 position, Vector3 rotation, Vector3 scale)
+		{
+			Function.Call(Hash._0x1CE592FDC749D6F5, Handle, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, 2.0f, 2.0f, 1.0f, scale.X, scale.Y, scale.Z, 2);
+		}
+		public void Render3DAdditive(Vector3 position, Vector3 rotation, Vector3 scale)
+		{
+			Function.Call(Hash._0x87D51D72255D4E78, Handle, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, 2.0f, 2.0f, 1.0f, scale.X, scale.Y, scale.Z, 2);
+		}
+	}
+}
