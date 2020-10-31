@@ -48,4 +48,23 @@ namespace GTA
 		{
 			return !(obj is null) && Handle == obj.Handle;
 		}
-		public sea
+		public sealed override bool Equals(object obj)
+		{
+			return !(obj is null) && obj.GetType() == GetType() && Equals((Pickup)obj);
+		}
+
+		public static bool operator ==(Pickup left, Pickup right)
+		{
+			return left is null ? right is null : left.Equals(right);
+		}
+		public static bool operator !=(Pickup left, Pickup right)
+		{
+			return !(left == right);
+		}
+
+		public sealed override int GetHashCode()
+		{
+			return Handle.GetHashCode();
+		}
+	}
+}
