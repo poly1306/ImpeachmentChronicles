@@ -17,4 +17,6 @@ namespace GTA
 		public int SelectedIndex
 		{
 			get;
-		
+		}
+	}
+}
