@@ -40,4 +40,24 @@ namespace GTA
 	[StructLayout(LayoutKind.Explicit, Size = 0x110)]
 	internal unsafe struct DlcWeaponComponentData
 	{
-		[FieldOffset(
+		[FieldOffset(0x00)] int attachBone; // The bone on the gun to attach the component to
+		[FieldOffset(0x08)] int bActiveByDefault;
+		[FieldOffset(0x18)] int componentHash;
+		[FieldOffset(0x28)] int componentCost;
+		[FieldOffset(0x30)] fixed byte name[0x40];
+		[FieldOffset(0x70)] fixed byte desc[0x40];
+
+		public WeaponComponent Hash => (WeaponComponent)componentHash;
+
+		public string DisplayName
+		{
+			get
+			{
+				fixed (byte* ptr = name)
+				{
+					return SHVDN.NativeMemory.PtrToStringUTF8(new IntPtr(ptr));
+				}
+			}
+		}
+	}
+}
