@@ -10,4 +10,18 @@ namespace GTA
 		Unknown = -1,
 		ExtraSunny,
 		Clear,
-		Cloud
+		Clouds,
+		Smog,
+		Foggy,
+		Overcast,
+		Raining,
+		ThunderStorm,
+		Clearing,
+		Neutral,
+		Snowing,
+		Blizzard,
+		Snowlight,
+		Christmas,
+		Halloween,
+	}
+}
