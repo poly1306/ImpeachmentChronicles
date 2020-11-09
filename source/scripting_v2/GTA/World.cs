@@ -84,4 +84,97 @@ namespace GTA
 		{
 			get
 			{
-				for (int i = 0; i < weath
+				for (int i = 0; i < weatherNames.Length; i++)
+				{
+					if (Function.Call<int>(Hash._GET_CURRENT_WEATHER_TYPE) == Game.GenerateHash(weatherNames[i]))
+					{
+						return (Weather)i;
+					}
+				}
+
+				return Weather.Unknown;
+			}
+			set
+			{
+				if (Enum.IsDefined(typeof(Weather), value) && value != Weather.Unknown)
+				{
+					Function.Call(Hash.SET_WEATHER_TYPE_NOW, weatherNames[(int)value]);
+				}
+			}
+		}
+		public static Weather NextWeather
+		{
+			get
+			{
+				for (int i = 0; i < weatherNames.Length; i++)
+				{
+					if (Function.Call<bool>(Hash.IS_NEXT_WEATHER_TYPE, weatherNames[i]))
+					{
+						return (Weather)i;
+					}
+				}
+
+				return Weather.Unknown;
+			}
+			set
+			{
+				if (Enum.IsDefined(typeof(Weather), value) && value != Weather.Unknown)
+				{
+					int currentWeatherHash, nextWeatherHash;
+					float weatherTransition;
+					unsafe
+					{
+						Function.Call(Hash._GET_WEATHER_TYPE_TRANSITION, &currentWeatherHash, &nextWeatherHash, &weatherTransition);
+					}
+					Function.Call(Hash._SET_WEATHER_TYPE_TRANSITION, currentWeatherHash, Game.GenerateHash(weatherNames[(int)value]), 0.0f);
+				}
+			}
+		}
+
+		public static void TransitionToWeather(Weather value, float duration)
+		{
+			if (Enum.IsDefined(value.GetType(), value) && value != Weather.Unknown)
+			{
+				Function.Call(Hash._SET_WEATHER_TYPE_OVER_TIME, weatherNames[(int)value], duration);
+			}
+		}
+
+		public static float WeatherTransition
+		{
+			get
+			{
+				int currentWeatherHash, nextWeatherHash;
+				float weatherTransition;
+				unsafe
+				{
+					Function.Call(Hash._GET_WEATHER_TYPE_TRANSITION, &currentWeatherHash, &nextWeatherHash, &weatherTransition);
+				}
+				return weatherTransition;
+			}
+			set => Function.Call(Hash._SET_WEATHER_TYPE_TRANSITION, 0, 0, value);
+		}
+
+		public static int GravityLevel
+		{
+			set => Function.Call(Hash.SET_GRAVITY_LEVEL, value);
+		}
+
+		#endregion
+
+		#region Blips
+
+		public static Vector3 GetWaypointPosition()
+		{
+			if (!Game.IsWaypointActive)
+			{
+				return Vector3.Zero;
+			}
+
+			bool blipFound = false;
+			Vector3 position = Vector3.Zero;
+
+			var waypointBlipHandle = SHVDN.NativeMemory.GetWaypointBlip();
+
+			if (waypointBlipHandle != 0)
+			{
+				position = 
