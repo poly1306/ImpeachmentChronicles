@@ -177,4 +177,91 @@ namespace GTA
 
 			if (waypointBlipHandle != 0)
 			{
-				position = 
+				position = Function.Call<Vector3>(Hash.GET_BLIP_INFO_ID_COORD, waypointBlipHandle);
+				blipFound = true;
+			}
+
+			if (blipFound)
+			{
+				bool groundFound = false;
+				float height = 0.0f;
+
+				for (int i = 800; i >= 0; i -= 50)
+				{
+					unsafe
+					{
+						if (Function.Call<bool>(Hash.GET_GROUND_Z_FOR_3D_COORD, position.X, position.Y, (float)i, &height))
+						{
+							groundFound = true;
+							position.Z = height;
+							break;
+						}
+					}
+
+					Script.Wait(100);
+				}
+
+				if (!groundFound)
+				{
+					position.Z = 1000.0f;
+				}
+			}
+
+			return position;
+		}
+
+		public static Blip CreateBlip(Vector3 position)
+		{
+			return Function.Call<Blip>(Hash.ADD_BLIP_FOR_COORD, position.X, position.Y, position.Z);
+		}
+		public static Blip CreateBlip(Vector3 position, float radius)
+		{
+			return Function.Call<Blip>(Hash.ADD_BLIP_FOR_RADIUS, position.X, position.Y, position.Z, radius);
+		}
+
+		#endregion
+
+		#region Entities
+
+		public static Ped[] GetAllPeds()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPedHandles(), handle => new Ped(handle));
+		}
+		public static Ped[] GetAllPeds(Model model)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPedHandles(new[] { model.Hash }), handle => new Ped(handle));
+		}
+		public static Ped[] GetNearbyPeds(Ped ped, float radius)
+		{
+			int[] handles = SHVDN.NativeMemory.GetPedHandles(ped.Position.ToArray(), radius);
+
+			var result = new List<Ped>();
+
+			foreach (int handle in handles)
+			{
+				if (handle == ped.Handle)
+				{
+					continue;
+				}
+
+				result.Add(new Ped(handle));
+			}
+
+			return result.ToArray();
+		}
+		public static Ped[] GetNearbyPeds(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPedHandles(position.ToArray(), radius), handle => new Ped(handle));
+		}
+		public static Ped[] GetNearbyPeds(Vector3 position, float radius, Model model)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPedHandles(position.ToArray(), radius, new[] { model.Hash }), handle => new Ped(handle));
+		}
+
+		public static Vehicle[] GetAllVehicles()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetVehicleHandles(), handle => new Vehicle(handle));
+		}
+		public static Vehicle[] GetAllVehicles(Model model)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetVehicleHandles(new[] { 
