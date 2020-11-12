@@ -323,4 +323,71 @@ namespace GTA
 		}
 		public static Entity[] GetNearbyEntities(Vector3 position, float radius)
 		{
-			return Array.ConvertAll<int, Entity>(SHVDN.NativeMemory.GetEntityHandles(position
+			return Array.ConvertAll<int, Entity>(SHVDN.NativeMemory.GetEntityHandles(position.ToArray(), radius), Entity.FromHandle);
+		}
+
+		public static T GetClosest<T>(Vector3 position, params T[] spatials) where T : ISpatial
+		{
+			ISpatial closest = null;
+			float closestDistance = 3e38f;
+
+			foreach (var spatial in spatials)
+			{
+				float distance = position.DistanceToSquared(spatial.Position);
+
+				if (distance <= closestDistance)
+				{
+					closest = spatial;
+					closestDistance = distance;
+				}
+			}
+			return (T)closest;
+		}
+		public static Ped GetClosestPed(Vector3 position, float radius)
+		{
+			Ped[] peds = Array.ConvertAll(SHVDN.NativeMemory.GetPedHandles(position.ToArray(), radius), handle => new Ped(handle));
+			return GetClosest(position, peds);
+		}
+		public static Vehicle GetClosestVehicle(Vector3 position, float radius)
+		{
+			Vehicle[] vehicles = Array.ConvertAll(SHVDN.NativeMemory.GetVehicleHandles(position.ToArray(), radius), handle => new Vehicle(handle));
+			return GetClosest(position, vehicles);
+
+		}
+
+		private static int VehicleCount => SHVDN.NativeMemory.GetVehicleCount();
+		private static int PedCount => SHVDN.NativeMemory.GetPedCount();
+		private static int PropCount => SHVDN.NativeMemory.GetObjectCount();
+
+		private static int VehicleCapacity => SHVDN.NativeMemory.GetVehicleCapacity();
+		private static int PedCapacity => SHVDN.NativeMemory.GetPedCapacity();
+		private static int PropCapacity => SHVDN.NativeMemory.GetObjectCapacity();
+
+		public static Ped CreatePed(Model model, Vector3 position)
+		{
+			return CreatePed(model, position, 0.0f);
+		}
+		public static Ped CreatePed(Model model, Vector3 position, float heading)
+		{
+			if (PedCount >= PedCapacity || !model.IsPed || !model.Request(1000))
+			{
+				return null;
+			}
+
+			return Function.Call<Ped>(Hash.CREATE_PED, 26, model.Hash, position.X, position.Y, position.Z, heading, false, false);
+		}
+		public static Ped CreateRandomPed(Vector3 position)
+		{
+			if (PedCount >= PedCapacity)
+			{
+				return null;
+			}
+
+			return Function.Call<Ped>(Hash.CREATE_RANDOM_PED, position.X, position.Y, position.Z);
+		}
+
+		public static Vehicle CreateVehicle(Model model, Vector3 position)
+		{
+			return CreateVehicle(model, position, 0.0f);
+		}
+		public static Ve
