@@ -264,4 +264,63 @@ namespace GTA
 		}
 		public static Vehicle[] GetAllVehicles(Model model)
 		{
-			return Array.ConvertAll(SHVDN.NativeMemory.GetVehicleHandles(new[] { 
+			return Array.ConvertAll(SHVDN.NativeMemory.GetVehicleHandles(new[] { model.Hash }), handle => new Vehicle(handle));
+		}
+		public static Vehicle[] GetNearbyVehicles(Ped ped, float radius)
+		{
+			int[] handles = SHVDN.NativeMemory.GetVehicleHandles(ped.Position.ToArray(), radius);
+
+			var result = new List<Vehicle>();
+			Vehicle ignore = ped.CurrentVehicle;
+			int ignoreHandle = Vehicle.Exists(ignore) ? ignore.Handle : 0;
+
+			foreach (int handle in handles)
+			{
+				if (handle == ignoreHandle)
+				{
+					continue;
+				}
+
+				result.Add(new Vehicle(handle));
+			}
+
+			return result.ToArray();
+		}
+		public static Vehicle[] GetNearbyVehicles(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetVehicleHandles(position.ToArray(), radius), handle => new Vehicle(handle));
+		}
+		public static Vehicle[] GetNearbyVehicles(Vector3 position, float radius, Model model)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetVehicleHandles(position.ToArray(), radius, new[] { model.Hash }), handle => new Vehicle(handle));
+		}
+
+		public static Prop[] GetAllProps()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPropHandles(), handle => new Prop(handle));
+		}
+		public static Prop[] GetAllProps(Model model)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPropHandles(new[] { model.Hash }), handle => new Prop(handle));
+		}
+		public static Prop[] GetNearbyProps(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPropHandles(position.ToArray(), radius), handle => new Prop(handle));
+		}
+		public static Prop[] GetNearbyProps(Vector3 position, float radius, Model model)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPropHandles(position.ToArray(), radius, new[] { model.Hash }), handle => new Prop(handle));
+		}
+
+		public static Blip[] GetActiveBlips()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetNonCriticalRadarBlipHandles(), handle => new Blip(handle));
+		}
+
+		public static Entity[] GetAllEntities()
+		{
+			return Array.ConvertAll<int, Entity>(SHVDN.NativeMemory.GetEntityHandles(), Entity.FromHandle);
+		}
+		public static Entity[] GetNearbyEntities(Vector3 position, float radius)
+		{
+			return Array.ConvertAll<int, Entity>(SHVDN.NativeMemory.GetEntityHandles(position
