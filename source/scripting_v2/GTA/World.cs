@@ -537,4 +537,55 @@ namespace GTA
 		{
 			Function.Call(Hash.ADD_EXPLOSION, position.X, position.Y, position.Z, (int)type, radius, Aubidble, Invis, cameraShake);
 		}
-		public static void AddOwnedExplosion(Ped ped, Vector3 position, Expl
+		public static void AddOwnedExplosion(Ped ped, Vector3 position, ExplosionType type, float radius, float cameraShake)
+		{
+			Function.Call(Hash.ADD_OWNED_EXPLOSION, ped.Handle, position.X, position.Y, position.Z, (int)type, radius, true, false, cameraShake);
+		}
+		public static void AddOwnedExplosion(Ped ped, Vector3 position, ExplosionType type, float radius, float cameraShake, bool Aubidble, bool Invis)
+		{
+			Function.Call(Hash.ADD_OWNED_EXPLOSION, ped.Handle, position.X, position.Y, position.Z, (int)type, radius, Aubidble, Invis, cameraShake);
+		}
+
+		public static int AddRelationshipGroup(string groupName)
+		{
+			int handle = 0;
+			unsafe
+			{
+				Function.Call(Hash.ADD_RELATIONSHIP_GROUP, groupName, &handle);
+			};
+			return handle;
+		}
+		public static void RemoveRelationshipGroup(int group)
+		{
+			Function.Call(Hash.REMOVE_RELATIONSHIP_GROUP, group);
+		}
+		public static Relationship GetRelationshipBetweenGroups(int group1, int group2)
+		{
+			return (Relationship)Function.Call<int>(Hash.GET_RELATIONSHIP_BETWEEN_GROUPS, group1, group2);
+		}
+		public static void SetRelationshipBetweenGroups(Relationship relationship, int group1, int group2)
+		{
+			Function.Call(Hash.SET_RELATIONSHIP_BETWEEN_GROUPS, (int)relationship, group1, group2);
+			Function.Call(Hash.SET_RELATIONSHIP_BETWEEN_GROUPS, (int)relationship, group2, group1);
+		}
+		public static void ClearRelationshipBetweenGroups(Relationship relationship, int group1, int group2)
+		{
+			Function.Call(Hash.CLEAR_RELATIONSHIP_BETWEEN_GROUPS, (int)relationship, group1, group2);
+			Function.Call(Hash.CLEAR_RELATIONSHIP_BETWEEN_GROUPS, (int)relationship, group2, group1);
+		}
+
+		#endregion
+
+		#region Drawing
+
+		public static void DrawMarker(MarkerType type, Vector3 pos, Vector3 dir, Vector3 rot, Vector3 scale, Color color)
+		{
+			DrawMarker(type, pos, dir, rot, scale, color, false, false, 2, false, null, null, false);
+		}
+		public static void DrawMarker(MarkerType type, Vector3 pos, Vector3 dir, Vector3 rot, Vector3 scale, Color color, bool bobUpAndDown, bool faceCamY, int unk2, bool rotateY, string textueDict, string textureName, bool drawOnEnt)
+		{
+			InputArgument dict = new InputArgument(0), name = new InputArgument(0);
+
+			if (textueDict != null && textureName != null)
+			{
+				if (textueDict.Length > 0 && tex
