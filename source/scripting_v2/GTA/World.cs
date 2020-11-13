@@ -390,4 +390,97 @@ namespace GTA
 		{
 			return CreateVehicle(model, position, 0.0f);
 		}
-		public static Ve
+		public static Vehicle CreateVehicle(Model model, Vector3 position, float heading)
+		{
+			if (VehicleCount >= VehicleCapacity || !model.IsVehicle || !model.Request(1000))
+			{
+				return null;
+			}
+
+			return Function.Call<Vehicle>(Hash.CREATE_VEHICLE, model.Hash, position.X, position.Y, position.Z, heading, false, false);
+		}
+
+		public static Prop CreateProp(Model model, Vector3 position, bool dynamic, bool placeOnGround)
+		{
+			if (PropCount >= PropCapacity)
+			{
+				return null;
+			}
+
+			if (placeOnGround)
+			{
+				position.Z = GetGroundHeight(position);
+			}
+
+			if (!model.Request(1000))
+			{
+				return null;
+			}
+
+			return Function.Call<Prop>(Hash.CREATE_OBJECT, model.Hash, position.X, position.Y, position.Z, 1, 1, dynamic);
+		}
+		public static Prop CreateProp(Model model, Vector3 position, Vector3 rotation, bool dynamic, bool placeOnGround)
+		{
+			Prop p = CreateProp(model, position, dynamic, placeOnGround);
+
+			if (p == null)
+			{
+				return null;
+			}
+
+			p.Rotation = rotation;
+
+			return p;
+		}
+
+		public static Prop CreateAmbientPickup(PickupType type, Vector3 position, Model model, int value)
+		{
+			if (!model.Request(1000))
+			{
+				return null;
+			}
+
+			int handle = Function.Call<int>(Hash.CREATE_AMBIENT_PICKUP, (int)type, position.X, position.Y, position.Z, 0, value, model.Hash, false, true);
+			if (handle == 0)
+			{
+				return null;
+			}
+
+			return new Prop(handle);
+		}
+		public static Pickup CreatePickup(PickupType type, Vector3 position, Model model, int value)
+		{
+			if (!model.Request(1000))
+			{
+				return null;
+			}
+
+			int handle = Function.Call<int>(Hash.CREATE_PICKUP, (int)type, position.X, position.Y, position.Z, 0, value, true, model.Hash);
+			if (handle == 0)
+			{
+				return null;
+			}
+
+			return new Pickup(handle);
+		}
+		public static Pickup CreatePickup(PickupType type, Vector3 position, Vector3 rotation, Model model, int value)
+		{
+			if (!model.Request(1000))
+			{
+				return null;
+			}
+
+			int handle = Function.Call<int>(Hash.CREATE_PICKUP_ROTATE, (int)type, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, 0, value, 2, true, model.Hash);
+			if (handle == 0)
+			{
+				return null;
+			}
+
+			return new Pickup(handle);
+		}
+
+		#endregion
+
+		#region Cameras
+
+		public stati
