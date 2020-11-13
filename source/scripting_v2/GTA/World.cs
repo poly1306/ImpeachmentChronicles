@@ -483,4 +483,58 @@ namespace GTA
 
 		#region Cameras
 
-		public stati
+		public static void DestroyAllCameras()
+		{
+			Function.Call(Hash.DESTROY_ALL_CAMS, 0);
+		}
+
+		public static Camera CreateCamera(Vector3 position, Vector3 rotation, float fov)
+		{
+			return Function.Call<Camera>(Hash.CREATE_CAM_WITH_PARAMS, "DEFAULT_SCRIPTED_CAMERA", position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, fov, 1, 2);
+		}
+
+		public static Camera RenderingCamera
+		{
+			get => new Camera(Function.Call<int>(Hash.GET_RENDERING_CAM));
+			set
+			{
+				if (value == null)
+				{
+					Function.Call(Hash.RENDER_SCRIPT_CAMS, false, 0, 3000, 1, 0);
+				}
+				else
+				{
+					value.IsActive = true;
+					Function.Call(Hash.RENDER_SCRIPT_CAMS, true, 0, 3000, 1, 0);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Others
+
+		public static Rope AddRope(RopeType type, Vector3 position, Vector3 rotation, float length, float minLength, bool breakable)
+		{
+			Function.Call(Hash.ROPE_LOAD_TEXTURES);
+			return Function.Call<Rope>(Hash.ADD_ROPE, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, length, (int)type, length, minLength, 0.5f, false, false, true, 1.0f, breakable, 0);
+		}
+
+		public static void ShootBullet(Vector3 sourcePosition, Vector3 targetPosition, Ped owner, Model model, int damage)
+		{
+			ShootBullet(sourcePosition, targetPosition, owner, model, damage, -1.0f);
+		}
+		public static void ShootBullet(Vector3 sourcePosition, Vector3 targetPosition, Ped owner, Model model, int damage, float speed)
+		{
+			Function.Call(Hash.SHOOT_SINGLE_BULLET_BETWEEN_COORDS, sourcePosition.X, sourcePosition.Y, sourcePosition.Z, targetPosition.X, targetPosition.Y, targetPosition.Z, damage, 1, model.Hash, owner.Handle, 1, 0, speed);
+		}
+
+		public static void AddExplosion(Vector3 position, ExplosionType type, float radius, float cameraShake)
+		{
+			Function.Call(Hash.ADD_EXPLOSION, position.X, position.Y, position.Z, (int)type, radius, true, false, cameraShake);
+		}
+		public static void AddExplosion(Vector3 position, ExplosionType type, float radius, float cameraShake, bool Aubidble, bool Invis)
+		{
+			Function.Call(Hash.ADD_EXPLOSION, position.X, position.Y, position.Z, (int)type, radius, Aubidble, Invis, cameraShake);
+		}
+		public static void AddOwnedExplosion(Ped ped, Vector3 position, Expl
