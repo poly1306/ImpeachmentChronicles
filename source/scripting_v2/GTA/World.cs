@@ -666,4 +666,81 @@ namespace GTA
 		{
 			return Function.Call<float>(Hash.CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS, origin.X, origin.Y, origin.Z, destination.X, destination.Y, destination.Z);
 		}
-		public static float GetGroundHeight(Vector2 po
+		public static float GetGroundHeight(Vector2 position)
+		{
+			return GetGroundHeight(new Vector3(position.X, position.Y, 1000f));
+		}
+		public static float GetGroundHeight(Vector3 position)
+		{
+			float resultArg;
+
+			unsafe
+			{
+				Function.Call(Hash.GET_GROUND_Z_FOR_3D_COORD, position.X, position.Y, position.Z, &resultArg, false);
+			}
+
+			return resultArg;
+		}
+
+		public static Vector3 GetSafeCoordForPed(Vector3 position)
+		{
+			return GetSafeCoordForPed(position, true, 0);
+		}
+		public static Vector3 GetSafeCoordForPed(Vector3 position, bool sidewalk)
+		{
+			return GetSafeCoordForPed(position, sidewalk, 0);
+		}
+		public static Vector3 GetSafeCoordForPed(Vector3 position, bool sidewalk, int flags)
+		{
+			OutputArgument outPos = new OutputArgument();
+
+			if (Function.Call<bool>(Hash.GET_SAFE_COORD_FOR_PED, position.X, position.Y, position.Z, sidewalk, outPos, flags))
+			{
+				return outPos.GetResult<Vector3>();
+			}
+			else
+			{
+				return Vector3.Zero;
+			}
+		}
+
+		public static Vector3 GetNextPositionOnStreet(Vector3 position)
+		{
+			return GetNextPositionOnStreet(position, false);
+		}
+		public static Vector3 GetNextPositionOnStreet(Vector2 position, bool unoccupied)
+		{
+			return GetNextPositionOnStreet(new Vector3(position.X, position.Y, 0), unoccupied);
+		}
+		public static Vector3 GetNextPositionOnStreet(Vector3 position, bool unoccupied)
+		{
+			OutputArgument outPos = new OutputArgument();
+
+			if (unoccupied)
+			{
+				for (int i = 1; i < 40; i++)
+				{
+					Function.Call(Hash.GET_NTH_CLOSEST_VEHICLE_NODE, position.X, position.Y, position.Z, i, outPos, 1, 0x40400000, 0);
+					Vector3 newPos = outPos.GetResult<Vector3>();
+
+					if (!Function.Call<bool>(Hash.IS_POINT_OBSCURED_BY_A_MISSION_ENTITY, newPos.X, newPos.Y, newPos.Z, 5.0f, 5.0f, 5.0f, 0))
+					{
+						return newPos;
+					}
+				}
+			}
+			else if (Function.Call<bool>(Hash.GET_NTH_CLOSEST_VEHICLE_NODE, position.X, position.Y, position.Z, 1, outPos, 1, 0x40400000, 0))
+			{
+				return outPos.GetResult<Vector3>();
+			}
+
+			return Vector3.Zero;
+		}
+
+		public static Vector3 GetNextPositionOnSidewalk(Vector2 position)
+		{
+			return GetNextPositionOnSidewalk(new Vector3(position.X, position.Y, 0));
+		}
+		public static Vector3 GetNextPositionOnSidewalk(Vector3 position)
+		{
+			OutputA
