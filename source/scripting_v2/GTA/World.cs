@@ -629,4 +629,41 @@ namespace GTA
 		public static RaycastResult Raycast(Vector3 source, Vector3 direction, float maxDistance, IntersectOptions options, Entity ignoreEntity)
 		{
 			Vector3 target = source + (direction * maxDistance);
-			retur
+			return new RaycastResult(Function.Call<int>(Hash._CAST_RAY_POINT_TO_POINT, source.X, source.Y, source.Z, target.X, target.Y, target.Z, (int)options, ignoreEntity == null ? 0 : ignoreEntity.Handle, 7));
+		}
+		public static RaycastResult RaycastCapsule(Vector3 source, Vector3 target, float radius, IntersectOptions options)
+		{
+			return RaycastCapsule(source, target, radius, options, null);
+		}
+		public static RaycastResult RaycastCapsule(Vector3 source, Vector3 target, float radius, IntersectOptions options, Entity ignoreEntity)
+		{
+			return new RaycastResult(Function.Call<int>(Hash._CAST_3D_RAY_POINT_TO_POINT, source.X, source.Y, source.Z, target.X, target.Y, target.Z, radius, (int)options, ignoreEntity == null ? 0 : ignoreEntity.Handle, 7));
+		}
+		public static RaycastResult RaycastCapsule(Vector3 source, Vector3 direction, float maxDistance, float radius, IntersectOptions options)
+		{
+			return RaycastCapsule(source, direction, maxDistance, radius, options, null);
+		}
+		public static RaycastResult RaycastCapsule(Vector3 source, Vector3 direction, float maxDistance, float radius, IntersectOptions options, Entity ignoreEntity)
+		{
+			Vector3 target = source + (direction * maxDistance);
+			return new RaycastResult(Function.Call<int>(Hash._CAST_3D_RAY_POINT_TO_POINT, source.X, source.Y, source.Z, target.X, target.Y, target.Z, radius, (int)options, ignoreEntity == null ? 0 : ignoreEntity.Handle, 7));
+		}
+
+		public static RaycastResult GetCrosshairCoordinates()
+		{
+			return Raycast(GameplayCamera.Position, GameplayCamera.Direction, 1000.0f, IntersectOptions.Everything);
+		}
+
+		#endregion
+
+		#region Positioning
+
+		public static float GetDistance(Vector3 origin, Vector3 destination)
+		{
+			return Function.Call<float>(Hash.GET_DISTANCE_BETWEEN_COORDS, origin.X, origin.Y, origin.Z, destination.X, destination.Y, destination.Z, 1);
+		}
+		public static float CalculateTravelDistance(Vector3 origin, Vector3 destination)
+		{
+			return Function.Call<float>(Hash.CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS, origin.X, origin.Y, origin.Z, destination.X, destination.Y, destination.Z);
+		}
+		public static float GetGroundHeight(Vector2 po
