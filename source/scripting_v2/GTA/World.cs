@@ -588,4 +588,45 @@ namespace GTA
 
 			if (textueDict != null && textureName != null)
 			{
-				if (textueDict.Length > 0 && tex
+				if (textueDict.Length > 0 && textureName.Length > 0)
+				{
+					dict = new InputArgument(textueDict);
+					name = new InputArgument(textureName);
+				}
+			}
+
+			Function.Call(Hash.DRAW_MARKER, (int)type, pos.X, pos.Y, pos.Z, dir.X, dir.Y, dir.Z, rot.X, rot.Y, rot.Z, scale.X, scale.Y, scale.Z, color.R, color.G, color.B, color.A, bobUpAndDown, faceCamY, unk2, rotateY, dict, name, drawOnEnt);
+		}
+		public static void DrawLightWithRange(Vector3 position, Color color, float range, float intensity)
+		{
+			Function.Call(Hash.DRAW_LIGHT_WITH_RANGE, position.X, position.Y, position.Z, color.R, color.G, color.B, range, intensity);
+		}
+		public static void DrawSpotLight(Vector3 pos, Vector3 dir, Color color, float distance, float brightness, float roundness, float radius, float fadeout)
+		{
+			Function.Call(Hash.DRAW_SPOT_LIGHT, pos.X, pos.Y, pos.Z, dir.X, dir.Y, dir.Z, color.R, color.G, color.B, distance, brightness, roundness, radius, fadeout);
+		}
+		public static void DrawSpotLightWithShadow(Vector3 pos, Vector3 dir, Color color, float distance, float brightness, float roundness, float radius, float fadeout)
+		{
+			Function.Call(Hash._DRAW_SPOT_LIGHT_WITH_SHADOW, pos.X, pos.Y, pos.Z, dir.X, dir.Y, dir.Z, color.R, color.G, color.B, distance, brightness, roundness, radius, fadeout);
+		}
+
+		#endregion
+
+		#region Raycasting
+
+		public static RaycastResult Raycast(Vector3 source, Vector3 target, IntersectOptions options)
+		{
+			return Raycast(source, target, options, null);
+		}
+		public static RaycastResult Raycast(Vector3 source, Vector3 target, IntersectOptions options, Entity ignoreEntity)
+		{
+			return new RaycastResult(Function.Call<int>(Hash._CAST_RAY_POINT_TO_POINT, source.X, source.Y, source.Z, target.X, target.Y, target.Z, (int)options, ignoreEntity == null ? 0 : ignoreEntity.Handle, 7));
+		}
+		public static RaycastResult Raycast(Vector3 source, Vector3 direction, float maxDistance, IntersectOptions options)
+		{
+			return Raycast(source, direction, maxDistance, options, null);
+		}
+		public static RaycastResult Raycast(Vector3 source, Vector3 direction, float maxDistance, IntersectOptions options, Entity ignoreEntity)
+		{
+			Vector3 target = source + (direction * maxDistance);
+			retur
