@@ -743,4 +743,84 @@ namespace GTA
 		}
 		public static Vector3 GetNextPositionOnSidewalk(Vector3 position)
 		{
-			OutputA
+			OutputArgument outPos = new OutputArgument();
+
+			if (Function.Call<bool>(Hash.GET_SAFE_COORD_FOR_PED, position.X, position.Y, position.Z, true, outPos, 0))
+			{
+				return outPos.GetResult<Vector3>();
+			}
+			else if (Function.Call<bool>(Hash.GET_SAFE_COORD_FOR_PED, position.X, position.Y, position.Z, false, outPos, 0))
+			{
+				return outPos.GetResult<Vector3>();
+			}
+			else
+			{
+				return Vector3.Zero;
+			}
+		}
+
+		public static string GetZoneName(Vector2 position)
+		{
+			return GetZoneName(new Vector3(position.X, position.Y, 0));
+		}
+		public static string GetZoneName(Vector3 position)
+		{
+			if (Enum.TryParse(GetZoneNameLabel(position), out ZoneID zoneID))
+			{
+				switch (zoneID)
+				{
+					case ZoneID.AIRP:
+						return "Los Santos International Airport";
+					case ZoneID.ALAMO:
+						return "Alamo Sea";
+					case ZoneID.ALTA:
+						return "Alta";
+					case ZoneID.ARMYB:
+						return "Fort Zancudo";
+					case ZoneID.BANHAMC:
+						return "Banham Canyon";
+					case ZoneID.BANNING:
+						return "Banning";
+					case ZoneID.BAYTRE:
+						return "Baytree Canyon";
+					case ZoneID.BEACH:
+						return "Vespucci Beach";
+					case ZoneID.BHAMCA:
+						return "Banham Canyon";
+					case ZoneID.BRADP:
+						return "Braddock Pass";
+					case ZoneID.BRADT:
+						return "Braddock Tunnel";
+					case ZoneID.BURTON:
+						return "Burton";
+					case ZoneID.CALAFB:
+						return "Calafia Bridge";
+					case ZoneID.CANNY:
+						return "Raton Canyon";
+					case ZoneID.CCREAK:
+						return "Cassidy Creek";
+					case ZoneID.CHAMH:
+						return "Chamberlain Hills";
+					case ZoneID.CHIL:
+						return "Vinewood Hills";
+					case ZoneID.CHU:
+						return "Chumash";
+					case ZoneID.CMSW:
+						return "Chiliad Mountain State Wilderness";
+					case ZoneID.CYPRE:
+						return "Cypress Flats";
+					case ZoneID.DAVIS:
+						return "Davis";
+					case ZoneID.DELBE:
+						return "Del Perro Beach";
+					case ZoneID.DELPE:
+						return "Del Perro";
+					case ZoneID.DELSOL:
+						return "Puerto Del Sol";
+					case ZoneID.DESRT:
+						return "Grand Senora Desert";
+					case ZoneID.DOWNT:
+						return "Downtown";
+					case ZoneID.DTVINE:
+						return "Downtown Vinewood";
+					case ZoneID.EAST_V:
