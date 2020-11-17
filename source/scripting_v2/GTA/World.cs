@@ -824,3 +824,83 @@ namespace GTA
 					case ZoneID.DTVINE:
 						return "Downtown Vinewood";
 					case ZoneID.EAST_V:
+						return "East Vinewood";
+					case ZoneID.EBURO:
+						return "El Burro Heights";
+					case ZoneID.ELGORL:
+						return "El Gordo Lighthouse";
+					case ZoneID.ELYSIAN:
+						return "Elysian Island";
+					case ZoneID.GALFISH:
+						return "Galilee";
+					case ZoneID.GALLI:
+						return "Galileo Park";
+					case ZoneID.golf:
+						return "GWC and Golfing Society";
+					case ZoneID.GRAPES:
+						return "Grapeseed";
+					case ZoneID.GREATC:
+						return "Great Chaparral";
+					case ZoneID.HARMO:
+						return "Harmony";
+					case ZoneID.HAWICK:
+						return "Hawick";
+					case ZoneID.HORS:
+						return "Vinewood Racetrack";
+					case ZoneID.HUMLAB:
+						return "Humane Labs and Research";
+					case ZoneID.JAIL:
+						return "Bolingbroke Penitentiary";
+					case ZoneID.KOREAT:
+						return "Little Seoul";
+					case ZoneID.LACT:
+						return "Land Act Reservoir";
+					case ZoneID.LAGO:
+						return "Lago Zancudo";
+					case ZoneID.LDAM:
+						return "Land Act Dam";
+					case ZoneID.LEGSQU:
+						return "Legion Square";
+					case ZoneID.LMESA:
+						return "La Mesa";
+					case ZoneID.LOSPUER:
+						return "La Puerta";
+					case ZoneID.MIRR:
+						return "Mirror Park";
+					case ZoneID.MORN:
+						return "Morningwood";
+					case ZoneID.MOVIE:
+						return "Richards Majestic";
+					case ZoneID.MTCHIL:
+						return "Mount Chiliad";
+					case ZoneID.MTGORDO:
+						return "Mount Gordo";
+					case ZoneID.MTJOSE:
+						return "Mount Josiah";
+					case ZoneID.MURRI:
+						return "Murrieta Heights";
+					case ZoneID.NCHU:
+						return "North Chumash";
+					case ZoneID.NOOSE:
+						return "N.O.O.S.E.";
+					case ZoneID.OCEANA:
+						return "Pacific Ocean";
+					case ZoneID.PALCOV:
+						return "Paleto Cove";
+					case ZoneID.PALETO:
+						return "Paleto Bay";
+					case ZoneID.PALFOR:
+						return "Paleto Forest";
+					case ZoneID.PALHIGH:
+						return "Palomino Highlands";
+					case ZoneID.PALMPOW:
+						return "Palmer-Taylor Power Station";
+					case ZoneID.PBLUFF:
+						return "Pacific Bluffs";
+					case ZoneID.PBOX:
+						return "Pillbox Hill";
+					case ZoneID.PROCOB:
+						return "Procopio Beach";
+					case ZoneID.RANCHO:
+						return "Rancho";
+					cas
