@@ -903,4 +903,83 @@ namespace GTA
 						return "Procopio Beach";
 					case ZoneID.RANCHO:
 						return "Rancho";
-					cas
+					case ZoneID.RGLEN:
+						return "Richman Glen";
+					case ZoneID.RICHM:
+						return "Richman";
+					case ZoneID.ROCKF:
+						return "Rockford Hills";
+					case ZoneID.RTRAK:
+						return "Redwood Lights Track";
+					case ZoneID.SanAnd:
+						return "San Andreas";
+					case ZoneID.SANCHIA:
+						return "San Chianski Mountain Range";
+					case ZoneID.SANDY:
+						return "Sandy Shores";
+					case ZoneID.SKID:
+						return "Mission Row";
+					case ZoneID.SLAB:
+						return "Stab City";
+					case ZoneID.STAD:
+						return "Maze Bank Arena";
+					case ZoneID.STRAW:
+						return "Strawberry";
+					case ZoneID.TATAMO:
+						return "Tataviam Mountains";
+					case ZoneID.TERMINA:
+						return "Terminal";
+					case ZoneID.TEXTI:
+						return "Textile City";
+					case ZoneID.TONGVAH:
+						return "Tongva Hills";
+					case ZoneID.TONGVAV:
+						return "Tongva Valley";
+					case ZoneID.VCANA:
+						return "Vespucci Canals";
+					case ZoneID.VESP:
+						return "Vespucci";
+					case ZoneID.VINE:
+						return "Vinewood";
+					case ZoneID.WINDF:
+						return "RON Alternates Wind Farm";
+					case ZoneID.WVINE:
+						return "West Vinewood";
+					case ZoneID.ZANCUDO:
+						return "Zancudo River";
+					case ZoneID.ZP_ORT:
+						return "Port of South Los Santos";
+					case ZoneID.ZQ_UAR:
+						return "Davis Quartz";
+				}
+			}
+			return string.Empty;
+		}
+
+		public static string GetZoneNameLabel(Vector2 position)
+		{
+			return GetZoneNameLabel(new Vector3(position.X, position.Y, 0));
+		}
+		public static string GetZoneNameLabel(Vector3 position)
+		{
+			return Function.Call<string>(Hash.GET_NAME_OF_ZONE, position.X, position.Y, position.Z);
+		}
+
+		public static string GetStreetName(Vector2 position)
+		{
+			return GetStreetName(new Vector3(position.X, position.Y, 0));
+		}
+		public static string GetStreetName(Vector3 position)
+		{
+			int streetHash = 0, crossingHash = 0;
+			unsafe
+			{
+				Function.Call(Hash.GET_STREET_NAME_AT_COORD, position.X, position.Y, position.Z, &streetHash, &crossingHash);
+			}
+
+			return Function.Call<string>(Hash.GET_STREET_NAME_FROM_HASH_KEY, streetHash);
+		}
+
+		#endregion
+	}
+}
