@@ -1146,3 +1146,315 @@ namespace GTA.Native
 			unsafe
 			{
 				const int argCount = 12;
+				var argPtr = stackalloc ulong[argCount];
+
+				argPtr[0] = argument0.data;
+				argPtr[1] = argument1.data;
+				argPtr[2] = argument2.data;
+				argPtr[3] = argument3.data;
+				argPtr[4] = argument4.data;
+				argPtr[5] = argument5.data;
+				argPtr[6] = argument6.data;
+				argPtr[7] = argument7.data;
+				argPtr[8] = argument8.data;
+				argPtr[9] = argument9.data;
+				argPtr[10] = argument10.data;
+				argPtr[11] = argument11.data;
+
+				SHVDN.NativeFunc.Invoke((ulong)hash, argPtr, argCount);
+			}
+		}
+		public static void Call(Hash hash,
+			InputArgument argument0,
+			InputArgument argument1,
+			InputArgument argument2,
+			InputArgument argument3,
+			InputArgument argument4,
+			InputArgument argument5,
+			InputArgument argument6,
+			InputArgument argument7,
+			InputArgument argument8,
+			InputArgument argument9,
+			InputArgument argument10,
+			InputArgument argument11,
+			InputArgument argument12)
+		{
+			unsafe
+			{
+				const int argCount = 13;
+				var argPtr = stackalloc ulong[argCount];
+
+				argPtr[0] = argument0.data;
+				argPtr[1] = argument1.data;
+				argPtr[2] = argument2.data;
+				argPtr[3] = argument3.data;
+				argPtr[4] = argument4.data;
+				argPtr[5] = argument5.data;
+				argPtr[6] = argument6.data;
+				argPtr[7] = argument7.data;
+				argPtr[8] = argument8.data;
+				argPtr[9] = argument9.data;
+				argPtr[10] = argument10.data;
+				argPtr[11] = argument11.data;
+				argPtr[12] = argument12.data;
+
+				SHVDN.NativeFunc.Invoke((ulong)hash, argPtr, argCount);
+			}
+		}
+		public static void Call(Hash hash,
+			InputArgument argument0,
+			InputArgument argument1,
+			InputArgument argument2,
+			InputArgument argument3,
+			InputArgument argument4,
+			InputArgument argument5,
+			InputArgument argument6,
+			InputArgument argument7,
+			InputArgument argument8,
+			InputArgument argument9,
+			InputArgument argument10,
+			InputArgument argument11,
+			InputArgument argument12,
+			InputArgument argument13)
+		{
+			unsafe
+			{
+				const int argCount = 14;
+				var argPtr = stackalloc ulong[argCount];
+
+				argPtr[0] = argument0.data;
+				argPtr[1] = argument1.data;
+				argPtr[2] = argument2.data;
+				argPtr[3] = argument3.data;
+				argPtr[4] = argument4.data;
+				argPtr[5] = argument5.data;
+				argPtr[6] = argument6.data;
+				argPtr[7] = argument7.data;
+				argPtr[8] = argument8.data;
+				argPtr[9] = argument9.data;
+				argPtr[10] = argument10.data;
+				argPtr[11] = argument11.data;
+				argPtr[12] = argument12.data;
+				argPtr[13] = argument13.data;
+
+				SHVDN.NativeFunc.Invoke((ulong)hash, argPtr, argCount);
+			}
+		}
+		public static void Call(Hash hash,
+			InputArgument argument0,
+			InputArgument argument1,
+			InputArgument argument2,
+			InputArgument argument3,
+			InputArgument argument4,
+			InputArgument argument5,
+			InputArgument argument6,
+			InputArgument argument7,
+			InputArgument argument8,
+			InputArgument argument9,
+			InputArgument argument10,
+			InputArgument argument11,
+			InputArgument argument12,
+			InputArgument argument13,
+			InputArgument argument14)
+		{
+			unsafe
+			{
+				const int argCount = 15;
+				var argPtr = stackalloc ulong[argCount];
+
+				argPtr[0] = argument0.data;
+				argPtr[1] = argument1.data;
+				argPtr[2] = argument2.data;
+				argPtr[3] = argument3.data;
+				argPtr[4] = argument4.data;
+				argPtr[5] = argument5.data;
+				argPtr[6] = argument6.data;
+				argPtr[7] = argument7.data;
+				argPtr[8] = argument8.data;
+				argPtr[9] = argument9.data;
+				argPtr[10] = argument10.data;
+				argPtr[11] = argument11.data;
+				argPtr[12] = argument12.data;
+				argPtr[13] = argument13.data;
+				argPtr[14] = argument14.data;
+
+				SHVDN.NativeFunc.Invoke((ulong)hash, argPtr, argCount);
+			}
+		}
+		public static void Call(Hash hash,
+			InputArgument argument0,
+			InputArgument argument1,
+			InputArgument argument2,
+			InputArgument argument3,
+			InputArgument argument4,
+			InputArgument argument5,
+			InputArgument argument6,
+			InputArgument argument7,
+			InputArgument argument8,
+			InputArgument argument9,
+			InputArgument argument10,
+			InputArgument argument11,
+			InputArgument argument12,
+			InputArgument argument13,
+			InputArgument argument14,
+			InputArgument argument15)
+		{
+			unsafe
+			{
+				const int argCount = 16;
+				var argPtr = stackalloc ulong[argCount];
+
+				argPtr[0] = argument0.data;
+				argPtr[1] = argument1.data;
+				argPtr[2] = argument2.data;
+				argPtr[3] = argument3.data;
+				argPtr[4] = argument4.data;
+				argPtr[5] = argument5.data;
+				argPtr[6] = argument6.data;
+				argPtr[7] = argument7.data;
+				argPtr[8] = argument8.data;
+				argPtr[9] = argument9.data;
+				argPtr[10] = argument10.data;
+				argPtr[11] = argument11.data;
+				argPtr[12] = argument12.data;
+				argPtr[13] = argument13.data;
+				argPtr[14] = argument14.data;
+				argPtr[15] = argument15.data;
+
+				SHVDN.NativeFunc.Invoke((ulong)hash, argPtr, argCount);
+			}
+		}
+		#endregion
+
+		internal static unsafe ulong ObjectToNative(object value)
+		{
+			if (value is null)
+			{
+				return 0;
+			}
+
+			if (value is bool valueBool)
+			{
+				return valueBool ? 1ul : 0ul;
+			}
+			if (value is int valueInt32)
+			{
+				// Prevent value from changing memory expression, in case the type is incorrect
+				return (uint)valueInt32;
+			}
+			if (value is uint valueUInt32)
+			{
+				return valueUInt32;
+			}
+			if (value is float valueFloat)
+			{
+				return *(uint*)&valueFloat;
+			}
+			if (value is double valueDouble)
+			{
+				valueFloat = (float)valueDouble;
+				return *(uint*)&valueFloat;
+			}
+			if (value is IntPtr valueIntPtr)
+			{
+				return (ulong)valueIntPtr.ToInt64();
+			}
+			if (value is string valueString)
+			{
+				return (ulong)SHVDN.ScriptDomain.CurrentDomain.PinString(valueString).ToInt64();
+			}
+
+			// Scripting types
+			if (value is Model valueModel)
+			{
+				return (ulong)valueModel.Hash;
+			}
+			if (typeof(IHandleable).IsAssignableFrom(value.GetType()))
+			{
+				return (ulong)((IHandleable)value).Handle;
+			}
+
+			throw new InvalidCastException(string.Concat("Unable to cast object of type '", value.GetType(), "' to native value"));
+		}
+
+		internal static unsafe T ObjectFromNative<T>(ulong* value)
+		{
+			if (typeof(T).IsEnum)
+			{
+				return NativeHelper<T>.Convert(*value);
+			}
+
+			if (typeof(T) == typeof(bool))
+			{
+				// Return proper boolean values (true if non-zero and false if zero)
+				bool valueBool = *value != 0;
+				return NativeHelper<T>.PtrToStructure(new IntPtr(&valueBool));
+			}
+
+			if (typeof(T) == typeof(int) || typeof(T) == typeof(uint) || typeof(T) == typeof(long) || typeof(T) == typeof(ulong) || typeof(T) == typeof(float))
+			{
+				return NativeHelper<T>.PtrToStructure(new IntPtr(value));
+			}
+
+			if (typeof(T) == typeof(double))
+			{
+				return NativeHelper<T>.Convert(NativeHelper<T>.PtrToStructure(new IntPtr(value)));
+			}
+
+			if (typeof(T) == typeof(Vector2) || typeof(T) == typeof(Vector3))
+			{
+				return NativeHelper<T>.Convert(*(NativeVector3*)value);
+			}
+
+			throw new InvalidCastException(string.Concat("Unable to cast native value to object of type '", typeof(T), "'"));
+		}
+
+		internal static unsafe object ObjectFromNative(Type type, ulong* value)
+		{
+			if (type == typeof(string))
+			{
+				return SHVDN.NativeMemory.PtrToStringUTF8(new IntPtr((char*)*value));
+			}
+
+			// Scripting types
+			if (type == typeof(Blip))
+			{
+				return new Blip(*(int*)value);
+			}
+			if (type == typeof(Camera))
+			{
+				return new Camera(*(int*)value);
+			}
+			if (type == typeof(Entity))
+			{
+				return Entity.FromHandle(*(int*)value);
+			}
+			if (type == typeof(Ped))
+			{
+				return new Ped(*(int*)value);
+			}
+			if (type == typeof(PedGroup))
+			{
+				return new PedGroup(*(int*)value);
+			}
+			if (type == typeof(Player))
+			{
+				return new Player(*(int*)value);
+			}
+			if (type == typeof(Prop))
+			{
+				return new Prop(*(int*)value);
+			}
+			if (type == typeof(Rope))
+			{
+				return new Rope(*(int*)value);
+			}
+			if (type == typeof(Vehicle))
+			{
+				return new Vehicle(*(int*)value);
+			}
+
+			throw new InvalidCastException(string.Concat("Unable to cast native value to object of type '", type, "'"));
+		}
+	}
+}
