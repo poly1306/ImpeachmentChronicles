@@ -106,4 +106,16 @@ namespace GTA.Native
 		HeavyShotgun = 0x3AABBBAA,
 		Gusenberg = 0x61012683,
 		Hatchet = 0xF9DCBF2D,
-		Railgun =
+		Railgun = 0x6D544C99,
+		RailgunXmas3 = 0xFEA23564,
+		Unarmed = 0xA2719263,
+		KnuckleDuster = 0xD8DF3C3C,
+		Machete = 0xDD5DF8D9,
+		MachinePistol = 0xDB1AA450,
+		Flashlight = 0x8BB05FD7,
+		Ball = 0x23C9F95C,
+		Flare = 0x497FACC3,
+		NightVision = 0xA720365C,
+		Parachute = 0xFBAB5776,
+	}
+}
