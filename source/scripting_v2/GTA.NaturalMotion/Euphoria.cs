@@ -456,3 +456,104 @@ namespace GTA.NaturalMotion
 		/// Gets a PointGunExtra Helper class for sending PointGunExtra <see cref="Message"/> to this <see cref="Ped"/>.
 		/// </summary>
 		/// <remarks>
+		/// Seldom set parameters for pointGun - just to keep number of parameters in any message less than or equal to 64
+		/// </remarks>
+		public PointGunExtraHelper PointGunExtra => GetHelper<PointGunExtraHelper>("pointGunExtra");
+
+		/// <summary>
+		/// Gets a RollDownStairs Helper class for sending RollDownStairs <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		public RollDownStairsHelper RollDownStairs => GetHelper<RollDownStairsHelper>("rollDownStairs");
+
+		/// <summary>
+		/// Gets a Shot Helper class for sending Shot <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		public ShotHelper Shot => GetHelper<ShotHelper>("shot");
+
+		/// <summary>
+		/// Gets a ShotNewBullet Helper class for sending ShotNewBullet <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		/// <remarks>
+		/// Send new wound information to the shot.  Can cause shot to restart it's performance in part or in whole.
+		/// </remarks>
+		public ShotNewBulletHelper ShotNewBullet => GetHelper<ShotNewBulletHelper>("shotNewBullet");
+
+		/// <summary>
+		/// Gets a ShotSnap Helper class for sending ShotSnap <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		public ShotSnapHelper ShotSnap => GetHelper<ShotSnapHelper>("shotSnap");
+
+		/// <summary>
+		/// Gets a ShotShockSpin Helper class for sending ShotShockSpin <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		/// <remarks>
+		/// configure the shockSpin effect in shot.  Spin/Lift the character using cheat torques/forces
+		/// </remarks>
+		public ShotShockSpinHelper ShotShockSpin => GetHelper<ShotShockSpinHelper>("shotShockSpin");
+
+		/// <summary>
+		/// Gets a ShotFallToKnees Helper class for sending ShotFallToKnees <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		/// <remarks>
+		/// configure the fall to knees shot.
+		/// </remarks>
+		public ShotFallToKneesHelper ShotFallToKnees => GetHelper<ShotFallToKneesHelper>("shotFallToKnees");
+
+		/// <summary>
+		/// Gets a ShotFromBehind Helper class for sending ShotFromBehind <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		/// <remarks>
+		/// configure the shot from behind reaction
+		/// </remarks>
+		public ShotFromBehindHelper ShotFromBehind => GetHelper<ShotFromBehindHelper>("shotFromBehind");
+
+		/// <summary>
+		/// Gets a ShotInGuts Helper class for sending ShotInGuts <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		/// <remarks>
+		/// configure the shot in guts reaction
+		/// </remarks>
+		public ShotInGutsHelper ShotInGuts => GetHelper<ShotInGutsHelper>("shotInGuts");
+
+		/// <summary>
+		/// Gets a ShotHeadLook Helper class for sending ShotHeadLook <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		public ShotHeadLookHelper ShotHeadLook => GetHelper<ShotHeadLookHelper>("shotHeadLook");
+
+		/// <summary>
+		/// Gets a ShotConfigureArms Helper class for sending ShotConfigureArms <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		/// <remarks>
+		/// configure the arm reactions in shot
+		/// </remarks>
+		public ShotConfigureArmsHelper ShotConfigureArms => GetHelper<ShotConfigureArmsHelper>("shotConfigureArms");
+
+		/// <summary>
+		/// Gets a SmartFall Helper class for sending SmartFall <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		/// <remarks>
+		/// Clone of High Fall with a wider range of operating conditions.
+		/// </remarks>
+		public SmartFallHelper SmartFall => GetHelper<SmartFallHelper>("smartFall");
+
+		/// <summary>
+		/// Gets a StaggerFall Helper class for sending StaggerFall <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		public StaggerFallHelper StaggerFall => GetHelper<StaggerFallHelper>("staggerFall");
+
+		/// <summary>
+		/// Gets a Teeter Helper class for sending Teeter <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		public TeeterHelper Teeter => GetHelper<TeeterHelper>("teeter");
+
+		/// <summary>
+		/// Gets a UpperBodyFlinch Helper class for sending UpperBodyFlinch <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		public UpperBodyFlinchHelper UpperBodyFlinch => GetHelper<UpperBodyFlinchHelper>("upperBodyFlinch");
+
+		/// <summary>
+		/// Gets a Yanked Helper class for sending Yanked <see cref="Message"/> to this <see cref="Ped"/>.
+		/// </summary>
+		public YankedHelper Yanked => GetHelper<YankedHelper>("yanked");
+	}
+}
