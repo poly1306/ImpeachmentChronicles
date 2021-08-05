@@ -4299,3 +4299,2251 @@ namespace GTA.NaturalMotion
 
 	/// <summary>
 	/// This single message allows you to configure the injured leg reaction during shot.
+	/// </summary>
+	public sealed class ConfigureShotInjuredLegHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureShotInjuredLegHelper for sending a ConfigureShotInjuredLeg <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureShotInjuredLeg <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// This single message allows you to configure the injured leg reaction during shot.
+		/// </remarks>
+		public ConfigureShotInjuredLegHelper(Ped ped) : base(ped, "configureShotInjuredLeg")
+		{
+		}
+
+		/// <summary>
+		/// Time before a wounded leg is set to be weak and cause the character to collapse.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float TimeBeforeCollapseWoundLeg
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("timeBeforeCollapseWoundLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury duration (reaction to being shot in leg).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float LegInjuryTime
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("legInjuryTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Force a step to be taken whether pushed out of balance or not.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool LegForceStep
+		{
+			set => SetArgument("legForceStep", value);
+		}
+
+		/// <summary>
+		/// Bend the legs via the balancer by this amount if stepping on the injured leg.
+		/// 0.2 seems a good default.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegLimpBend
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("legLimpBend", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg lift duration (reaction to being shot in leg).
+		/// (Lifting happens when not stepping with other leg).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float LegLiftTime
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("legLiftTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury - leg strength is reduced.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjury
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("legInjury", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury bend forwards amount when not lifting leg.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjuryHipPitch
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("legInjuryHipPitch", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury bend forwards amount when lifting leg.
+		/// (Lifting happens when not stepping with other leg).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjuryLiftHipPitch
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("legInjuryLiftHipPitch", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury bend forwards amount when not lifting leg.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjurySpineBend
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("legInjurySpineBend", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury bend forwards amount when lifting leg.
+		/// (Lifting happens when not stepping with other leg).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjuryLiftSpineBend
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("legInjuryLiftSpineBend", value);
+			}
+		}
+	}
+
+	public sealed class DefineAttachedObjectHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the DefineAttachedObjectHelper for sending a DefineAttachedObject <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the DefineAttachedObject <see cref="Message"/> to.</param>
+		public DefineAttachedObjectHelper(Ped ped) : base(ped, "defineAttachedObject")
+		{
+		}
+
+		/// <summary>
+		/// Index of part to attach to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// Max value = 21.
+		/// </remarks>
+		public int PartIndex
+		{
+			set
+			{
+				if (value > 21)
+					value = 21;
+				if (value < -1)
+					value = -1;
+				SetArgument("partIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// Mass of the attached object.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ObjectMass
+		{
+			set
+			{
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("objectMass", value);
+			}
+		}
+
+		/// <summary>
+		/// World position of attached object's center of mass. Must be updated each frame.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 WorldPos
+		{
+			set => SetArgument("worldPos", value);
+		}
+	}
+
+	/// <summary>
+	/// Apply an impulse to a named body part.
+	/// </summary>
+	public sealed class ForceToBodyPartHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ForceToBodyPartHelper for sending a ForceToBodyPart <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ForceToBodyPart <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Apply an impulse to a named body part.
+		/// </remarks>
+		public ForceToBodyPartHelper(Ped ped) : base(ped, "forceToBodyPart")
+		{
+		}
+
+		/// <summary>
+		/// Part or link or bound index.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 28.
+		/// </remarks>
+		public int PartIndex
+		{
+			set
+			{
+				if (value > 28)
+					value = 28;
+				if (value < 0)
+					value = 0;
+				SetArgument("partIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// Force to apply.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, -50.0f, 0.0f).
+		/// Min value = -100000.0f.
+		/// Max value = 100000.0f.
+		/// </remarks>
+		public Vector3 Force
+		{
+			set => SetArgument("force",
+					Vector3.Clamp(value, new Vector3(-100000.0f, -100000.0f, -100000.0f), new Vector3(100000.0f, 100000.0f, 100000.0f)));
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ForceDefinedInPartSpace
+		{
+			set => SetArgument("forceDefinedInPartSpace", value);
+		}
+	}
+
+	public sealed class LeanInDirectionHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the LeanInDirectionHelper for sending a LeanInDirection <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the LeanInDirection <see cref="Message"/> to.</param>
+		public LeanInDirectionHelper(Ped ped) : base(ped, "leanInDirection")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Direction to lean in.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 1.0f).
+		/// Min value = 0.0f.
+		/// </remarks>
+		public Vector3 Dir
+		{
+			set => SetArgument("dir", Vector3.Maximize(value, new Vector3(0.0f, 0.0f, 0.0f)));
+		}
+	}
+
+	public sealed class LeanRandomHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the LeanRandomHelper for sending a LeanRandom <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the LeanRandom <see cref="Message"/> to.</param>
+		public LeanRandomHelper(Ped ped) : base(ped, "leanRandom")
+		{
+		}
+
+		/// <summary>
+		/// Minimum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMin
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("leanAmountMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMax
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("leanAmountMax", value);
+			}
+		}
+
+		/// <summary>
+		/// Minimum time until changing direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ChangeTimeMin
+		{
+			set
+			{
+				if (value > 20.0f)
+					value = 20.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("changeTimeMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum time until changing direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ChangeTimeMax
+		{
+			set
+			{
+				if (value > 20.0f)
+					value = 20.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("changeTimeMax", value);
+			}
+		}
+	}
+
+	public sealed class LeanToPositionHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the LeanToPositionHelper for sending a LeanToPosition <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the LeanToPosition <see cref="Message"/> to.</param>
+		public LeanToPositionHelper(Ped ped) : base(ped, "leanToPosition")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -0.5f.
+		/// Max value = 0.5f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 0.5f)
+					value = 0.5f;
+				if (value < -0.5f)
+					value = -0.5f;
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Position to head towards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 Pos
+		{
+			set => SetArgument("pos", value);
+		}
+	}
+
+	public sealed class LeanTowardsObjectHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the LeanTowardsObjectHelper for sending a LeanTowardsObject <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the LeanTowardsObject <see cref="Message"/> to.</param>
+		public LeanTowardsObjectHelper(Ped ped) : base(ped, "leanTowardsObject")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -0.5f.
+		/// Max value = 0.5f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 0.5f)
+					value = 0.5f;
+				if (value < -0.5f)
+					value = -0.5f;
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Offset from instance position added when calculating position to lean to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// Min value = -100.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public Vector3 Offset
+		{
+			set => SetArgument("offset",
+					Vector3.Clamp(value, new Vector3(-100.0f, -100.0f, -100.0f), new Vector3(100.0f, 100.0f, 100.0f)));
+		}
+
+		/// <summary>
+		/// LevelIndex of object to lean towards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int InstanceIndex
+		{
+			set
+			{
+				if (value < -1)
+					value = -1;
+				SetArgument("instanceIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// BoundIndex of object to lean towards (0 = just use instance coordinates).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// </remarks>
+		public int BoundIndex
+		{
+			set
+			{
+				if (value < 0)
+					value = 0;
+				SetArgument("boundIndex", value);
+			}
+		}
+	}
+
+	public sealed class HipsLeanInDirectionHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the HipsLeanInDirectionHelper for sending a HipsLeanInDirection <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the HipsLeanInDirection <see cref="Message"/> to.</param>
+		public HipsLeanInDirectionHelper(Ped ped) : base(ped, "hipsLeanInDirection")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Direction to lean in.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 1.0f).
+		/// Min value = 0.0f.
+		/// </remarks>
+		public Vector3 Dir
+		{
+			set => SetArgument("dir", Vector3.Maximize(value, new Vector3(0.0f, 0.0f, 0.0f)));
+		}
+	}
+
+	public sealed class HipsLeanRandomHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the HipsLeanRandomHelper for sending a HipsLeanRandom <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the HipsLeanRandom <see cref="Message"/> to.</param>
+		public HipsLeanRandomHelper(Ped ped) : base(ped, "hipsLeanRandom")
+		{
+		}
+
+		/// <summary>
+		/// Minimum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMin
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("leanAmountMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMax
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("leanAmountMax", value);
+			}
+		}
+
+		/// <summary>
+		/// Min time until changing direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ChangeTimeMin
+		{
+			set
+			{
+				if (value > 20.0f)
+					value = 20.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("changeTimeMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum time until changing direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ChangeTimeMax
+		{
+			set
+			{
+				if (value > 20.0f)
+					value = 20.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("changeTimeMax", value);
+			}
+		}
+	}
+
+	public sealed class HipsLeanToPositionHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the HipsLeanToPositionHelper for sending a HipsLeanToPosition <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the HipsLeanToPosition <see cref="Message"/> to.</param>
+		public HipsLeanToPositionHelper(Ped ped) : base(ped, "hipsLeanToPosition")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -0.5f.
+		/// Max value = 0.5f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 0.5f)
+					value = 0.5f;
+				if (value < -0.5f)
+					value = -0.5f;
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Position to head towards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 Pos
+		{
+			set => SetArgument("pos", value);
+		}
+	}
+
+	public sealed class HipsLeanTowardsObjectHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the HipsLeanTowardsObjectHelper for sending a HipsLeanTowardsObject <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the HipsLeanTowardsObject <see cref="Message"/> to.</param>
+		public HipsLeanTowardsObjectHelper(Ped ped) : base(ped, "hipsLeanTowardsObject")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -0.5f.
+		/// Max value = 0.5f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 0.5f)
+					value = 0.5f;
+				if (value < -0.5f)
+					value = -0.5f;
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Offset from instance position added when calculating position to lean to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// Min value = -100.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public Vector3 Offset
+		{
+			set => SetArgument("offset",
+					Vector3.Clamp(value, new Vector3(-100.0f, -100.0f, -100.0f), new Vector3(100.0f, 100.0f, 100.0f)));
+		}
+
+		/// <summary>
+		/// LevelIndex of object to lean hips towards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int InstanceIndex
+		{
+			set
+			{
+				if (value < -1)
+					value = -1;
+				SetArgument("instanceIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// BoundIndex of object to lean hips towards (0 = just use instance coordinates).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// </remarks>
+		public int BoundIndex
+		{
+			set
+			{
+				if (value < 0)
+					value = 0;
+				SetArgument("boundIndex", value);
+			}
+		}
+	}
+
+	public sealed class ForceLeanInDirectionHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ForceLeanInDirectionHelper for sending a ForceLeanInDirection <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ForceLeanInDirection <see cref="Message"/> to.</param>
+		public ForceLeanInDirectionHelper(Ped ped) : base(ped, "forceLeanInDirection")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Direction to lean in.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 1.0f).
+		/// Min value = 0.0f.
+		/// </remarks>
+		public Vector3 Dir
+		{
+			set => SetArgument("dir", Vector3.Maximize(value, new Vector3(0.0f, 0.0f, 0.0f)));
+		}
+
+		/// <summary>
+		/// Body part that the force is applied to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 21.
+		/// </remarks>
+		public int BodyPart
+		{
+			set
+			{
+				if (value > 21)
+					value = 21;
+				if (value < 0)
+					value = 0;
+				SetArgument("bodyPart", value);
+			}
+		}
+	}
+
+	public sealed class ForceLeanRandomHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ForceLeanRandomHelper for sending a ForceLeanRandom <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ForceLeanRandom <see cref="Message"/> to.</param>
+		public ForceLeanRandomHelper(Ped ped) : base(ped, "forceLeanRandom")
+		{
+		}
+
+		/// <summary>
+		/// Minimum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMin
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("leanAmountMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMax
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("leanAmountMax", value);
+			}
+		}
+
+		/// <summary>
+		/// Min time until changing direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ChangeTimeMin
+		{
+			set
+			{
+				if (value > 20.0f)
+					value = 20.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("changeTimeMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum time until changing direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ChangeTimeMax
+		{
+			set
+			{
+				if (value > 20.0f)
+					value = 20.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("changeTimeMax", value);
+			}
+		}
+
+		/// <summary>
+		/// Body part that the force is applied to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 21.
+		/// </remarks>
+		public int BodyPart
+		{
+			set
+			{
+				if (value > 21)
+					value = 21;
+				if (value < 0)
+					value = 0;
+				SetArgument("bodyPart", value);
+			}
+		}
+	}
+
+	public sealed class ForceLeanToPositionHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ForceLeanToPositionHelper for sending a ForceLeanToPosition <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ForceLeanToPosition <see cref="Message"/> to.</param>
+		public ForceLeanToPositionHelper(Ped ped) : base(ped, "forceLeanToPosition")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -0.5f.
+		/// Max value = 0.5f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 0.5f)
+					value = 0.5f;
+				if (value < -0.5f)
+					value = -0.5f;
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Position to head towards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 Pos
+		{
+			set => SetArgument("pos", value);
+		}
+
+		/// <summary>
+		/// Body part that the force is applied to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 21.
+		/// </remarks>
+		public int BodyPart
+		{
+			set
+			{
+				if (value > 21)
+					value = 21;
+				if (value < 0)
+					value = 0;
+				SetArgument("bodyPart", value);
+			}
+		}
+	}
+
+	public sealed class ForceLeanTowardsObjectHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ForceLeanTowardsObjectHelper for sending a ForceLeanTowardsObject <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ForceLeanTowardsObject <see cref="Message"/> to.</param>
+		public ForceLeanTowardsObjectHelper(Ped ped) : base(ped, "forceLeanTowardsObject")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -0.5f.
+		/// Max value = 0.5f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 0.5f)
+					value = 0.5f;
+				if (value < -0.5f)
+					value = -0.5f;
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Offset from instance position added when calculating position to lean to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// Min value = -100.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public Vector3 Offset
+		{
+			set => SetArgument("offset",
+					Vector3.Clamp(value, new Vector3(-100.0f, -100.0f, -100.0f), new Vector3(100.0f, 100.0f, 100.0f)));
+		}
+
+		/// <summary>
+		/// LevelIndex of object to move towards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int InstanceIndex
+		{
+			set
+			{
+				if (value < -1)
+					value = -1;
+				SetArgument("instanceIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// BoundIndex of object to move towards (0 = just use instance coordinates).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// </remarks>
+		public int BoundIndex
+		{
+			set
+			{
+				if (value < 0)
+					value = 0;
+				SetArgument("boundIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// Body part that the force is applied to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 21.
+		/// </remarks>
+		public int BodyPart
+		{
+			set
+			{
+				if (value > 21)
+					value = 21;
+				if (value < 0)
+					value = 0;
+				SetArgument("bodyPart", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Use this message to manually set the body stiffness values -before using Active Pose to drive to an animated pose, for example.
+	/// </summary>
+	public sealed class SetStiffnessHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the SetStiffnessHelper for sending a SetStiffness <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the SetStiffness <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Use this message to manually set the body stiffness values -before using Active Pose to drive to an animated pose, for example.
+		/// </remarks>
+		public SetStiffnessHelper(Ped ped) : base(ped, "setStiffness")
+		{
+		}
+
+		/// <summary>
+		/// Stiffness of whole character.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 12.0f.
+		/// Min value = 2.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float BodyStiffness
+		{
+			set
+			{
+				if (value > 20.0f)
+					value = 20.0f;
+				if (value < 2.0f)
+					value = 2.0f;
+				SetArgument("bodyStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Damping amount, less is underdamped.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 3.0f.
+		/// </remarks>
+		public float Damping
+		{
+			set
+			{
+				if (value > 3.0f)
+					value = 3.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("damping", value);
+			}
+		}
+
+		/// <summary>
+		/// Two character body-masking value, bitwise joint mask or bitwise logic string of two character body-masking value  (see Active Pose notes for possible values).
+		/// </summary>
+		/// <remarks>
+		/// Default value = "fb".
+		/// </remarks>
+		public string Mask
+		{
+			set => SetArgument("mask", value);
+		}
+	}
+
+	/// <summary>
+	/// Use this message to manually set the muscle stiffness values -before using Active Pose to drive to an animated pose, for example.
+	/// </summary>
+	public sealed class SetMuscleStiffnessHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the SetMuscleStiffnessHelper for sending a SetMuscle stiffness <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the SetMuscle stiffness <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Use this message to manually set the muscle stiffness values -before using Active Pose to drive to an animated pose, for example.
+		/// </remarks>
+		public SetMuscleStiffnessHelper(Ped ped) : base(ped, "setMuscleStiffness")
+		{
+		}
+
+		/// <summary>
+		/// Muscle stiffness of joint/s.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float MuscleStiffness
+		{
+			set
+			{
+				if (value > 20.0f)
+					value = 20.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("muscleStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Two character body-masking value, bitwise joint mask or bitwise logic string of two character body-masking value  (see Active Pose notes for possible values).
+		/// </summary>
+		/// <remarks>
+		/// Default value = "fb".
+		/// </remarks>
+		public string Mask
+		{
+			set => SetArgument("mask", value);
+		}
+	}
+
+	/// <summary>
+	/// Use this message to set the character's weapon mode.  This is an alternativeto the setWeaponMode public function.
+	/// </summary>
+	public sealed class SetWeaponModeHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the SetWeaponModeHelper for sending a SetWeaponMode <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the SetWeaponMode <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Use this message to set the character's weapon mode.  This is an alternativeto the setWeaponMode public function.
+		/// </remarks>
+		public SetWeaponModeHelper(Ped ped) : base(ped, "setWeaponMode")
+		{
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="WeaponMode.PistolRight"/>.
+		/// </remarks>.
+		public WeaponMode WeaponMode
+		{
+			set => SetArgument("weaponMode", (int)value);
+		}
+	}
+
+	/// <summary>
+	/// Use this message to register weapon.  This is an alternativeto the registerWeapon public function.
+	/// </summary>
+	public sealed class RegisterWeaponHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the RegisterWeaponHelper for sending a RegisterWeapon <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the RegisterWeapon <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Use this message to register weapon.  This is an alternativeto the registerWeapon public function.
+		/// </remarks>
+		public RegisterWeaponHelper(Ped ped) : base(ped, "registerWeapon")
+		{
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="Hand.Right"/>.
+		/// </remarks>
+		public Hand Hand
+		{
+			set => SetArgument("hand", (int)value);
+		}
+
+		/// <summary>
+		/// Level index of the weapon.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int LevelIndex
+		{
+			set
+			{
+				if (value < -1)
+					value = -1;
+				SetArgument("levelIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// Pointer to the hand-gun constraint handle.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int ConstraintHandle
+		{
+			set
+			{
+				if (value < -1)
+					value = -1;
+				SetArgument("constraintHandle", value);
+			}
+		}
+
+		/// <summary>
+		/// A vector of the gunToHand matrix.  The gunToHandMatrix is the desired gunToHandMatrix in the aimingPose. (The gunToHandMatrix when pointGun starts can be different so will be blended to this desired one).
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(1.0f, 0.0f, 0.0f).
+		/// Min value = 0.0f.
+		/// </remarks>
+		public Vector3 GunToHandA
+		{
+			set => SetArgument("gunToHandA", Vector3.Maximize(value, new Vector3(0.0f, 0.0f, 0.0f)));
+		}
+
+		/// <summary>
+		/// B vector of the gunToHand matrix.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 1.0f, 0.0f).
+		/// Min value = 0.0f.
+		/// </remarks>
+		public Vector3 GunToHandB
+		{
+			set => SetArgument("gunToHandB", Vector3.Maximize(value, new Vector3(0.0f, 0.0f, 0.0f)));
+		}
+
+		/// <summary>
+		/// C vector of the gunToHand matrix.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 1.0f).
+		/// Min value = 0.0f.
+		/// </remarks>
+		public Vector3 GunToHandC
+		{
+			set => SetArgument("gunToHandC", Vector3.Maximize(value, new Vector3(0.0f, 0.0f, 0.0f)));
+		}
+
+		/// <summary>
+		/// D vector of the gunToHand matrix.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// Min value = 0.0f.
+		/// </remarks>
+		public Vector3 GunToHandD
+		{
+			set => SetArgument("gunToHandD", Vector3.Maximize(value, new Vector3(0.0f, 0.0f, 0.0f)));
+		}
+
+		/// <summary>
+		/// Gun center to muzzle expressed in gun co-ordinates.  To get the line of sight/barrel of the gun. Assumption: the muzzle direction is always along the same primary axis of the gun.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 GunToMuzzleInGun
+		{
+			set => SetArgument("gunToMuzzleInGun", value);
+		}
+
+		/// <summary>
+		/// Gun center to butt expressed in gun co-ordinates.  The gun pivots around this point when aiming.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 GunToButtInGun
+		{
+			set => SetArgument("gunToButtInGun", value);
+		}
+	}
+
+	public sealed class ShotRelaxHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ShotRelaxHelper for sending a ShotRelax <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ShotRelax <see cref="Message"/> to.</param>
+		public ShotRelaxHelper(Ped ped) : base(ped, "shotRelax")
+		{
+		}
+
+		/// <summary>
+		/// Time over which to relax to full relaxation for upper body.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 40.0f.
+		/// </remarks>
+		public float RelaxPeriodUpper
+		{
+			set
+			{
+				if (value > 40.0f)
+					value = 40.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("relaxPeriodUpper", value);
+			}
+		}
+
+		/// <summary>
+		/// Time over which to relax to full relaxation for lower body.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 40.0f.
+		/// </remarks>
+		public float RelaxPeriodLower
+		{
+			set
+			{
+				if (value > 40.0f)
+					value = 40.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("relaxPeriodLower", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// One shot message apply a force to the hand as we fire the gun that should be in this hand.
+	/// </summary>
+	public sealed class FireWeaponHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the FireWeaponHelper for sending a FireWeapon <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the FireWeapon <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// One shot message apply a force to the hand as we fire the gun that should be in this hand.
+		/// </remarks>
+		public FireWeaponHelper(Ped ped) : base(ped, "fireWeapon")
+		{
+		}
+
+		/// <summary>
+		/// The force of the gun.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1000.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10000.0f.
+		/// </remarks>
+		public float FiredWeaponStrength
+		{
+			set
+			{
+				if (value > 10000.0f)
+					value = 10000.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("firedWeaponStrength", value);
+			}
+		}
+
+		/// <summary>
+		/// Which hand is the gun in.
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="Hand.Left"/>.
+		/// </remarks>
+		public Hand GunHandEnum
+		{
+			set => SetArgument("gunHandEnum", (int)value);
+		}
+
+		/// <summary>
+		/// Should we apply some of the force at the shoulder. Force double handed weapons (Ak47 etc).
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ApplyFireGunForceAtClavicle
+		{
+			set => SetArgument("applyFireGunForceAtClavicle", value);
+		}
+
+		/// <summary>
+		/// Minimum time before next fire impulse.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float InhibitTime
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("inhibitTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Direction of impulse in gun frame.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 Direction
+		{
+			set => SetArgument("direction", value);
+		}
+
+		/// <summary>
+		/// Split force between hand and clavicle when applyFireGunForceAtClavicle is true. 1 = all hand, 0 = all clavicle.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Split
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("split", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// One shot to give state of constraints on character and response to constraints.
+	/// </summary>
+	public sealed class ConfigureConstraintsHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureConstraintsHelper for sending a ConfigureConstraints <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureConstraints <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// One shot to give state of constraints on character and response to constraints.
+		/// </remarks>
+		public ConfigureConstraintsHelper(Ped ped) : base(ped, "configureConstraints")
+		{
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool HandCuffs
+		{
+			set => SetArgument("handCuffs", value);
+		}
+
+		/// <summary>
+		/// Not implemented.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool HandCuffsBehindBack
+		{
+			set => SetArgument("handCuffsBehindBack", value);
+		}
+
+		/// <summary>
+		/// Not implemented.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool LegCuffs
+		{
+			set => SetArgument("legCuffs", value);
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool RightDominant
+		{
+			set => SetArgument("rightDominant", value);
+		}
+
+		/// <summary>
+		/// 0 setCurrent, 1= IK to dominant, (2=pointGunLikeIK //not implemented).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 5.
+		/// </remarks>
+		public int PassiveMode
+		{
+			set
+			{
+				if (value > 5)
+					value = 5;
+				if (value < 0)
+					value = 0;
+				SetArgument("passiveMode", value);
+			}
+		}
+
+		/// <summary>
+		/// Not implemented.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool BespokeBehavior
+		{
+			set => SetArgument("bespokeBehaviour", value);
+		}
+
+		/// <summary>
+		/// Blend Arms to zero pose.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Blend2ZeroPose
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("blend2ZeroPose", value);
+			}
+		}
+	}
+
+	public sealed class StayUprightHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the StayUprightHelper for sending a StayUpright <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the StayUpright <see cref="Message"/> to.</param>
+		public StayUprightHelper(Ped ped) : base(ped, "stayUpright")
+		{
+		}
+
+		/// <summary>
+		/// Enable force based constraint.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseForces
+		{
+			set => SetArgument("useForces", value);
+		}
+
+		/// <summary>
+		/// Enable torque based constraint.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseTorques
+		{
+			set => SetArgument("useTorques", value);
+		}
+
+		/// <summary>
+		/// Uses position/orientation control on the spine and drifts in the direction of bullets.  This ignores all other stayUpright settings.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool LastStandMode
+		{
+			set => SetArgument("lastStandMode", value);
+		}
+
+		/// <summary>
+		/// The sink rate (higher for a faster drop).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LastStandSinkRate
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("lastStandSinkRate", value);
+			}
+		}
+
+		/// <summary>
+		/// Higher values for more damping.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LastStandHorizDamping
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("lastStandHorizDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Max time allowed in last stand mode.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float LastStandMaxTime
+		{
+			set
+			{
+				if (value > 5.0f)
+					value = 5.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("lastStandMaxTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Use cheat torques to face the direction of bullets if not facing too far away.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool TurnTowardsBullets
+		{
+			set => SetArgument("turnTowardsBullets", value);
+		}
+
+		/// <summary>
+		/// Make strength of constraint function of COM velocity.  Uses -1 for forceDamping if the damping is positive.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool VelocityBased
+		{
+			set => SetArgument("velocityBased", value);
+		}
+
+		/// <summary>
+		/// Only apply torque based constraint when airBorne.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool TorqueOnlyInAir
+		{
+			set => SetArgument("torqueOnlyInAir", value);
+		}
+
+		/// <summary>
+		/// Strength of constraint.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 3.0f.
+		/// Min value = 0.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float ForceStrength
+		{
+			set
+			{
+				if (value > 16.0f)
+					value = 16.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("forceStrength", value);
+			}
+		}
+
+		/// <summary>
+		/// Damping in constraint: -1 makes it scale automagically with forceStrength.  Other negative values will scale this automagic damping.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 50.0f.
+		/// </remarks>
+		public float ForceDamping
+		{
+			set
+			{
+				if (value > 50.0f)
+					value = 50.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("forceDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Multiplier to the force applied to the feet.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ForceFeetMult
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("forceFeetMult", value);
+			}
+		}
+
+		/// <summary>
+		/// Share of pelvis force applied to spine3.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ForceSpine3Share
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("forceSpine3Share", value);
+			}
+		}
+
+		/// <summary>
+		/// How much the character lean is taken into account when reducing the force.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ForceLeanReduction
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("forceLeanReduction", value);
+			}
+		}
+
+		/// <summary>
+		/// Share of the feet force to the airborne foot.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ForceInAirShare
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("forceInAirShare", value);
+			}
+		}
+
+		/// <summary>
+		/// When min and max are greater than 0 the constraint strength is determined from character strength, scaled into the range given by min and max.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float ForceMin
+		{
+			set
+			{
+				if (value > 16.0f)
+					value = 16.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("forceMin", value);
+			}
+		}
+
+		/// <summary>
+		/// See above.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float ForceMax
+		{
+			set
+			{
+				if (value > 16.0f)
+					value = 16.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("forceMax", value);
+			}
+		}
+
+		/// <summary>
+		/// When in velocityBased mode, the COM velocity at which constraint reaches maximum strength (forceStrength).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.1f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float ForceSaturationVel
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.1f)
+					value = 0.1f;
+				SetArgument("forceSaturationVel", value);
+			}
+		}
+
+		/// <summary>
+		/// When in velocityBased mode, the COM velocity above which constraint starts applying forces.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float ForceThresholdVel
+		{
+			set
+			{
+				if (value > 5.0f)
+					value = 5.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("forceThresholdVel", value);
+			}
+		}
+
+		/// <summary>
+		/// Strength of torque based constraint.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float TorqueStrength
+		{
+			set
+			{
+				if (value > 16.0f)
+					value = 16.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("torqueStrength", value);
+			}
+		}
+
+		/// <summary>
+		/// Damping of torque based constraint.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float TorqueDamping
+		{
+			set
+			{
+				if (value > 16.0f)
+					value = 16.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("torqueDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// When in velocityBased mode, the COM velocity at which constraint reaches maximum strength (torqueStrength).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.1f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float TorqueSaturationVel
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.1f)
+					value = 0.1f;
+				SetArgument("torqueSaturationVel", value);
+			}
+		}
+
+		/// <summary>
+		/// When in velocityBased mode, the COM velocity above which constraint starts applying torques.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.5f.
+		/// Min value = 0.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float TorqueThresholdVel
+		{
+			set
+			{
+				if (value > 5.0f)
+					value = 5.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("torqueThresholdVel", value);
+			}
+		}
+
+		/// <summary>
+		/// Distance the foot is behind Com projection that is still considered able to generate the support for the upright constraint.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = -2.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float SupportPosition
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < -2.0f)
+					value = -2.0f;
+				SetArgument("supportPosition", value);
+			}
+		}
+
+		/// <summary>
+		/// Still apply this fraction of the upright constaint force if the foot is not in a position (defined by supportPosition) to generate the support for the upright constraint.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float NoSupportForceMult
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("noSupportForceMult", value);
+			}
+		}
+
+		/// <summary>
+		/// Strength of cheat force applied upwards to spine3 to help the character up steps/slopes.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float StepUpHelp
+		{
+			set
+			{
+				if (value > 16.0f)
+					value = 16.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("stepUpHelp", value);
+			}
+		}
+
+		/// <summary>
+		/// How much the cheat force takes into account the acceleration of moving platforms.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.7f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float StayUpAcc
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("stayUpAcc", value);
+			}
+		}
+
+		/// <summary>
+		/// The maximum floorAcceleration (of a moving platform) that the cheat force takes into account.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 5.0f.
+		/// Min value = 0.0f.
+		/// Max value = 15.0f.
+		/// </remarks>
+		public float StayUpAccMax
+		{
+			set
+			{
+				if (value > 15.0f)
+					value = 15.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("stayUpAccMax", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Send this message to immediately stop all behaviors from executing.
+	/// </summary>
+	public sealed class StopAllBehavioursHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the StopAllBehaviorsHelper for sending a StopAllBehaviors <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the StopAllBehaviors <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Send this message to immediately stop all behaviors from executing.
