@@ -19963,3 +19963,2098 @@ namespace GTA.NaturalMotion
 		/// Max value = 15.0f.
 		/// </remarks>
 		public float FtkFallBelowStab
+		{
+			set
+			{
+				if (value > 15.0f)
+					value = 15.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("ftkFallBelowStab", value);
+			}
+		}
+
+		/// <summary>
+		/// When the character gives up and goes into a fall.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 4.0f.
+		/// </remarks>
+		public float FtkBalanceAbortThreshold
+		{
+			set
+			{
+				if (value > 4.0f)
+					value = 4.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("ftkBalanceAbortThreshold", value);
+			}
+		}
+
+		/// <summary>
+		/// Type of arm response when on knees falling forward 0=useFallArms (from RollDownstairs or catchFall), 1= armsIn, 2=armsOut.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.
+		/// Min value = 0.
+		/// Max value = 2.
+		/// </remarks>
+		public int FtkOnKneesArmType
+		{
+			set
+			{
+				if (value > 2)
+					value = 2;
+				if (value < 0)
+					value = 0;
+				SetArgument("ftkOnKneesArmType", value);
+			}
+		}
+
+		/// <summary>
+		/// Release the reachForWound this amount of time after the knees have hit.
+		/// If LT 0.0 then keep reaching for wound regardless of fall/onground state.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float FtkReleaseReachForWound
+		{
+			set
+			{
+				if (value > 5.0f)
+					value = 5.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("ftkReleaseReachForWound", value);
+			}
+		}
+
+		/// <summary>
+		/// True = Keep reaching for wound regardless of fall/onground state.
+		/// false = respect the shotConfigureArms params: reachFalling, reachFallingWithOneHand, reachOnFloor.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool FtkReachForWound
+		{
+			set => SetArgument("ftkReachForWound", value);
+		}
+
+		/// <summary>
+		/// Override the pointGun when knees hit.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool FtkReleasePointGun
+		{
+			set => SetArgument("ftkReleasePointGun", value);
+		}
+
+		/// <summary>
+		/// The upper body of the character must be colliding and other failure conditions met to fail.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool FtkFailMustCollide
+		{
+			set => SetArgument("ftkFailMustCollide", value);
+		}
+	}
+
+	/// <summary>
+	/// Configure the shot from behind reaction.
+	/// </summary>
+	public sealed class ShotFromBehindHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ShotFromBehindHelper for sending a ShotFromBehind <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ShotFromBehind <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Configure the shot from behind reaction.
+		/// </remarks>
+		public ShotFromBehindHelper(Ped ped) : base(ped, "shotFromBehind")
+		{
+		}
+
+		/// <summary>
+		/// Type of reaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ShotFromBehind
+		{
+			set => SetArgument("shotFromBehind", value);
+		}
+
+		/// <summary>
+		/// SpineBend.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SfbSpineAmount
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sfbSpineAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Neck Bend.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SfbNeckAmount
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sfbNeckAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Hip Pitch.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SfbHipAmount
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sfbHipAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Knee bend.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float SfbKneeAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sfbKneeAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// ShotFromBehind reaction period after being shot.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.7f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SfbPeriod
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sfbPeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of time not taking a step.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SfbForceBalancePeriod
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sfbForceBalancePeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of time before applying spread out arms pose.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SfbArmsOnset
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sfbArmsOnset", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of time before bending knees a bit.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SfbKneesOnset
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sfbKneesOnset", value);
+			}
+		}
+
+		/// <summary>
+		/// Controls additional independent randomized bending of left/right elbows.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float SfbNoiseGain
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sfbNoiseGain", value);
+			}
+		}
+
+		/// <summary>
+		/// 0 = balancer fails as normal,
+		/// 1 = ignore backArchedBack and leanedTooFarBack balancer failures,
+		/// 2 = ignore backArchedBack balancer failure only,
+		/// 3 = ignore leanedTooFarBack balancer failure only.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 3.
+		/// </remarks>
+		public int SfbIgnoreFail
+		{
+			set
+			{
+				if (value > 3)
+					value = 3;
+				if (value < 0)
+					value = 0;
+				SetArgument("sfbIgnoreFail", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Configure the shot in guts reaction.
+	/// </summary>
+	public sealed class ShotInGutsHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ShotInGutsHelper for sending a ShotInGuts <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ShotInGuts <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Configure the shot in guts reaction.
+		/// </remarks>
+		public ShotInGutsHelper(Ped ped) : base(ped, "shotInGuts")
+		{
+		}
+
+		/// <summary>
+		/// Type of reaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ShotInGuts
+		{
+			set => SetArgument("shotInGuts", value);
+		}
+
+		/// <summary>
+		/// SpineBend.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SigSpineAmount
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sigSpineAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Neck Bend.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SigNeckAmount
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sigNeckAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Hip Pitch.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SigHipAmount
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sigHipAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Knee bend.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float SigKneeAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sigKneeAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Active time after being shot.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SigPeriod
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sigPeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of time not taking a step.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SigForceBalancePeriod
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sigForceBalancePeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of time not taking a step.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SigKneesOnset
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("sigKneesOnset", value);
+			}
+		}
+	}
+
+	public sealed class ShotHeadLookHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ShotHeadLookHelper for sending a ShotHeadLook <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ShotHeadLook <see cref="Message"/> to.</param>
+		public ShotHeadLookHelper(Ped ped) : base(ped, "shotHeadLook")
+		{
+		}
+
+		/// <summary>
+		/// Use head look.
+		/// Default: looks at provided target or if this is zero - looks forward or in velocity direction.
+		/// If reachForWound is enabled, switches between looking at the wound and at the default target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseHeadLook
+		{
+			set => SetArgument("useHeadLook", value);
+		}
+
+		/// <summary>
+		/// Position to look at with headlook flag.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 HeadLook
+		{
+			set => SetArgument("headLook", value);
+		}
+
+		/// <summary>
+		/// Min time to look at wound.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float HeadLookAtWoundMinTimer
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("headLookAtWoundMinTimer", value);
+			}
+		}
+
+		/// <summary>
+		/// Max time to look at wound.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.8f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float HeadLookAtWoundMaxTimer
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("headLookAtWoundMaxTimer", value);
+			}
+		}
+
+		/// <summary>
+		/// Min time to look headLook or if zero - forward or in velocity direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.7f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float HeadLookAtHeadPosMaxTimer
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("headLookAtHeadPosMaxTimer", value);
+			}
+		}
+
+		/// <summary>
+		/// Max time to look headLook or if zero - forward or in velocity direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float HeadLookAtHeadPosMinTimer
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("headLookAtHeadPosMinTimer", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Configure the arm reactions in shot.
+	/// </summary>
+	public sealed class ShotConfigureArmsHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ShotConfigureArmsHelper for sending a ShotConfigureArms <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ShotConfigureArms <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Configure the arm reactions in shot.
+		/// </remarks>
+		public ShotConfigureArmsHelper(Ped ped) : base(ped, "shotConfigureArms")
+		{
+		}
+
+		/// <summary>
+		/// Blind brace with arms if appropriate.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool Brace
+		{
+			set => SetArgument("brace", value);
+		}
+
+		/// <summary>
+		/// Point gun if appropriate.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool PointGun
+		{
+			set => SetArgument("pointGun", value);
+		}
+
+		/// <summary>
+		/// ArmsWindmill if going backwards fast enough.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool UseArmsWindmill
+		{
+			set => SetArgument("useArmsWindmill", value);
+		}
+
+		/// <summary>
+		/// Release wound if going sideways/forward fast enough.
+		/// 0 = don't.
+		/// 1 = only if bracing.
+		/// 2 = any default arm reaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.
+		/// Min value = 0.
+		/// Max value = 2.
+		/// </remarks>
+		public int ReleaseWound
+		{
+			set
+			{
+				if (value > 2)
+					value = 2;
+				if (value < 0)
+					value = 0;
+				SetArgument("releaseWound", value);
+			}
+		}
+
+		/// <summary>
+		/// Reach for wound when falling.
+		/// 0 = false,
+		/// 1 = true,
+		/// 2 = once per shot performance.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 2.
+		/// </remarks>
+		public int ReachFalling
+		{
+			set
+			{
+				if (value > 2)
+					value = 2;
+				if (value < 0)
+					value = 0;
+				SetArgument("reachFalling", value);
+			}
+		}
+
+		/// <summary>
+		/// Force character to reach for wound with only one hand when falling or fallen.
+		/// 0 = allow two-handed reach,
+		/// 1 = left only if two-handed possible,
+		/// 2 = right only if two-handed possible,
+		/// 3 = one handed but automatic (allows switching of hands).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 3.
+		/// Min value = 0.
+		/// Max value = 3.
+		/// </remarks>
+		public int ReachFallingWithOneHand
+		{
+			set
+			{
+				if (value > 3)
+					value = 3;
+				if (value < 0)
+					value = 0;
+				SetArgument("reachFallingWithOneHand", value);
+			}
+		}
+
+		/// <summary>
+		/// ReachForWound when on floor - 0 = false, 1 = true, 2 = once per shot performance.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 2.
+		/// </remarks>
+		public int ReachOnFloor
+		{
+			set
+			{
+				if (value > 2)
+					value = 2;
+				if (value < 0)
+					value = 0;
+				SetArgument("reachOnFloor", value);
+			}
+		}
+
+		/// <summary>
+		/// Inhibit arms brace for this amount of time after reachForWound has begun.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float AlwaysReachTime
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("alwaysReachTime", value);
+			}
+		}
+
+		/// <summary>
+		/// For armsWindmill, multiplier on character speed - increase of speed of circling is proportional to character speed (max speed of circliing increase = 1.5). Eg. lowering the value increases the range of velocity that the 0-1.5 is applied over.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float AWSpeedMult
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("AWSpeedMult", value);
+			}
+		}
+
+		/// <summary>
+		/// For armsWindmill, multiplier on character speed - increase of radii is proportional to character speed (max radius increase = 0.45).
+		/// E.g. lowering the value increases the range of velocity that the 0-0.45 is applied over.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float AWRadiusMult
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("AWRadiusMult", value);
+			}
+		}
+
+		/// <summary>
+		/// For armsWindmill, added arm stiffness ranges from 0 to AWStiffnessAdd.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float AWStiffnessAdd
+		{
+			set
+			{
+				if (value > 16.0f)
+					value = 16.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("AWStiffnessAdd", value);
+			}
+		}
+
+		/// <summary>
+		/// Force character to reach for wound with only one hand.
+		/// 0 = allow two-handed reach,
+		/// 1 = left only if two-handed possible,
+		/// 2 = right only if two-handed possible.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 2.
+		/// </remarks>
+		public int ReachWithOneHand
+		{
+			set
+			{
+				if (value > 2)
+					value = 2;
+				if (value < 0)
+					value = 0;
+				SetArgument("reachWithOneHand", value);
+			}
+		}
+
+		/// <summary>
+		/// Allow character to reach for wound with left hand if holding a pistol.
+		/// It never will for a rifle.
+		/// If pointGun is running this will only happen if the hand cannot point and pointGun:poseUnusedGunArm = false.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool AllowLeftPistolRFW
+		{
+			set => SetArgument("allowLeftPistolRFW", value);
+		}
+
+		/// <summary>
+		/// Allow character to reach for wound with right hand if holding a pistol.
+		/// It never will for a rifle.
+		/// If pointGun is running this will only happen if the hand cannot point and pointGun:poseUnusedGunArm = false.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool AllowRightPistolRFW
+		{
+			set => SetArgument("allowRightPistolRFW", value);
+		}
+
+		/// <summary>
+		/// Override pointGun and reachForWound if desired if holding a pistol.
+		/// It never will for a rifle.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool RfwWithPistol
+		{
+			set => SetArgument("rfwWithPistol", value);
+		}
+
+		/// <summary>
+		/// Type of reaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool Fling2
+		{
+			set => SetArgument("fling2", value);
+		}
+
+		/// <summary>
+		/// Fling the left arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool Fling2Left
+		{
+			set => SetArgument("fling2Left", value);
+		}
+
+		/// <summary>
+		/// Fling the right arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool Fling2Right
+		{
+			set => SetArgument("fling2Right", value);
+		}
+
+		/// <summary>
+		/// Override stagger arms even if staggerFall:m_upperBodyReaction = true.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool Fling2OverrideStagger
+		{
+			set => SetArgument("fling2OverrideStagger", value);
+		}
+
+		/// <summary>
+		/// Time after hit that the fling will start (allows for a bit of loose arm movement from bullet impact.snap etc).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Fling2TimeBefore
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("fling2TimeBefore", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration of the fling behavior.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Fling2Time
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("fling2Time", value);
+			}
+		}
+
+		/// <summary>
+		/// Muscle stiffness of the left arm.
+		/// If negative then uses the shots underlying muscle stiffness from controlStiffness (i.e. respects looseness).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.5f.
+		/// </remarks>
+		public float Fling2MStiffL
+		{
+			set
+			{
+				if (value > 1.5f)
+					value = 1.5f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("fling2MStiffL", value);
+			}
+		}
+
+		/// <summary>
+		/// Muscle stiffness of the right arm.
+		/// If negative then uses the shots underlying muscle stiffness from controlStiffness (i.e. respects looseness).
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.5f.
+		/// </remarks>
+		public float Fling2MStiffR
+		{
+			set
+			{
+				if (value > 1.5f)
+					value = 1.5f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("fling2MStiffR", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum time before the left arm relaxes in the fling.
+		/// It will relax automatically when the arm has completed it's bent arm fling.
+		/// This is what causes the arm to straighten.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Fling2RelaxTimeL
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("fling2RelaxTimeL", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum time before the right arm relaxes in the fling.
+		/// It will relax automatically when the arm has completed it's bent arm fling.
+		/// This is what causes the arm to straighten.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Fling2RelaxTimeR
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("fling2RelaxTimeR", value);
+			}
+		}
+
+		/// <summary>
+		/// Minimum fling angle for left arm.
+		/// Fling angle is random in the range fling2AngleMin:fling2AngleMax.
+		/// Angle of fling in radians measured from the body horizontal sideways from shoulder.
+		/// Positive is up, 0 shoulder level, negative down.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.5f.
+		/// Min value = -1.5f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Fling2AngleMinL
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.5f)
+					value = -1.5f;
+				SetArgument("fling2AngleMinL", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum fling angle for left arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = -1.5f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Fling2AngleMaxL
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.5f)
+					value = -1.5f;
+				SetArgument("fling2AngleMaxL", value);
+			}
+		}
+
+		/// <summary>
+		/// Minimum fling angle for right arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.5f.
+		/// Min value = -1.5f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Fling2AngleMinR
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.5f)
+					value = -1.5f;
+				SetArgument("fling2AngleMinR", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum fling angle for right arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = -1.5f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Fling2AngleMaxR
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.5f)
+					value = -1.5f;
+				SetArgument("fling2AngleMaxR", value);
+			}
+		}
+
+		/// <summary>
+		/// Minimum left arm length.
+		/// Arm length is random in the range fling2LengthMin:fling2LengthMax.
+		/// Arm length maps one to one with elbow angle.
+		/// These values are scaled internally for the female character.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.3f.
+		/// Max value = 0.6f.
+		/// </remarks>
+		public float Fling2LengthMinL
+		{
+			set
+			{
+				if (value > 0.6f)
+					value = 0.6f;
+				if (value < 0.3f)
+					value = 0.3f;
+				SetArgument("fling2LengthMinL", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum left arm length.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = 0.3f.
+		/// Max value = 0.6f.
+		/// </remarks>
+		public float Fling2LengthMaxL
+		{
+			set
+			{
+				if (value > 0.6f)
+					value = 0.6f;
+				if (value < 0.3f)
+					value = 0.3f;
+				SetArgument("fling2LengthMaxL", value);
+			}
+		}
+
+		/// <summary>
+		/// Min right arm length.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.3f.
+		/// Max value = 0.6f.
+		/// </remarks>
+		public float Fling2LengthMinR
+		{
+			set
+			{
+				if (value > 0.6f)
+					value = 0.6f;
+				if (value < 0.3f)
+					value = 0.3f;
+				SetArgument("fling2LengthMinR", value);
+			}
+		}
+
+		/// <summary>
+		/// Max right arm length.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = 0.3f.
+		/// Max value = 0.6f.
+		/// </remarks>
+		public float Fling2LengthMaxR
+		{
+			set
+			{
+				if (value > 0.6f)
+					value = 0.6f;
+				if (value < 0.3f)
+					value = 0.3f;
+				SetArgument("fling2LengthMaxR", value);
+			}
+		}
+
+		/// <summary>
+		/// Has the character got a bust.
+		/// If so then cupBust (move bust reach targets below bust) or bustElbowLift and cupSize (stop upperArm penetrating bust and move bust targets to surface of bust) are implemented.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool Bust
+		{
+			set => SetArgument("bust", value);
+		}
+
+		/// <summary>
+		/// Lift the elbows up this much extra to avoid upper arm penetrating the bust (when target hits spine2 or spine3).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.7f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float BustElbowLift
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("bustElbowLift", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount reach target to bust (spine2) will be offset forward by.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CupSize
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("cupSize", value);
+			}
+		}
+
+		/// <summary>
+		/// All reach targets above or on the bust will cause a reach below the bust.
+		/// (specifically moves spine3 and spine2 targets to spine1).
+		/// BustElbowLift and cupSize are ignored.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool CupBust
+		{
+			set => SetArgument("cupBust", value);
+		}
+	}
+
+	/// <summary>
+	/// Clone of High Fall with a wider range of operating conditions.
+	/// </summary>
+	public sealed class SmartFallHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the SmartFallHelper for sending a SmartFall <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the SmartFall <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Clone of High Fall with a wider range of operating conditions.
+		/// </remarks>
+		public SmartFallHelper(Ped ped) : base(ped, "smartFall")
+		{
+		}
+
+		/// <summary>
+		/// Stiffness of body.
+		/// Value feeds through to bodyBalance (synced with defaults), to armsWindmill (14 for this value at default ), legs pedal, head look and roll down stairs directly.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 11.0f.
+		/// Min value = 6.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float BodyStiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+					value = 16.0f;
+				if (value < 6.0f)
+					value = 6.0f;
+				SetArgument("bodyStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// The damping of the joints.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 3.0f.
+		/// </remarks>
+		public float Bodydamping
+		{
+			set
+			{
+				if (value > 3.0f)
+					value = 3.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("bodydamping", value);
+			}
+		}
+
+		/// <summary>
+		/// The length of time before the impact that the character transitions to the landing.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Catchfalltime
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("catchfalltime", value);
+			}
+		}
+
+		/// <summary>
+		/// 0.52angle is 0.868 dot//A threshold for deciding how far away from upright the character needs to be before bailing out (going into a foetal) instead of trying to land (keeping stretched out).
+		/// NB: never does bailout if ignorWorldCollisions true.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.9f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CrashOrLandCutOff
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("crashOrLandCutOff", value);
+			}
+		}
+
+		/// <summary>
+		/// Strength of the controller to keep the character at angle aimAngleBase from vertical.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float PdStrength
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("pdStrength", value);
+			}
+		}
+
+		/// <summary>
+		/// Damping multiplier of the controller to keep the character at angle aimAngleBase from vertical.
+		/// The actual damping is pdDamping*pdStrength*constant*angVel.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float PdDamping
+		{
+			set
+			{
+				if (value > 5.0f)
+					value = 5.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("pdDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Arm circling speed in armWindMillAdaptive.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 7.9f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ArmAngSpeed
+		{
+			set
+			{
+				if (value > 20.0f)
+					value = 20.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("armAngSpeed", value);
+			}
+		}
+
+		/// <summary>
+		/// In armWindMillAdaptive.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float ArmAmplitude
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("armAmplitude", value);
+			}
+		}
+
+		/// <summary>
+		/// In armWindMillAdaptive 3.1 opposite for stuntman.
+		/// 1.0 old default. 0.0 in phase.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 3.1f.
+		/// Min value = 0.0f.
+		/// Max value = 6.3f.
+		/// </remarks>
+		public float ArmPhase
+		{
+			set
+			{
+				if (value > 6.3f)
+					value = 6.3f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("armPhase", value);
+			}
+		}
+
+		/// <summary>
+		/// In armWindMillAdaptive bend the elbows as a function of armAngle.
+		/// For stunt man true otherwise false.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool ArmBendElbows
+		{
+			set => SetArgument("armBendElbows", value);
+		}
+
+		/// <summary>
+		/// Radius of legs on pedal.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 0.5f.
+		/// </remarks>
+		public float LegRadius
+		{
+			set
+			{
+				if (value > 0.5f)
+					value = 0.5f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("legRadius", value);
+			}
+		}
+
+		/// <summary>
+		/// In pedal.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 7.9f.
+		/// Min value = 0.0f.
+		/// Max value = 15.0f.
+		/// </remarks>
+		public float LegAngSpeed
+		{
+			set
+			{
+				if (value > 15.0f)
+					value = 15.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("legAngSpeed", value);
+			}
+		}
+
+		/// <summary>
+		/// 0.0 for stunt man.
+		/// Random offset applied per leg to the angular speed to desynchronize the pedaling - set to 0 to disable, otherwise should be set to less than the angularSpeed value.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = -10.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float LegAsymmetry
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < -10.0f)
+					value = -10.0f;
+				SetArgument("legAsymmetry", value);
+			}
+		}
+
+		/// <summary>
+		/// Phase angle between the arms and legs circling angle.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 6.5f.
+		/// </remarks>
+		public float Arms2LegsPhase
+		{
+			set
+			{
+				if (value > 6.5f)
+					value = 6.5f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("arms2LegsPhase", value);
+			}
+		}
+
+		/// <summary>
+		/// Syncs the arms angle to what the leg angle is.
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="Synchroisation.AlwaysSynced"/>.
+		/// All speed/direction parameters of armswindmill are overwritten if = <see cref="Synchroisation.AlwaysSynced"/>.
+		/// If <see cref="Synchroisation.SyncedAtStart"/> and you want synced arms/legs then armAngSpeed=legAngSpeed, legAsymmetry = 0.0 (to stop randomizations of the leg cicle speed).
+		/// </remarks>
+		public Synchroisation Arms2LegsSync
+		{
+			set => SetArgument("arms2LegsSync", (int)value);
+		}
+
+		/// <summary>
+		/// Where to put the arms when preparing to land.
+		/// Approx 1 = above head, 0 = head height, -1 = down.
+		/// LT -2.0 use catchFall arms, LT -3.0 use prepare for landing pose if Agent is due to land vertically, feet first.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -3.1f.
+		/// Min value = -4.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float ArmsUp
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < -4.0f)
+					value = -4.0f;
+				SetArgument("armsUp", value);
+			}
+		}
+
+		/// <summary>
+		/// Toggle to orientate to fall direction.  i.e. orientate so that the character faces the horizontal velocity direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool OrientateBodyToFallDirection
+		{
+			set => SetArgument("orientateBodyToFallDirection", value);
+		}
+
+		/// <summary>
+		/// If false don't worry about the twist angle of the character when orientating the character.
+		/// If false this allows the twist axis of the character to be free (You can get a nice twisting highFall like the one in dieHard 4 when the car goes into the helicopter).
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool OrientateTwist
+		{
+			set => SetArgument("orientateTwist", value);
+		}
+
+		/// <summary>
+		/// DEVEL parameter - suggest you don't edit it.  Maximum torque the orientation controller can apply.
+		/// If 0 then no helper torques will be used.
+		/// 300 will orientate the character softly for all but extreme angles away from aimAngleBase.
+		/// If abs (current -aimAngleBase) is getting near 3.0 then this can be reduced to give a softer feel.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 300.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2000.0f.
+		/// </remarks>
+		public float OrientateMax
+		{
+			set
+			{
+				if (value > 2000.0f)
+					value = 2000.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("orientateMax", value);
+			}
+		}
+
+		/// <summary>
+		/// If true then orientate the character to face the point from where it started falling.
+		/// High fall like the one in "Die Hard" with Alan Rickman.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool AlanRickman
+		{
+			set => SetArgument("alanRickman", value);
+		}
+
+		/// <summary>
+		/// Try to execute a forward Roll on landing.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool FowardRoll
+		{
+			set => SetArgument("fowardRoll", value);
+		}
+
+		/// <summary>
+		/// Blend to a zero pose when forward roll is attempted.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseZeroPose_withFowardRoll
+		{
+			set => SetArgument("useZeroPose_withFowardRoll", value);
+		}
+
+		/// <summary>
+		/// Angle from vertical the pdController is driving to (positive = forwards).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -3.1f.
+		/// Max value = 3.1f.
+		/// </remarks>
+		public float AimAngleBase
+		{
+			set
+			{
+				if (value > 3.1f)
+					value = 3.1f;
+				if (value < -3.1f)
+					value = -3.1f;
+				SetArgument("aimAngleBase", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale to add/subtract from aimAngle based on forward speed (Internal).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float FowardVelRotation
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("fowardVelRotation", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale to change to amount of vel that is added to the foot ik from the velocity (Internal).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float FootVelCompScale
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("footVelCompScale", value);
+			}
+		}
+
+		/// <summary>
+		/// Sideoffset for the feet during prepareForLanding. +ve = right.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float SideD
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("sideD", value);
+			}
+		}
+
+		/// <summary>
+		/// Forward offset for the feet during prepareForLanding.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float FowardOffsetOfLegIK
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("fowardOffsetOfLegIK", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg Length for ik (Internal)//unused.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float LegL
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("legL", value);
+			}
+		}
+
+		/// <summary>
+		/// 0.5angle is 0.878 dot. Cutoff to go to the catchFall (internal) //mmmtodo do like crashOrLandCutOff.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.9f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CatchFallCutOff
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < -1.0f)
+					value = -1.0f;
+				SetArgument("catchFallCutOff", value);
+			}
+		}
+
+		/// <summary>
+		/// Strength of the legs at landing.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 12.0f.
+		/// Min value = 6.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float LegStrength
+		{
+			set
+			{
+				if (value > 16.0f)
+					value = 16.0f;
+				if (value < 6.0f)
+					value = 6.0f;
+				SetArgument("legStrength", value);
+			}
+		}
+
+		/// <summary>
+		/// If true have enough strength to balance.
+		/// If false not enough strength in legs to balance (even though bodyBlance called).
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool Balance
+		{
+			set => SetArgument("balance", value);
+		}
+
+		/// <summary>
+		/// Never go into bailout (foetal).
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool IgnorWorldCollisions
+		{
+			set => SetArgument("ignorWorldCollisions", value);
+		}
+
+		/// <summary>
+		/// Stunt man type fall.  Arm and legs circling direction controlled by angmom and orientation.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool AdaptiveCircling
+		{
+			set => SetArgument("adaptiveCircling", value);
+		}
+
+		/// <summary>
+		/// With stunt man type fall.  Hula reaction if can't see floor and not rotating fast.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool Hula
+		{
+			set => SetArgument("hula", value);
+		}
+
+		/// <summary>
+		/// Character needs to be moving less than this speed to consider fall as a recoverable one.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 15.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float MaxSpeedForRecoverableFall
+		{
+			set
+			{
+				if (value > 100.0f)
+					value = 100.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("maxSpeedForRecoverableFall", value);
+			}
+		}
+
+		/// <summary>
+		/// Character needs to be moving at least this fast horizontally to start bracing for impact if there is an object along its trajectory.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 10.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float MinSpeedForBrace
+		{
+			set
+			{
+				if (value > 100.0f)
+					value = 100.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("minSpeedForBrace", value);
+			}
+		}
+
+		/// <summary>
+		/// Ray-cast normal doted with up direction has to be greater than this number to consider object flat enough to land on it.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LandingNormal
+		{
+			set
+			{
+				if (value > 1.0f)
+					value = 1.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("landingNormal", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.8f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float RdsForceMag
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("rdsForceMag", value);
+			}
+		}
+
+		/// <summary>
+		/// RDS: Time for the targetlinearVelocity to decay to zero.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float RdsTargetLinVeDecayTime
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("rdsTargetLinVeDecayTime", value);
+			}
+		}
+
+		/// <summary>
+		/// RDS: Helper torques are applied to match the spin of the character to the max of targetLinearVelocity and COMVelMag.
+		/// -1 to use initial character velocity.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 30.0f.
+		/// </remarks>
+		public float RdsTargetLinearVelocity
+		{
+			set
+			{
+				if (value > 30.0f)
+					value = 30.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("rdsTargetLinearVelocity", value);
+			}
+		}
+
+		/// <summary>
+		/// Start Catch Fall/RDS state with specified friction.
+		/// Catch fall will overwrite based on setFallingReaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool RdsUseStartingFriction
+		{
+			set => SetArgument("rdsUseStartingFriction", value);
+		}
+
+		/// <summary>
+		/// Catch Fall/RDS starting friction.
+		/// Catch fall will overwrite based on setFallingReaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float RdsStartingFriction
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("rdsStartingFriction", value);
+			}
+		}
+
+		/// <summary>
+		/// Catch Fall/RDS starting friction minimum.
+		/// Catch fall will overwrite based on setFallingReaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float RdsStartingFrictionMin
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("rdsStartingFrictionMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Velocity threshold under which RDS force mag will be applied.
+		/// </summary>
+		/// <remarks>
