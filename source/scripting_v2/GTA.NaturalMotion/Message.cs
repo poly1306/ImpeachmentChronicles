@@ -125,4 +125,57 @@ namespace GTA.NaturalMotion
 		/// <summary>
 		/// Sets an argument to a <see cref="string"/> value.
 		/// </summary>
-		/// <param name="message">The argument name.</para
+		/// <param name="message">The argument name.</param>
+		/// <param name="value">The value to set the argument to.</param>
+		public void SetArgument(string message, string value)
+		{
+			CreateStringVector3ArrayArgDictIfNotCreated();
+
+			_stringVector3ArrayArguments[message] = value;
+		}
+		/// <summary>
+		/// Sets an argument to a <see cref="Vector3"/> value.
+		/// </summary>
+		/// <param name="message">The argument name.</param>
+		/// <param name="value">The value to set the argument to.</param>
+		public void SetArgument(string message, Vector3 value)
+		{
+			CreateStringVector3ArrayArgDictIfNotCreated();
+
+			_stringVector3ArrayArguments[message] = value.ToArray();
+		}
+
+		/// <summary>
+		/// Resets all arguments to their default values.
+		/// </summary>
+		public void ResetArguments()
+		{
+			_boolIntFloatArguments?.Clear();
+			_stringVector3ArrayArguments?.Clear();
+		}
+
+		public void CreateBoolIntFloatArgDictIfNotCreated()
+		{
+			if (_boolIntFloatArguments == null)
+			{
+				_boolIntFloatArguments = new Dictionary<string, (int value, Type type)>();
+			}
+		}
+
+		public void CreateStringVector3ArrayArgDictIfNotCreated()
+		{
+			if (_stringVector3ArrayArguments == null)
+			{
+				_stringVector3ArrayArguments = new Dictionary<string, object>();
+			}
+		}
+
+		/// <summary>
+		/// Returns the internal message name.
+		/// </summary>
+		public override string ToString()
+		{
+			return _message;
+		}
+	}
+}
