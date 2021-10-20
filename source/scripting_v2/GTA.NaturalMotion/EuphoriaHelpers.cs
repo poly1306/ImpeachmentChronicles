@@ -24267,3 +24267,63 @@ namespace GTA.NaturalMotion
 		/// <summary>
 		/// Arm Damping when on the ground.
 		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float GroundArmDamping
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("groundArmDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Spine Damping when on the ground.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float GroundSpineDamping
+		{
+			set
+			{
+				if (value > 2.0f)
+					value = 2.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("groundSpineDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Friction multiplier on body parts when on ground.
+		/// Character can look too slidy with groundFriction = 1.
+		/// Higher values give a more jerky reaction but this seems timestep dependent especially for dragged by the feet.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 8.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float GroundFriction
+		{
+			set
+			{
+				if (value > 10.0f)
+					value = 10.0f;
+				if (value < 0.0f)
+					value = 0.0f;
+				SetArgument("groundFriction", value);
+			}
+		}
+	}
+}
