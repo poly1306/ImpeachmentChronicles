@@ -55,4 +55,48 @@ namespace GTA
 		/// <param name="soundFile">The sound file to play.</param>
 		/// <param name="soundSet">The name of the sound inside the file.</param>
 		/// <returns>The identifier of the active sound effect instance.</returns>
-		publ
+		public static int PlaySoundAt(Entity entity, string soundFile, string soundSet)
+		{
+			var id = Function.Call<int>(Hash.GET_SOUND_ID);
+			Function.Call(Hash.PLAY_SOUND_FROM_ENTITY, id, soundFile, entity.Handle, soundSet, 0, 0);
+			return id;
+		}
+		/// <summary>
+		/// Plays a sound from the game's sound files at the specified <paramref name="position"/>.
+		/// </summary>
+		/// <param name="position">The world coordinates to play the sound at.</param>
+		/// <param name="soundFile">The sound file to play.</param>
+		/// <returns>The identifier of the active sound effect instance.</returns>
+		public static int PlaySoundAt(Vector3 position, string soundFile)
+		{
+			var id = Function.Call<int>(Hash.GET_SOUND_ID);
+			Function.Call(Hash.PLAY_SOUND_FROM_COORD, id, soundFile, position.X, position.Y, position.Z, 0, 0, 0, 0);
+			return id;
+		}
+		/// <summary>
+		/// Plays a sound from the game's sound files at the specified <paramref name="position"/>.
+		/// </summary>
+		/// <param name="position">The world coordinates to play the sound at.</param>
+		/// <param name="soundFile">The sound file to play.</param>
+		/// <param name="soundSet">The name of the sound inside the file.</param>
+		/// <returns>The identifier of the active sound effect instance.</returns>
+		public static int PlaySoundAt(Vector3 position, string soundFile, string soundSet)
+		{
+			var id = Function.Call<int>(Hash.GET_SOUND_ID);
+			Function.Call(Hash.PLAY_SOUND_FROM_COORD, id, soundFile, position.X, position.Y, position.Z, soundSet, 0, 0, 0);
+			return id;
+		}
+		/// <summary>
+		/// Plays a sound from the game's sound files without transformation.
+		/// </summary>
+		/// <param name="soundFile">The sound file to play.</param>
+		/// <returns>The identifier of the active sound effect instance.</returns>
+		public static int PlaySoundFrontend(string soundFile)
+		{
+			var id = Function.Call<int>(Hash.GET_SOUND_ID);
+			Function.Call(Hash.PLAY_SOUND_FRONTEND, id, soundFile, 0, 0);
+			return id;
+		}
+		/// <summary>
+		/// Plays a sound from the game's sound files without transformation.
+		/// </summary>
