@@ -19,4 +19,8 @@ namespace GTA
 		/// </summary>
 		Property = 10,
 		/// <summary>
-		/// <para>Blips will sh
+		/// <para>Blips will show under the "Owned Property" category listing in the map legend, regardless of name.</para>
+		/// </summary>
+		OwnedProperty,
+	}
+}
