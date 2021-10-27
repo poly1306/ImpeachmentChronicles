@@ -88,4 +88,84 @@ namespace GTA
 						return EntityType.Ped;
 					case EntityTypeInternal.Vehicle:
 						return EntityType.Vehicle;
-			
+					case EntityTypeInternal.Object:
+						return EntityType.Prop;
+				}
+
+				return EntityType.Invalid;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the population type of the current <see cref="Entity"/>.
+		/// This property can also be used to add or remove <see cref="Entity"/> persistence.
+		/// </summary>
+		public EntityPopulationType PopulationType
+		{
+			get => (EntityPopulationType)Function.Call<int>(Hash.GET_ENTITY_POPULATION_TYPE, Handle);
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteByte(address + 0xDA, (byte)((int)value & 0xF));
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> is dead or does not exist.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if this <see cref="Entity"/> is dead or does not exist; otherwise, <see langword="false" />.
+		/// </value>
+		/// <seealso cref="Exists"/>
+		/// <seealso cref="Ped.IsInjured"/>
+		public bool IsDead => Function.Call<bool>(Hash.IS_ENTITY_DEAD, Handle);
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> exists and is alive.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if this <see cref="Entity"/> exists and is alive; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsAlive => !IsDead;
+
+		#region Styling
+
+		/// <summary>
+		/// Gets the model of the current <see cref="Entity"/>.
+		/// </summary>
+		public Model Model => new Model(Function.Call<int>(Hash.GET_ENTITY_MODEL, Handle));
+
+		/// <summary>
+		/// Gets or sets how opaque this <see cref="Entity"/> is.
+		/// </summary>
+		/// <value>
+		/// 0 for completely see through, 255 for fully opaque
+		/// </value>
+		public int Opacity
+		{
+			get => Function.Call<int>(Hash.GET_ENTITY_ALPHA, Handle);
+			set => Function.Call(Hash.SET_ENTITY_ALPHA, Handle, value, false);
+		}
+
+		/// <summary>
+		/// Resets the <seealso cref="Opacity"/>.
+		/// </summary>
+		public void ResetOpacity()
+		{
+			Function.Call(Hash.RESET_ENTITY_ALPHA, Handle);
+		}
+
+		#endregion
+
+		#region Configuration
+
+		/// <summary>
+		/// Gets or sets the level of detail distance of this <see cref="Entity"/>.
+		/// </summary>
+		public int LodDistance
+		{
+			get => Function
