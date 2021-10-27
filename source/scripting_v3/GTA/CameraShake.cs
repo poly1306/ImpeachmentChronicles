@@ -9,4 +9,14 @@ namespace GTA
 	{
 		Hand,
 		SmallExplosion,
-		MediumEx
+		MediumExplosion,
+		LargeExplosion,
+		Jolt,
+		Vibrate,
+		RoadVibration,
+		Drunk,
+		SkyDiving,
+		FamilyDrugTrip,
+		DeathFail,
+	}
+}
