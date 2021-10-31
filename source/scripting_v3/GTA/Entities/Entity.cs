@@ -235,4 +235,87 @@ namespace GTA
 		/// <value>
 		/// The health as an <see cref="int"/>.
 		/// </value>
-		/// <seealso c
+		/// <seealso cref="HealthFloat"/>
+		public int Health
+		{
+			get => Function.Call<int>(Hash.GET_ENTITY_HEALTH, Handle);
+			set => Function.Call(Hash.SET_ENTITY_HEALTH, Handle, value);
+		}
+		/// <summary>
+		/// Gets or sets the maximum health of this <see cref="Entity"/> as an <see cref="int"/>.
+		/// <para>Use <see cref="MaxHealthFloat"/> instead if you need to get or set the value precisely, since a max health value of a <see cref="Entity"/> are stored as a <see cref="float"/>.</para>
+		/// </summary>
+		/// <value>
+		/// The maximum health as a <see cref="int"/>.
+		/// </value>
+		public virtual int MaxHealth
+		{
+			get => Function.Call<int>(Hash.GET_ENTITY_MAX_HEALTH, Handle);
+			set => Function.Call(Hash.SET_ENTITY_MAX_HEALTH, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the health of this <see cref="Entity"/> as a <see cref="float"/>.
+		/// </summary>
+		/// <value>
+		/// The health as a <see cref="float"/>.
+		/// </value>
+		public float HealthFloat
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + 640);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + 640, value);
+			}
+		}
+		/// <summary>
+		/// Gets or sets the maximum health of this <see cref="Entity"/> as a <see cref="float"/>.
+		/// </summary>
+		/// <value>
+		/// The maximum health as a <see cref="float"/>.
+		/// </value>
+		public float MaxHealthFloat
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.EntityMaxHealthOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.EntityMaxHealthOffset);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.EntityMaxHealthOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.EntityMaxHealthOffset, value);
+			}
+		}
+
+		#endregion
+
+		#region Positioning
+
+		/// <summary>
+		/// Gets this <see cref="Entity"/>s matrix which stores position and rotation
