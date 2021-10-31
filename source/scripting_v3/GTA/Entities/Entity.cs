@@ -168,4 +168,71 @@ namespace GTA
 		/// </summary>
 		public int LodDistance
 		{
-			get => Function
+			get => Function.Call<int>(Hash.GET_ENTITY_LOD_DIST, Handle);
+			set => Function.Call(Hash.SET_ENTITY_LOD_DIST, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is persistent.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is persistent; otherwise, <see langword="false" />.
+		/// </value>
+		/// <remarks>
+		/// If this <see cref="Entity"/> is <see cref="Ped"/>, setting to <see langword="true" /> can clear ambient tasks and setting to <see langword="false" /> will clear all tasks immediately.
+		/// Use <see cref="Ped.SetIsPersistentNoClearTask(bool)"/> instead if you need to keep assigned tasks.
+		/// </remarks>
+		public bool IsPersistent
+		{
+			get => Function.Call<bool>(Hash.IS_ENTITY_A_MISSION_ENTITY, Handle);
+			set
+			{
+				if (value)
+				{
+					Function.Call(Hash.SET_ENTITY_AS_MISSION_ENTITY, Handle, true, true);
+				}
+				else
+				{
+					MarkAsNoLongerNeeded();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is frozen.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is position frozen; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsPositionFrozen
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + 0x2E, 1);
+			}
+			set => Function.Call(Hash.FREEZE_ENTITY_POSITION, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets a collection of the <see cref="EntityBone"/>s in this <see cref="Entity"/>.
+		/// </summary>
+		public virtual EntityBoneCollection Bones => _bones ?? (_bones = new EntityBoneCollection(this));
+
+		#endregion
+
+		#region Health
+
+		/// <summary>
+		/// Gets or sets the health of this <see cref="Entity"/> as an <see cref="int"/>.
+		/// <para>Use <see cref="HealthFloat"/> instead if you need to get or set the value precisely, since a health value of a <see cref="Entity"/> are stored as a <see cref="float"/>.</para>
+		/// </summary>
+		/// <value>
+		/// The health as an <see cref="int"/>.
+		/// </value>
+		/// <seealso c
