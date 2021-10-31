@@ -318,4 +318,75 @@ namespace GTA
 		#region Positioning
 
 		/// <summary>
-		/// Gets this <see cref="Entity"/>s matrix which stores position and rotation
+		/// Gets this <see cref="Entity"/>s matrix which stores position and rotation information.
+		/// </summary>
+		public Matrix Matrix
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return new Matrix();
+				}
+
+				return new Matrix(SHVDN.NativeMemory.ReadMatrix(address + 96));
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the position of this <see cref="Entity"/>.
+		/// If the <see cref="Entity"/> is <see cref="Ped"/> and the <see cref="Ped"/> is in a <see cref="Vehicle"/>, the <see cref="Vehicle"/>'s position will be returned or changed.
+		/// </summary>
+		/// <value>
+		/// The position in world space.
+		/// </value>
+		public virtual Vector3 Position
+		{
+			get => Function.Call<Vector3>(Hash.GET_ENTITY_COORDS, Handle, 0);
+			set => Function.Call(Hash.SET_ENTITY_COORDS, Handle, value.X, value.Y, value.Z, 0, 0, 0, 1);
+		}
+
+		/// <summary>
+		/// Sets the position of this <see cref="Entity"/> without any offset.
+		/// </summary>
+		/// <value>
+		/// The position in world space.
+		/// </value>
+		public Vector3 PositionNoOffset
+		{
+			set => Function.Call(Hash.SET_ENTITY_COORDS_NO_OFFSET, Handle, value.X, value.Y, value.Z, 1, 1, 1);
+		}
+
+		/// <summary>
+		/// Gets or sets the rotation of this <see cref="Entity"/>.
+		/// </summary>
+		/// <value>
+		/// The yaw, pitch, roll rotation values.
+		/// </value>
+		public virtual Vector3 Rotation
+		{
+			get => Function.Call<Vector3>(Hash.GET_ENTITY_ROTATION, Handle, 2);
+			set => Function.Call(Hash.SET_ENTITY_ROTATION, Handle, value.X, value.Y, value.Z, 2, 1);
+		}
+
+		/// <summary>
+		/// Gets or sets the heading of this <see cref="Entity"/>.
+		/// </summary>
+		/// <value>
+		/// The heading in degrees.
+		/// </value>
+		public float Heading
+		{
+			get => Function.Call<float>(Hash.GET_ENTITY_HEADING, Handle);
+			set => Function.Call<float>(Hash.SET_ENTITY_HEADING, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets a value indicating how submersed this <see cref="Entity"/> is, 1.0f means the whole entity is submerged.
+		/// </summary>
+		public float SubmersionLevel => Function.Call<float>(Hash.GET_ENTITY_SUBMERGED_LEVEL, Handle);
+
+		/// <summary>
+		/// Gets how high above ground this <see cref="Entity"/> is.
+		/
