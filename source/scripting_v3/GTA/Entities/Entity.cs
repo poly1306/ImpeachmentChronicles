@@ -389,4 +389,106 @@ namespace GTA
 
 		/// <summary>
 		/// Gets how high above ground this <see cref="Entity"/> is.
-		/
+		/// </summary>
+		public float HeightAboveGround => Function.Call<float>(Hash.GET_ENTITY_HEIGHT_ABOVE_GROUND, Handle);
+
+		/// <summary>
+		/// Gets or sets the quaternion of this <see cref="Entity"/>.
+		/// </summary>
+		public Quaternion Quaternion
+		{
+			get
+			{
+				float x;
+				float y;
+				float z;
+				float w;
+				unsafe
+				{
+					Function.Call(Hash.GET_ENTITY_QUATERNION, Handle, &x, &y, &z, &w);
+				}
+
+				return new Quaternion(x, y, z, w);
+			}
+			set => Function.Call(Hash.SET_ENTITY_QUATERNION, Handle, value.X, value.Y, value.Z, value.W);
+		}
+
+		/// <summary>
+		/// Gets the vector that points above this <see cref="Entity"/>.
+		/// </summary>
+		public Vector3 UpVector
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return Vector3.RelativeTop;
+				}
+
+				return new Vector3(SHVDN.NativeMemory.ReadVector3(address + 0x80));
+			}
+		}
+
+		/// <summary>
+		/// Gets the vector that points to the right of this <see cref="Entity"/>.
+		/// </summary>
+		public Vector3 RightVector
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return Vector3.RelativeRight;
+				}
+
+				return new Vector3(SHVDN.NativeMemory.ReadVector3(address + 0x60));
+			}
+		}
+
+		/// <summary>
+		/// Gets the vector that points in front of this <see cref="Entity"/>.
+		/// </summary>
+		public Vector3 ForwardVector
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return Vector3.RelativeFront;
+				}
+
+				return new Vector3(SHVDN.NativeMemory.ReadVector3(address + 0x70));
+			}
+		}
+
+		/// <summary>
+		/// Gets a position directly to the left of this <see cref="Entity"/>.
+		/// </summary>
+		public Vector3 LeftPosition
+		{
+			get
+			{
+				var (rearBottomLeft, _) = Model.Dimensions;
+				return GetOffsetPosition(new Vector3(rearBottomLeft.X, 0, 0));
+			}
+		}
+
+		/// <summary>
+		/// Gets a position directly to the right of this <see cref="Entity"/>.
+		/// </summary>
+		public Vector3 RightPosition
+		{
+			get
+			{
+				var (_, frontTopRight) = Model.Dimensions;
+				return GetOffsetPosition(new Vector3(frontTopRight.X, 0, 0));
+			}
+		}
+
+		/// <summary>
+		/// Gets a position directly behind this <see cref="Entity"/>.
+		/// </summary>
+		
