@@ -491,4 +491,84 @@ namespace GTA
 		/// <summary>
 		/// Gets a position directly behind this <see cref="Entity"/>.
 		/// </summary>
-		
+		public Vector3 RearPosition
+		{
+			get
+			{
+				var (rearBottomLeft, _) = Model.Dimensions;
+				return GetOffsetPosition(new Vector3(0, rearBottomLeft.Y, 0));
+			}
+		}
+
+		/// <summary>
+		/// Gets a position directly in front of this <see cref="Entity"/>.
+		/// </summary>
+		public Vector3 FrontPosition
+		{
+			get
+			{
+				var (_, frontTopRight) = Model.Dimensions;
+				return GetOffsetPosition(new Vector3(0, frontTopRight.Y, 0));
+			}
+		}
+
+		/// <summary>
+		/// Gets a position directly above this <see cref="Entity"/>.
+		/// </summary>
+		public Vector3 AbovePosition
+		{
+			get
+			{
+				var (_, frontTopRight) = Model.Dimensions;
+				return GetOffsetPosition(new Vector3(0, 0, frontTopRight.Z));
+			}
+		}
+
+		/// <summary>
+		/// Gets a position directly below this <see cref="Entity"/>.
+		/// </summary>
+		public Vector3 BelowPosition
+		{
+			get
+			{
+				var (rearBottomLeft, _) = Model.Dimensions;
+				return GetOffsetPosition(new Vector3(0, 0, rearBottomLeft.Z));
+			}
+		}
+
+		/// <summary>
+		/// Gets the position in world coordinates of an offset relative this <see cref="Entity"/>.
+		/// </summary>
+		/// <param name="offset">The offset from this <see cref="Entity"/>.</param>
+		public Vector3 GetOffsetPosition(Vector3 offset)
+		{
+			return Function.Call<Vector3>(Hash.GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS, Handle, offset.X, offset.Y, offset.Z);
+		}
+
+		/// <summary>
+		/// Gets the relative offset of this <see cref="Entity"/> from a world coordinates position.
+		/// </summary>
+		/// <param name="worldCoords">The world coordinates.</param>
+		public Vector3 GetPositionOffset(Vector3 worldCoords)
+		{
+			return Function.Call<Vector3>(Hash.GET_OFFSET_FROM_ENTITY_GIVEN_WORLD_COORDS, Handle, worldCoords.X, worldCoords.Y, worldCoords.Z);
+		}
+
+		/// <summary>
+		/// Gets or sets this <see cref="Entity"/>s speed.
+		/// </summary>
+		/// <value>
+		/// The speed in m/s.
+		/// </value>
+		public float Speed
+		{
+			get => Function.Call<float>(Hash.GET_ENTITY_SPEED, Handle);
+			set => Velocity = Velocity.Normalized * value;
+		}
+
+		/// <summary>
+		/// Sets the maximum speed this <see cref="Entity"/> can move at.
+		/// </summary>
+		public float MaxSpeed
+		{
+			set => Function.Call(Hash.SET_ENTITY_M
