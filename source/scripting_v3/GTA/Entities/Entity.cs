@@ -858,4 +858,90 @@ namespace GTA
 		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="Entity"/> is bullet proof.
 		/// </summary>
-		/// <value
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is bullet proof; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsBulletProof
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + 392, 4);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address + 392, 4, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is explosion proof.
+		/// Explosions cannot add force to this <see cref="Entity"/> and <see cref="Ped"/>s do not getting ragdolled with explosions when this property is set to <see langword="true" />.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is explosion proof; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsExplosionProof
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + 392, 11);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address + 392, 11, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is collision proof.
+		/// Setting this property to <see langword="true" /> only does not prevent this <see cref="Entity"/> from getting ragdolled when another <see cref="Entity"/> collide with this <see cref="Entity"/>.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is collision proof; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsCollisionProof
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + 392, 6);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address + 392, 6, value);
+			}
