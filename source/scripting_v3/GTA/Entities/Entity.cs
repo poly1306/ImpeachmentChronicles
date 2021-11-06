@@ -649,4 +649,61 @@ namespace GTA
 
 				var quaternionInverted = Quaternion;
 				quaternionInverted.Invert();
+				unsafe
+				{
+					var returnVectorPtr = SHVDN.NativeMemory.GetEntityAngularVelocity(address);
+					return (quaternionInverted * new Vector3(returnVectorPtr[0], returnVectorPtr[1], returnVectorPtr[2]));
+				}
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return;
+				}
+
+				var angularVelocityWorldSpace = Quaternion * value;
+				SHVDN.NativeMemory.SetEntityAngularVelocity(address, angularVelocityWorldSpace.X, angularVelocityWorldSpace.Y, angularVelocityWorldSpace.Z);
+			}
+		}
+
+		#endregion
+
+		#region Damaging
+
+		/// <summary>
+		/// Gets a collection of the <see cref="EntityDamageRecord"/>s in this <see cref="Entity"/>.
+		/// </summary>
+		public EntityDamageRecordCollection DamageRecords => _damageRecords ?? (_damageRecords = new EntityDamageRecordCollection(this));
+
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> has been damaged by a specified <see cref="Entity"/>.
+		/// </summary>
+		/// <param name="entity">The <see cref="Entity"/> to check</param>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> has been damaged by the specified <see cref="Entity"/>; otherwise, <see langword="false" />.
+		/// </returns>
+		public bool HasBeenDamagedBy(Entity entity)
+		{
+			return Function.Call<bool>(Hash.HAS_ENTITY_BEEN_DAMAGED_BY_ENTITY, Handle, entity.Handle, 1);
+		}
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> has been damaged by a specific weapon].
+		/// </summary>
+		/// <param name="weapon">The weapon to check.</param>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> has been damaged by the specified weapon; otherwise, <see langword="false" />.
+		/// </returns>
+		public virtual bool HasBeenDamagedBy(WeaponHash weapon)
+		{
+			return Function.Call<bool>(Hash.HAS_ENTITY_BEEN_DAMAGED_BY_WEAPON, Handle, weapon, 0);
+		}
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> has been damaged by any weapon.
+		/// </summary>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> has been damaged by any weapon; otherwise, <see langword="false" />.
+		/// </returns>
+		public virtual bool HasBeenDamagedByAnyWeapon()
 	
