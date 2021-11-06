@@ -776,4 +776,86 @@ namespace GTA
 		/// <returns>
 		///   <para><see langword="true" /> if a new <see cref="Entity"/> is created; otherwise, <see langword="false" />.</para>
 		///   <para>Returning <see langword="false" /> does not necessarily mean detaching the part did not change the <see cref="Entity"/> in any ways.
-		///   For example, detaching <c
+		///   For example, detaching <c>seat_f</c> for <see cref="Vehicle"/> will return <see langword="false" /> but the <see cref="Ped"/> on the front seat will not be able to sit properly.</para>
+		/// </returns>
+		public bool DetachFragmentPart(int fragmentGroupIndex)
+		{
+			var address = MemoryAddress;
+			if (address == IntPtr.Zero)
+			{
+				return false;
+			}
+
+			return SHVDN.NativeMemory.DetachFragmentPartByIndex(address, fragmentGroupIndex);
+		}
+
+		#endregion
+
+		#region Invincibility
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is fire proof.
+		/// This <see cref="Entity"/> does not catch fire naturally and <see cref="Ped"/>s do not getting ragdolled for being burned when this property is set to <see langword="true" />.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is fire proof; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsFireProof
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + 392, 5);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address + 392, 5, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is melee proof.
+		/// <see cref="Ped"/>s are not susceptible to the reactions of melee attacks when this property is set to <see langword="true" />.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is melee proof; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsMeleeProof
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + 392, 7);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address + 392, 7, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is bullet proof.
+		/// </summary>
+		/// <value
