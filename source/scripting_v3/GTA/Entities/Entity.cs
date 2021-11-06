@@ -706,4 +706,74 @@ namespace GTA
 		///   <see langword="true" /> if this <see cref="Entity"/> has been damaged by any weapon; otherwise, <see langword="false" />.
 		/// </returns>
 		public virtual bool HasBeenDamagedByAnyWeapon()
-	
+		{
+			return Function.Call<bool>(Hash.HAS_ENTITY_BEEN_DAMAGED_BY_WEAPON, Handle, 0, 2);
+		}
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> has been damaged by any melee weapon.
+		/// </summary>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> has been damaged by any melee weapon; otherwise, <see langword="false" />.
+		/// </returns>
+		public virtual bool HasBeenDamagedByAnyMeleeWeapon()
+		{
+			return Function.Call<bool>(Hash.HAS_ENTITY_BEEN_DAMAGED_BY_WEAPON, Handle, 0, 1);
+		}
+
+		/// <summary>
+		/// Clears the last weapon damage this <see cref="Entity"/> received.
+		/// </summary>
+		public virtual void ClearLastWeaponDamage()
+		{
+			Function.Call(Hash.CLEAR_ENTITY_LAST_WEAPON_DAMAGE, Handle);
+		}
+
+		#endregion
+
+		#region Fragment Object
+
+		/// <summary>
+		/// Returns the number of fragment group of this <see cref="Entity"/>.
+		/// </summary>
+		public int FragmentGroupCount
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0;
+				}
+
+				return SHVDN.NativeMemory.GetFragmentGroupCountFromEntity(address);
+			}
+		}
+
+		/// <summary>
+		/// Determines if this <see cref="Entity"/> is a fragment object.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true" /> if this <see cref="Entity"/> is a fragment object; otherwise, <see langword="false" />.
+		/// This will return <see langword="true" /> if this <see cref="Entity"/> is a <see cref="Ped"/> or a <see cref="Vehicle"/>.
+		/// </returns>
+		public bool IsFragmentObject
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsEntityFragmentObject(address);
+			}
+		}
+
+		/// <summary>
+		/// Detachs a fragment part of this <see cref="Entity"/>. Can create a new <see cref="Entity"/>.
+		/// </summary>
+		/// <returns>
+		///   <para><see langword="true" /> if a new <see cref="Entity"/> is created; otherwise, <see langword="false" />.</para>
+		///   <para>Returning <see langword="false" /> does not necessarily mean detaching the part did not change the <see cref="Entity"/> in any ways.
+		///   For example, detaching <c
