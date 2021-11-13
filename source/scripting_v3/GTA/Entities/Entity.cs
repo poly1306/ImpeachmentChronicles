@@ -1039,4 +1039,75 @@ namespace GTA
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether this <see cref="Entity"/> is invin
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is invincible.
+		/// Setting this property to <see langword="true" /> does not prevent <see cref="Ped"/>s from doing the reactions for getting hit with melee attacks.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is invincible; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsInvincible
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + 392, 8);
+			}
+			set => Function.Call(Hash.SET_ENTITY_INVINCIBLE, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> can only be damaged by <see cref="Player"/>s.
+		/// <see cref="Ped"/>s are not susceptible to the reactions of melee attacks when this property is set to <see langword="true" />, unlike <see cref="IsInvincible"/>.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> can only be damaged by <see cref="Player"/>s; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsOnlyDamagedByPlayer
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + 392, 10);
+			}
+			set => Function.Call(Hash.SET_ENTITY_ONLY_DAMAGED_BY_PLAYER, Handle, value);
+		}
+
+		#endregion
+
+		#region Status Effects
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is visible.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is visible; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsVisible
+		{
+			get => Function.Call<bool>(Hash.IS_ENTITY_VISIBLE, Handle);
+			set => Function.Call(Hash.SET_ENTITY_VISIBLE, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> is occluded.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is occluded; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsOccluded
+		{
+			get => Function.Call<bool>(Hash.IS_ENTITY_OCCLUDED, Handle);
+		}
+
+		/// <summary>
+		/// Gets a value indicating wheth
