@@ -1110,4 +1110,67 @@ namespace GTA
 		}
 
 		/// <summary>
-		/// Gets a value indicating wheth
+		/// Gets a value indicating whether this <see cref="Entity"/> is rendered.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is rendered; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsRendered
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + 176, 4);
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> is on fire.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is on fire; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsOnFire => Function.Call<bool>(Hash.IS_ENTITY_ON_FIRE, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> is on screen.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is on screen; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsOnScreen => Function.Call<bool>(Hash.IS_ENTITY_ON_SCREEN, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> is upright.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is upright; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsUpright => Function.Call<bool>(Hash.IS_ENTITY_UPRIGHT, Handle, 30.0f);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> is upside down.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is upside down; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsUpsideDown => Function.Call<bool>(Hash.IS_ENTITY_UPSIDEDOWN, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> is in the air.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if this <see cref="Entity"/> is in the air; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsInAir => Function.Call<bool>(Hash.IS_ENTITY_IN_AIR, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> is in water.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> is in water; otherwise, <s
