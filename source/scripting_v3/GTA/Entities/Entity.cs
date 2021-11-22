@@ -1173,4 +1173,64 @@ namespace GTA
 		/// Gets a value indicating whether this <see cref="Entity"/> is in water.
 		/// </summary>
 		/// <value>
-		/// <see langword="true" /> if this <see cref="Entity"/> is in water; otherwise, <s
+		/// <see langword="true" /> if this <see cref="Entity"/> is in water; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsInWater => Function.Call<bool>(Hash.IS_ENTITY_IN_WATER, Handle);
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> has gravity.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> has gravity; otherwise, <see langword="false" />.
+		/// </value>
+		public bool HasGravity
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return true;
+				}
+				address = SHVDN.NativeMemory.ReadAddress(address + 48);
+				if (address == IntPtr.Zero)
+				{
+					return true;
+				}
+				return !SHVDN.NativeMemory.IsBitSet(address + 26, 4);
+
+			}
+			set => Function.Call(Hash.SET_ENTITY_HAS_GRAVITY, Handle, value);
+		}
+
+		/// <summary>
+		/// Stops all particle effects attached to this <see cref="Entity"/>.
+		/// </summary>
+		public void RemoveParticleEffects()
+		{
+			Function.Call(Hash.REMOVE_PARTICLE_FX_FROM_ENTITY, Handle);
+		}
+
+		#endregion
+
+		#region Collision
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Entity"/> has collided with anything.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> has collided; otherwise, <see langword="false" />.
+		/// </value>
+		/// <remarks><see cref="IsRecordingCollisions"/> must be <see langword="true" /> for this to work.</remarks>
+		public bool HasCollided => Function.Call<bool>(Hash.HAS_ENTITY_COLLIDED_WITH_ANYTHING, Handle);
+
+		/// <summary>
+		/// Gets the material this <see cref="Entity"/> is pushing up against.
+		/// </summary>
+		/// <value>
+		/// A material hash if this <see cref = "Entity"/> has collision; otherwise, <see cref = "MaterialHash.None"/>.
+		/// </value>
+		/// <remarks>
+		/// <para>This returns <see cref = "MaterialHash.None"/> in some cases, although this enrity is internally considered touched with something.
+		/// For example, this returns <see cref = "MaterialHash.None"/> when this <see cref = "Entity"/> is a <see cref = "Ped"/> and this <see cref = "Entity"/> doesn't push none of the touching entities, including buildings.
+		/// However, this returns <see cref = "MaterialHash.None
