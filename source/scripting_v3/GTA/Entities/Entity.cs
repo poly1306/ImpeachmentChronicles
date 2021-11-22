@@ -1233,4 +1233,49 @@ namespace GTA
 		/// <remarks>
 		/// <para>This returns <see cref = "MaterialHash.None"/> in some cases, although this enrity is internally considered touched with something.
 		/// For example, this returns <see cref = "MaterialHash.None"/> when this <see cref = "Entity"/> is a <see cref = "Ped"/> and this <see cref = "Entity"/> doesn't push none of the touching entities, including buildings.
-		/// However, this returns <see cref = "MaterialHash.None
+		/// However, this returns <see cref = "MaterialHash.None"/> when this <see cref = "Entity"/> touches any ragdolled peds.</para>
+		/// <para>Note that when this <see cref = "Entity"/> is a this <see cref = "Vehicle"/> and only its wheels touches something, the game will consider the entity touching nothing and this returns <see cref = "MaterialHash.None"/>.</para>
+		/// </remarks>
+		public MaterialHash MaterialCollidingWith => (MaterialHash)Function.Call<uint>(Hash.GET_LAST_MATERIAL_HIT_BY_ENTITY, Handle);
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> has collision.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Entity"/> has collision; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsCollisionEnabled
+		{
+			get => !Function.Call<bool>(Hash.GET_ENTITY_COLLISION_DISABLED, Handle);
+			set => Function.Call(Hash.SET_ENTITY_COLLISION, Handle, value, false);
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Entity"/> is recording collisions.
+		/// </summary>
+		public bool IsRecordingCollisions
+		{
+			set => Function.Call(Hash.SET_ENTITY_RECORDS_COLLISIONS, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets the collision between this <see cref="Entity"/> and another <see cref="Entity"/>
+		/// </summary>
+		/// <param name="entity">The <see cref="Entity"/> to set collision with</param>
+		/// <param name="toggle">if set to <see langword="true" /> the 2 <see cref="Entity"/>s wont collide with each other.</param>
+		public void SetNoCollision(Entity entity, bool toggle)
+		{
+			Function.Call(Hash.SET_ENTITY_NO_COLLISION_ENTITY, Handle, entity.Handle, toggle);
+		}
+
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> is in a specified area
+		/// </summary>
+		/// <param name="minBounds">The minimum bounds.</param>
+		/// <param name="maxBounds">The maximum bounds.</param>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> is in the specified area; otherwise, <see langword="false" />.
+		/// </returns>
+		public bool IsInArea(Vector3 minBounds, Vector3 maxBounds)
+		{
+			return Function.Call<bool>(Hash.IS_ENTITY_IN_AREA, Handle, minBou
