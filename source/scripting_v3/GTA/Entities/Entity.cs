@@ -1314,3 +1314,57 @@ namespace GTA
 		/// </summary>
 		/// <param name="position">The position.</param>
 		/// <param name="range">The maximum range.</param>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> is in range of the <paramref name="position"/>; otherwise, <see langword="false" />.
+		/// </returns>
+		public bool IsInRange(Vector3 position, float range)
+		{
+			return Vector3.Subtract(Position, position).LengthSquared() < range * range;
+		}
+
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> is near a specified <see cref="Entity"/>.
+		/// </summary>
+		/// <param name="entity">The <see cref="Entity"/> to check.</param>
+		/// <param name="bounds">The max displacement from the <paramref name="entity"/>.</param>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> is near the <paramref name="entity"/>; otherwise, <see langword="false" />.
+		/// </returns>
+		public bool IsNearEntity(Entity entity, Vector3 bounds)
+		{
+			return Function.Call<bool>(Hash.IS_ENTITY_AT_ENTITY, Handle, entity.Handle, bounds.X, bounds.Y, bounds.Z, false, true, false);
+		}
+
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> is touching an <see cref="Entity"/> with the <see cref="Model"/> <paramref name="model"/>.
+		/// </summary>
+		/// <param name="model">The <see cref="Model"/> to check</param>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> is touching a <paramref name="model"/>; otherwise, <see langword="false" />.
+		/// </returns>
+		public bool IsTouching(Model model)
+		{
+			return Function.Call<bool>(Hash.IS_ENTITY_TOUCHING_MODEL, Handle, model.Hash);
+		}
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> is touching the <see cref="Entity"/> <paramref name="entity"/>.
+		/// </summary>
+		/// <param name="entity">The <see cref="Entity"/> to check.</param>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> is touching <paramref name="entity"/>; otherwise, <see langword="false" />.
+		/// </returns>
+		public bool IsTouching(Entity entity)
+		{
+			return Function.Call<bool>(Hash.IS_ENTITY_TOUCHING_ENTITY, Handle, entity.Handle);
+		}
+
+		#endregion
+
+		#region Blips
+
+		/// <summary>
+		/// Creates a <see cref="Blip"/> on this <see cref="Entity"/>.
+		/// </summary>
+		public Blip AddBlip()
+		{
+			
