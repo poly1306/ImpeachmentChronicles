@@ -1367,4 +1367,60 @@ namespace GTA
 		/// </summary>
 		public Blip AddBlip()
 		{
-			
+			return new Blip(Function.Call<int>(Hash.ADD_BLIP_FOR_ENTITY, Handle));
+		}
+
+		/// <summary>
+		/// Gets the <see cref="Blip"/> attached to this <see cref="Entity"/>.
+		/// </summary>
+		/// <remarks>returns <see langword="null" /> if no <see cref="Blip"/>s are attached to this <see cref="Entity"/></remarks>
+		public Blip AttachedBlip
+		{
+			get
+			{
+				int handle = Function.Call<int>(Hash.GET_BLIP_FROM_ENTITY, Handle);
+
+				if (Function.Call<bool>(Hash.DOES_BLIP_EXIST, handle))
+				{
+					return new Blip(handle);
+				}
+
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Blip"/>s attached to this <see cref="Entity"/>.
+		/// </summary>
+		public Blip[] AttachedBlips
+		{
+			get => World.GetAllBlips().Where(x => Function.Call<int>(Hash.GET_BLIP_INFO_ID_ENTITY_INDEX, x.NativeValue) == Handle).ToArray();
+		}
+
+		#endregion
+
+		#region Attaching
+
+		/// <summary>
+		/// Detaches this <see cref="Entity"/> from any <see cref="Entity"/> it may be attached to.
+		/// </summary>
+		public void Detach()
+		{
+			Function.Call(Hash.DETACH_ENTITY, Handle, true, true);
+		}
+		/// <summary>
+		/// Attaches this <see cref="Entity"/> to a different <see cref="Entity"/>
+		/// </summary>
+		/// <param name="entity">The <see cref="Entity"/> to attach this <see cref="Entity"/> to.</param>
+		/// <param name="position">The position relative to the <paramref name="entity"/> to attach this <see cref="Entity"/> to.</param>
+		/// <param name="rotation">The rotation to apply to this <see cref="Entity"/> relative to the <paramref name="entity"/></param>
+		public void AttachTo(Entity entity, Vector3 position = default, Vector3 rotation = default)
+		{
+			Function.Call(Hash.ATTACH_ENTITY_TO_ENTITY, Handle, entity.Handle, -1, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, 0, 0, 0, 0, 2, 1);
+		}
+		/// <summary>
+		/// Attaches this <see cref="Entity"/> to a different <see cref="Entity"/>
+		/// </summary>
+		/// <param name="entityBone">The <see cref="EntityBone"/> to attach this <see cref="Entity"/> to.</param>
+		/// <param name="position">The position relative to the <paramref name="entityBone"/> to attach this <see cref="Entity"/> to.</param>
+		/// <param name="rotation">The rotation to apply to this <see
