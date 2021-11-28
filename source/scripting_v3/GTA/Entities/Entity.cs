@@ -1530,4 +1530,34 @@ namespace GTA
 		/// <param name="scaleByMass">
 		/// <para>Specifies whether to scale the force by mass.</para>
 		/// <para>If <see langword="true"/>, force will be multiplied by mass. For example, force passed in is in fact an acceleration rate in <c>m/s*s</c> (force) or velocity change in <c>m/s</c> (impulse).</para>
-		/// <para>If <see langword="false"/>, force will be applied directly and it's effect will depend on the mass of the entity. For example, force passed in is a proper force in Newtons (force) or a step change in momentum <c>kg*m/s</c> (im
+		/// <para>If <see langword="false"/>, force will be applied directly and it's effect will depend on the mass of the entity. For example, force passed in is a proper force in Newtons (force) or a step change in momentum <c>kg*m/s</c> (impulse).</para>
+		/// <para>
+		/// In other words, scaling by mass is probably easier in most situations -
+		/// if the mass of the object changes it's behaviour shouldn't, and it's easier to picture the effect because an acceleration rate of <c>10.0</c> is approximately the same as gravity (<c>9.81</c> to be more precise).
+		/// </para>
+		/// </param>
+		/// <param name="triggerAudio">
+		/// <para>Specifies whether to play audio events related to the force being applied. The sound will play only if the entity type is <see cref="Vehicle"/> and will play a suspension squeal depending on the magnitude of the force.</para>
+		/// <para>The sound will play even if regardless of <see cref="ForceType"/> (even with a value other than between 0 to 5).</para>
+		/// </param>
+		/// <param name="scaleByTimeScale">
+		/// <para>Specifies whether scale the force by the current time scale (max: <c>1.0f</c>).</para>
+		///	<para>Only affects when <paramref name="forceType"/> is <see cref="ForceType.InternalImpulse"/> or <see cref="ForceType.ExternalImpulse"/>.</para>
+		/// </param>
+		private void ApplyForceInternal(Vector3 force, Vector3 offset, ForceType forceType, bool relativeForce, bool relativeOffset, bool scaleByMass, bool triggerAudio = false, bool scaleByTimeScale = true)
+		{
+			// 9th parameter is component index (not bone index), which matters only if the entity is a ped
+			Function.Call(Hash.APPLY_FORCE_TO_ENTITY, Handle, forceType, force.X, force.Y, force.Z, offset.X, offset.Y, offset.Z, 0, relativeForce, relativeOffset, scaleByMass, triggerAudio, scaleByTimeScale);
+		}
+
+		/// <summary>
+		/// Applies a world force to the center of mass of this <see cref="Entity"/>.
+		/// <paramref name="forceType"/> must not be <see cref="ForceType.ExternalForce"/> or <see cref="ForceType.ExternalImpulse"/>.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceCenterOfMassInternal(Vector3, ForceType, bool, bool, bool)"/>
+		public void ApplyWorldForceCenterOfMass(Vector3 force, ForceType forceType, bool scaleByMass, bool applyToChildren = false)
+		{
+			ApplyForceCenterOfMassInternal(force, forceType, false, scaleByMass, applyToChildren);
+		}
+		/// <summary>
+		/// Applies a relative for
