@@ -1423,4 +1423,50 @@ namespace GTA
 		/// </summary>
 		/// <param name="entityBone">The <see cref="EntityBone"/> to attach this <see cref="Entity"/> to.</param>
 		/// <param name="position">The position relative to the <paramref name="entityBone"/> to attach this <see cref="Entity"/> to.</param>
-		/// <param name="rotation">The rotation to apply to this <see
+		/// <param name="rotation">The rotation to apply to this <see cref="Entity"/> relative to the <paramref name="entityBone"/></param>
+		public void AttachTo(EntityBone entityBone, Vector3 position = default, Vector3 rotation = default)
+		{
+			Function.Call(Hash.ATTACH_ENTITY_TO_ENTITY, Handle, entityBone.Owner.Handle, entityBone, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, 0, 0, 0, 0, 2, 1);
+		}
+
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> is attached to any other <see cref="Entity"/>.
+		/// </summary>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> is attached to another <see cref="Entity"/>; otherwise, <see langword="false" />.
+		/// </returns>
+		public bool IsAttached()
+		{
+			return Function.Call<bool>(Hash.IS_ENTITY_ATTACHED, Handle);
+		}
+		/// <summary>
+		/// Determines whether this <see cref="Entity"/> is attached to the specified <see cref="Entity"/>.
+		/// </summary>
+		/// <param name="entity">The <see cref="Entity"/> to check if this <see cref="Entity"/> is attached to.</param>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Entity"/> is attached to <paramref name="entity"/>; otherwise, <see langword="false" />.
+		/// </returns>
+		public bool IsAttachedTo(Entity entity)
+		{
+			return Function.Call<bool>(Hash.IS_ENTITY_ATTACHED_TO_ENTITY, Handle, entity.Handle);
+		}
+
+		/// <summary>
+		/// Gets the <see cref="Entity"/> this <see cref="Entity"/> is attached to.
+		/// <remarks>returns <see langword="null" /> if this <see cref="Entity"/> isnt attached to any entity</remarks>
+		/// </summary>
+		public Entity AttachedEntity
+		{
+			get => FromHandle(Function.Call<int>(Hash.GET_ENTITY_ATTACHED_TO, Handle));
+		}
+
+		#endregion
+
+		#region Forces
+
+		/// <summary>
+		/// Applies a force to this <see cref="Entity"/>.
+		/// </summary>
+		/// <param name="direction">The direction to apply the force relative to world coordinates.</param>
+		/// <param name="rotation">The offset from the root component of this <see cref="Entity"/> where the force applies. "rotation" is incorrectly named parameter but is left for scripts that use the method with named parameters.</param>
+	
