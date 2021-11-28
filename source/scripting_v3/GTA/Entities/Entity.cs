@@ -1501,4 +1501,33 @@ namespace GTA
 			ApplyForceInternal(force, offset, forceType, false, true, scaleByMass, triggerAudio, scaleByTimeScale);
 		}
 		/// <summary>
-		/// Applies a relative force to this <see cref="Entit
+		/// Applies a relative force to this <see cref="Entity"/> using world offset.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceInternal(Vector3, Vector3, ForceType, bool, bool, bool, bool, bool)"/>
+		public void ApplyRelativeForceWorldOffset(Vector3 force, Vector3 offset, ForceType forceType, bool scaleByMass, bool triggerAudio = false, bool scaleByTimeScale = true)
+		{
+			ApplyForceInternal(force, offset, forceType, true, false, scaleByMass, triggerAudio, scaleByTimeScale);
+		}
+		/// <summary>
+		/// Applies a relative force to this <see cref="Entity"/> using relative offset.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceInternal(Vector3, Vector3, ForceType, bool, bool, bool, bool, bool)"/>
+		public void ApplyRelativeForceRelativeOffset(Vector3 force, Vector3 offset, ForceType forceType, bool scaleByMass, bool triggerAudio = false, bool scaleByTimeScale = true)
+		{
+			ApplyForceInternal(force, offset, forceType, true, true, scaleByMass, triggerAudio, scaleByTimeScale);
+		}
+		/// <summary>
+		/// Applies a force to this <see cref="Entity"/>.
+		/// </summary>
+		/// <param name="force">The force to be applied.</param>
+		/// <param name="offset">The offset from center of entity at which to apply force.</param>
+		/// <param name="forceType">Type of the force to apply.</param>
+		/// <param name="relativeForce">
+		/// Specifies whether the force vector passed in is in relative or world coordinates.
+		/// Rocal coordinates (<see langword="true"/>) means the force will get automatically transformed into world space before being applied.
+		/// </param>
+		/// <param name="relativeOffset">Specifies whether the offset passed in is in relative or world coordinates.</param>
+		/// <param name="scaleByMass">
+		/// <para>Specifies whether to scale the force by mass.</para>
+		/// <para>If <see langword="true"/>, force will be multiplied by mass. For example, force passed in is in fact an acceleration rate in <c>m/s*s</c> (force) or velocity change in <c>m/s</c> (impulse).</para>
+		/// <para>If <see langword="false"/>, force will be applied directly and it's effect will depend on the mass of the entity. For example, force passed in is a proper force in Newtons (force) or a step change in momentum <c>kg*m/s</c> (im
