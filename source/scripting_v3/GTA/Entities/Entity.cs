@@ -1469,4 +1469,36 @@ namespace GTA
 		/// </summary>
 		/// <param name="direction">The direction to apply the force relative to world coordinates.</param>
 		/// <param name="rotation">The offset from the root component of this <see cref="Entity"/> where the force applies. "rotation" is incorrectly named parameter but is left for scripts that use the method with named parameters.</param>
-	
+		/// <param name="forceType">Type of the force to apply.</param>
+		public void ApplyForce(Vector3 direction, Vector3 rotation = default, ForceType forceType = ForceType.ExternalImpulse)
+		{
+			Function.Call(Hash.APPLY_FORCE_TO_ENTITY, Handle, forceType, direction.X, direction.Y, direction.Z, rotation.X, rotation.Y, rotation.Z, false, false, true, true, false, true);
+		}
+		/// <summary>
+		/// Applies a force to this <see cref="Entity"/>.
+		/// </summary>
+		/// <param name="direction">The direction to apply the force relative to this <see cref="Entity"/>s rotation</param>
+		/// <param name="rotation">The offset from the root component of this <see cref="Entity"/> where the force applies. "rotation" is incorrectly named parameter but is left for scripts that use the method with named parameters.</param>
+		/// <param name="forceType">Type of the force to apply.</param>
+		public void ApplyForceRelative(Vector3 direction, Vector3 rotation = default, ForceType forceType = ForceType.ExternalImpulse)
+		{
+			Function.Call(Hash.APPLY_FORCE_TO_ENTITY, Handle, forceType, direction.X, direction.Y, direction.Z, rotation.X, rotation.Y, rotation.Z, false, true, true, true, false, true);
+		}
+		/// <summary>
+		/// Applies a world force to this <see cref="Entity"/> using world offset.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceInternal(Vector3, Vector3, ForceType, bool, bool, bool, bool, bool)"/>
+		public void ApplyWorldForceWorldOffset(Vector3 force, Vector3 offset, ForceType forceType, bool scaleByMass, bool triggerAudio = false, bool scaleByTimeScale = true)
+		{
+			ApplyForceInternal(force, offset, forceType, false, false, scaleByMass, triggerAudio, scaleByTimeScale);
+		}
+		/// <summary>
+		/// Applies a world force to this <see cref="Entity"/> using relative offset.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceInternal(Vector3, Vector3, ForceType, bool, bool, bool, bool, bool)"/>
+		public void ApplyWorldForceRelativeOffset(Vector3 force, Vector3 offset, ForceType forceType, bool scaleByMass, bool triggerAudio = false, bool scaleByTimeScale = true)
+		{
+			ApplyForceInternal(force, offset, forceType, false, true, scaleByMass, triggerAudio, scaleByTimeScale);
+		}
+		/// <summary>
+		/// Applies a relative force to this <see cref="Entit
