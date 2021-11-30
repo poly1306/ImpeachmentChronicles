@@ -1632,3 +1632,55 @@ namespace GTA
 			{
 				Function.Call(Hash.DELETE_ENTITY, &handle);
 			}
+			Handle = handle; // This will be zero now
+		}
+
+		/// <summary>
+		/// Determines if this <see cref="Entity"/> exists.
+		/// You should ensure <see cref="Entity"/>s still exist before manipulating them or getting some values for them on every tick, since some native functions may crash the game if invalid entity handles are passed.
+		/// </summary>
+		/// <returns><see langword="true" /> if this <see cref="Entity"/> exists; otherwise, <see langword="false" /></returns>.
+		/// <seealso cref="IsDead"/>
+		public override bool Exists()
+		{
+			return Function.Call<bool>(Hash.DOES_ENTITY_EXIST, Handle);
+		}
+
+		/// <summary>
+		/// Determines if an <see cref="object"/> refers to the same entity as this <see cref="Entity"/>.
+		/// </summary>
+		/// <param name="obj">The <see cref="object"/> to check.</param>
+		/// <returns><see langword="true" /> if the <paramref name="obj"/> is the same entity as this <see cref="Entity"/>; otherwise, <see langword="false" />.</returns>
+		public override bool Equals(object obj)
+		{
+			if (obj is Entity entity)
+			{
+				return Handle == entity.Handle;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Determines if two <see cref="Entity"/>s refer to the same entity.
+		/// </summary>
+		/// <param name="left">The left <see cref="Entity"/>.</param>
+		/// <param name="right">The right <see cref="Entity"/>.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> is the same entity as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator ==(Entity left, Entity right)
+		{
+			return left is null ? right is null : left.Equals(right);
+		}
+		/// <summary>
+		/// Determines if two <see cref="Entity"/>s don't refer to the same entity.
+		/// </summary>
+		/// <param name="left">The left <see cref="Entity"/>.</param>
+		/// <param name="right">The right <see cref="Entity"/>.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> is not the same entity as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator !=(Entity left, Entity right)
+		{
+			return !(left == right);
+		}
+
+		/// <summary>
+		/// Converts an <see cref="Entity"/> to a native input argum
