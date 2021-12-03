@@ -1683,4 +1683,16 @@ namespace GTA
 		}
 
 		/// <summary>
-		/// Converts an <see cref="Entity"/> to a native input argum
+		/// Converts an <see cref="Entity"/> to a native input argument.
+		/// </summary>
+		public static implicit operator InputArgument(Entity value)
+		{
+			return new InputArgument((ulong)value.Handle);
+		}
+
+		public override int GetHashCode()
+		{
+			return Handle.GetHashCode();
+		}
+	}
+}
