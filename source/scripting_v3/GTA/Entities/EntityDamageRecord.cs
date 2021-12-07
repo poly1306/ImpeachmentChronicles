@@ -104,4 +104,20 @@ namespace GTA
 		/// </summary>
 		/// <param name="left">The left <see cref="Entity"/>.</param>
 		/// <param name="right">The right <see cref="Entity"/>.</param>
-		/// <returns><c>true</c> if <paramref name="left"/> does not have the same properties as <paramref name="right"/>; otherwise, <c>false<
+		/// <returns><c>true</c> if <paramref name="left"/> does not have the same properties as <paramref name="right"/>; otherwise, <c>false</c>.</returns>
+		public static bool operator !=(EntityDamageRecord left, EntityDamageRecord right)
+		{
+			return !left.Equals(right);
+		}
+
+		public override int GetHashCode()
+		{
+			int hash = 17;
+			hash = Victim != null ? hash * 5039 + Victim.Handle.GetHashCode() : hash;
+			hash = Attacker != null ? hash * 883 + Attacker.Handle.GetHashCode() : hash;
+			hash = hash * 9719 + ((int)WeaponHash).GetHashCode();
+			hash = hash * 317 + GameTime.GetHashCode();
+			return hash;
+		}
+	}
+}
