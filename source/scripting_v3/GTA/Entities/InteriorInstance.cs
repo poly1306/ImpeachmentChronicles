@@ -51,4 +51,97 @@ namespace GTA
 					return 0;
 				}
 
-				return new Model(SH
+				return new Model(SHVDN.NativeMemory.GetModelHashFromEntity(address));
+			}
+		}
+
+		/// <summary>
+		/// Gets this <see cref="InteriorInstance"/>s matrix which stores position and rotation information.
+		/// </summary>
+		public Matrix Matrix
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return Matrix.Zero;
+				}
+
+				return new Matrix(SHVDN.NativeMemory.ReadMatrix(address + 0x60));
+			}
+		}
+
+		/// <summary>
+		/// Gets the rotation of this <see cref="InteriorInstance"/>.
+		/// </summary>
+		/// <value>
+		/// The yaw, pitch, roll rotation values in degree.
+		/// </value>
+		public Vector3 Rotation
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return Vector3.Zero;
+				}
+
+				unsafe
+				{
+					var tempRotationArray = stackalloc float[3];
+					SHVDN.NativeMemory.GetRotationFromMatrix(tempRotationArray, address + 0x60);
+
+					return new Vector3(tempRotationArray[0], tempRotationArray[1], tempRotationArray[2]);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets the quaternion of this <see cref="InteriorInstance"/>.
+		/// </summary>
+		public Quaternion Quaternion
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return Quaternion.Zero;
+				}
+
+				unsafe
+				{
+					var tempRotationArray = stackalloc float[4];
+					SHVDN.NativeMemory.GetQuaternionFromMatrix(tempRotationArray, address + 0x60);
+
+					return new Quaternion(tempRotationArray[0], tempRotationArray[1], tempRotationArray[2], tempRotationArray[3]);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the position of this <see cref="InteriorInstance"/>.
+		/// </summary>
+		/// <value>
+		/// The position in world space.
+		/// </value>
+		public Vector3 Position
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return Vector3.Zero;
+				}
+
+				return new Vector3(SHVDN.NativeMemory.ReadVector3(address + 0x90));
+			}
+		}
+
+		/// <summary>
+		/// Gets the <see cref="InteriorProxy"/> this <see cref="InteriorInstance"/> is loaded from.
+		/// </summary>
+		/// <remarks>returns <see langword="null" /> if this <see cref="InteriorInstance"/> does not exist or SHVDN could not fin
