@@ -144,4 +144,58 @@ namespace GTA
 		/// <summary>
 		/// Gets the <see cref="InteriorProxy"/> this <see cref="InteriorInstance"/> is loaded from.
 		/// </summary>
-		/// <remarks>returns <see langword="null" /> if this <see cref="InteriorInstance"/> does not exist or SHVDN could not fin
+		/// <remarks>returns <see langword="null" /> if this <see cref="InteriorInstance"/> does not exist or SHVDN could not find the <see cref="InteriorProxy"/> pool for some reason.</remarks>
+		public InteriorProxy InteriorProxy
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return null;
+				}
+
+				var interiorProxyHandle = SHVDN.NativeMemory.GetInteriorProxyHandleFromInteriorInst(Handle);
+				return interiorProxyHandle != 0 ? new InteriorProxy(interiorProxyHandle) : null;
+			}
+		}
+
+		/// <summary>
+		/// Determines if this <see cref="InteriorInstance"/> exists.
+		/// </summary>
+		/// <returns><see langword="true" /> if this <see cref="InteriorInstance"/> exists; otherwise, <see langword="false" />.</returns>
+		public bool Exists()
+		{
+			return SHVDN.NativeMemory.InteriorInstHandleExists(Handle);
+		}
+
+		/// <summary>
+		/// Determines if an <see cref="object"/> refers to the same entity as this <see cref="InteriorInstance"/>.
+		/// </summary>
+		/// <param name="obj">The <see cref="object"/> to check.</param>
+		/// <returns><see langword="true" /> if the <paramref name="obj"/> is the same entity as this <see cref="InteriorInstance"/>; otherwise, <see langword="false" />.</returns>
+		public override bool Equals(object obj)
+		{
+			if (obj is InteriorInstance entity)
+			{
+				return Handle == entity.Handle;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Determines if two <see cref="InteriorInstance"/>s refer to the same entity.
+		/// </summary>
+		/// <param name="left">The left <see cref="InteriorInstance"/>.</param>
+		/// <param name="right">The right <see cref="InteriorInstance"/>.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> is the same entity as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator ==(InteriorInstance left, InteriorInstance right)
+		{
+			return left is null ? right is null : left.Equals(right);
+		}
+		/// <summary>
+		/// Determines if two <see cref="InteriorInstance"/>s don't refer to the same entity.
+		/// </summary>
+		/// <param name="left">The left <see cref="InteriorInstance"/>.</param>
+		/// <param name="right">The right <see cref="InteriorIns
