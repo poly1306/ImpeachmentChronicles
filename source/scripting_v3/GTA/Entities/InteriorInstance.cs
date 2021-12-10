@@ -198,4 +198,16 @@ namespace GTA
 		/// Determines if two <see cref="InteriorInstance"/>s don't refer to the same entity.
 		/// </summary>
 		/// <param name="left">The left <see cref="InteriorInstance"/>.</param>
-		/// <param name="right">The right <see cref="InteriorIns
+		/// <param name="right">The right <see cref="InteriorInstance"/>.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> is not the same entity as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator !=(InteriorInstance left, InteriorInstance right)
+		{
+			return !(left == right);
+		}
+
+		public override int GetHashCode()
+		{
+			return Handle.GetHashCode();
+		}
+	}
+}
