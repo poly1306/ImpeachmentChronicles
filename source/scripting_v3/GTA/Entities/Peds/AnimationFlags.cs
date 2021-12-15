@@ -82,4 +82,46 @@ namespace GTA
 		/// <summary>
 		/// Sync the anim whilst blending out (use for seamless transitions from a full body anim into walking / running behaviour).
 		/// </summary>
-		/// <remarks>Tag synchronizer flags are for syncing the anim against ped movement (walking / r
+		/// <remarks>Tag synchronizer flags are for syncing the anim against ped movement (walking / running / etc).</remarks>
+		TagSyncOut = 32768,
+		/// <summary>
+		/// Sync all the time (Only usefull to synchronize a partial anim e.g. an upper body).
+		/// </summary>
+		/// <remarks>Tag synchronizer flags are for syncing the anim against ped movement (walking / running / etc).</remarks>
+		TagSyncContinuous = 65536,
+		/// <summary>
+		/// Force the anim task to start even if the ped is falling / ragdolling / etc.
+		/// Can fix issues with peds not playing their anims immediately after a warp / etc.
+		/// </summary>
+		ForceStart = 131072,
+		/// <summary>
+		/// Use the kinematic physics mode on the entity for the duration of the anim (it should push other entities out of the way, and not be pushed around by players / etc).
+		/// </summary>
+		UseKinematicPhysics = 262144,
+		/// <summary>
+		/// Updates the peds capsule position every frame based on the animation.
+		/// Use in conjunction with <see cref="UseKinematicPhysics"/> to create characters that cannot be pushed off course by other entities / geometry / etc whilst playing the anim.
+		/// </summary>
+		UseMoverExtraction = 524288,
+		/// <summary>
+		/// Indicates that the ped's weapon should be hidden while this animation is playing.
+		/// </summary>
+		HideWeapon = 1048576,
+		/// <summary>
+		/// When the anim ends, kill the ped and use the currently playing anim as the dead pose.
+		/// </summary>
+		EndsInDeadPose = 2097152,
+		/// <summary>
+		/// If the peds ragdoll bounds make contact with something physical (that isn't flat ground) activate the ragdoll and fall over.
+		/// </summary>
+		RagdollOnCollision = 4194304,
+		/// <summary>
+		/// Currently used only on secondary anim tasks. Secondary anim tasks will end automatically when the ped dies. Setting this flag stops that from happening.
+		/// </summary>
+		DontExitOnDeath = 8388608,
+		/// <summary>
+		/// Allow aborting from damage events (including non-ragdoll damage events) even when blocking other ai events using <see cref="NotInterruptable"/>.
+		/// </summary>
+		AbortOnWeaponDamage = 16777216,
+		/// <summary>
+		/// Prevent adjusting the capsule on the enter state (useful if script is doing a sequence of scripted anims and they are known to more or less stand still
