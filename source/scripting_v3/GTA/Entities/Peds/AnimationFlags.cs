@@ -124,4 +124,35 @@ namespace GTA
 		/// </summary>
 		AbortOnWeaponDamage = 16777216,
 		/// <summary>
-		/// Prevent adjusting the capsule on the enter state (useful if script is doing a sequence of scripted anims and they are known to more or less stand still
+		/// Prevent adjusting the capsule on the enter state (useful if script is doing a sequence of scripted anims and they are known to more or less stand still).
+		/// </summary>
+		DisableForcedPhysicsUpdate = 33554432,
+		/// <summary>
+		/// Force the attachments to be processed at the start of the clip.
+		/// </summary>
+		ProcessAttachmentsOnStart = 67108864,
+		/// <summary>
+		/// Expands the capsule to the extents of the skeleton.
+		/// </summary>
+		ExpandPedCapsuleFromSkeleton = 134217728,
+		/// <summary>
+		/// Plays an alternative first person version of the clip on the player when in first person mode.
+		/// The first person clip must be in the same dictionary, and be named the same as the anim you're playing, but with <c>_FP</c> appended on the end.
+		/// </summary>
+		UseAlternativeFirstPersonAnim = 268435456,
+		/// <summary>
+		/// Start blending out the anim early, so that the blend out duration completes at the end of the animation.
+		/// </summary>
+		BlendOutWRTLastFrame = 536870912,
+		/// <summary>
+		/// Use full blending for this anim and override the heading/position adjustment in CTaskScriptedAnimation::CheckIfClonePlayerNeedsHeadingPositionAdjust(),
+		/// so that the game doesn't correct errors (special case such as scrip-side implemented AI tasks, i.e. diving)
+		/// </summary>
+		UseFullBlending = 1073741824,
+
+		[Obsolete("AnimationFlags.AllowRotation is obsolete, use AnimationFlags.Secondary instead.")]
+		AllowRotation = 32,
+		[Obsolete("AnimationFlags.CancelableWithMovement is obsolete, use AnimationFlags.AbortOnPedMovement instead.")]
+		CancelableWithMovement = 128,
+	}
+}
