@@ -93,4 +93,19 @@ namespace GTA
 			return new DecisionMaker(source);
 		}
 
-		public static implicit operator InputArgument(Dec
+		public static implicit operator InputArgument(DecisionMaker value)
+		{
+			return new InputArgument((ulong)value.Hash);
+		}
+
+		public override int GetHashCode()
+		{
+			return (int)Hash;
+		}
+
+		public override string ToString()
+		{
+			return Hash.ToString();
+		}
+	}
+}
