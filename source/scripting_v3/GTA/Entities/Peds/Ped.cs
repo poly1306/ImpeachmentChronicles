@@ -118,4 +118,91 @@ namespace GTA
 					return IntPtr.Zero;
 				}
 
-				return S
+				return SHVDN.NativeMemory.ReadAddress(address + SHVDN.NativeMemory.PedIntelligenceOffset);
+			}
+		}
+
+		#region Styling
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Ped"/> is human.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if this <see cref="Ped"/> is human; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsHuman => Function.Call<bool>(Hash.IS_PED_HUMAN, Handle);
+
+		public bool IsCuffed => Function.Call<bool>(Hash.IS_PED_CUFFED, Handle);
+
+		public bool CanWearHelmet
+		{
+			set => Function.Call(Hash.SET_PED_HELMET, Handle, value);
+		}
+
+		public bool IsWearingHelmet => Function.Call<bool>(Hash.IS_PED_WEARING_HELMET, Handle);
+
+		public void ClearBloodDamage()
+		{
+			Function.Call(Hash.CLEAR_PED_BLOOD_DAMAGE, Handle);
+		}
+
+		public void ClearVisibleDamage()
+		{
+			Function.Call(Hash.RESET_PED_VISIBLE_DAMAGE, Handle);
+		}
+
+		public void GiveHelmet(bool canBeRemovedByPed, Helmet helmetType, int textureIndex)
+		{
+			Function.Call(Hash.GIVE_PED_HELMET, Handle, !canBeRemovedByPed, helmetType, textureIndex);
+		}
+
+		public void RemoveHelmet(bool instantly)
+		{
+			Function.Call(Hash.REMOVE_PED_HELMET, Handle, instantly);
+		}
+
+		/// <summary>
+		/// Opens a list of clothing and prop configurations that this <see cref="Ped"/> can wear.
+		/// </summary>
+		public Style Style => _style ?? (_style = new Style(this));
+
+		/// <summary>
+		/// Gets the gender of this <see cref="Ped"/>.
+		/// </summary>
+		public Gender Gender => Function.Call<bool>(Hash.IS_PED_MALE, Handle) ? Gender.Male : Gender.Female;
+
+		/// <summary>
+		/// Gets or sets the how much sweat should be rendered on this <see cref="Ped"/>.
+		/// </summary>
+		/// <value>
+		/// The sweat from 0 to 100, 0 being no sweat, 100 being saturated.
+		/// </value>
+		public float Sweat
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.SweatOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.SweatOffset);
+			}
+			set
+			{
+				if (value < 0)
+				{
+					value = 0;
+				}
+				if (value > 100)
+				{
+					value = 100;
+				}
+
+				Function.Call(Hash.SET_PED_SWEAT, Handle, value);
+			}
+		}
+
+		/// <summary>
+		/
