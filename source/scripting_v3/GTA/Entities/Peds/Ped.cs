@@ -44,4 +44,78 @@ namespace GTA
 			"SPEECH_PARAMS_INTERRUPT_SHOUTED_CRITICAL",
 			"SPEECH_PARAMS_INTERRUPT_NO_FORCE",
 			"SPEECH_PARAMS_INTERRUPT_FRONTEND",
-			"SPEECH
+			"SPEECH_PARAMS_INTERRUPT_NO_FORCE_FRONTEND",
+			"SPEECH_PARAMS_ADD_BLIP",
+			"SPEECH_PARAMS_ADD_BLIP_ALLOW_REPEAT",
+			"SPEECH_PARAMS_ADD_BLIP_FORCE",
+			"SPEECH_PARAMS_ADD_BLIP_SHOUTED",
+			"SPEECH_PARAMS_ADD_BLIP_SHOUTED_FORCE",
+			"SPEECH_PARAMS_ADD_BLIP_INTERRUPT",
+			"SPEECH_PARAMS_ADD_BLIP_INTERRUPT_FORCE",
+			"SPEECH_PARAMS_FORCE_PRELOAD_ONLY_SHOUTED",
+			"SPEECH_PARAMS_FORCE_PRELOAD_ONLY_SHOUTED_CLEAR",
+			"SPEECH_PARAMS_FORCE_PRELOAD_ONLY_SHOUTED_CRITICAL",
+			"SPEECH_PARAMS_SHOUTED",
+			"SPEECH_PARAMS_SHOUTED_CLEAR",
+			"SPEECH_PARAMS_SHOUTED_CRITICAL",
+		};
+		#endregion
+
+		internal Ped(int handle) : base(handle)
+		{
+		}
+
+		/// <summary>
+		/// Spawn an identical clone of this <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="heading">The direction the clone should be facing.</param>
+		public Ped Clone(float heading = 0.0f)
+		{
+			return new Ped(Function.Call<int>(Hash.CLONE_PED, Handle, heading, false, false));
+		}
+
+		/// <summary>
+		/// Kills this <see cref="Ped"/> immediately.
+		/// </summary>
+		public void Kill()
+		{
+			Health = 0;
+		}
+
+		/// <summary>
+		/// Resurrects this <see cref="Ped"/> from death.
+		/// </summary>
+		public void Resurrect()
+		{
+			int health = MaxHealth;
+			bool isCollisionEnabled = IsCollisionEnabled;
+
+			Function.Call(Hash.RESURRECT_PED, Handle);
+			Health = MaxHealth = health;
+			IsCollisionEnabled = isCollisionEnabled;
+			Function.Call(Hash.CLEAR_PED_TASKS_IMMEDIATELY, Handle);
+		}
+
+		/// <summary>
+		/// Determines if this <see cref="Ped"/> exists.
+		/// You should ensure <see cref="Ped"/>s still exist before manipulating them or getting some values for them on every tick, since some native functions may crash the game if invalid entity handles are passed.
+		/// </summary>
+		/// <returns><see langword="true" /> if this <see cref="Ped"/> exists; otherwise, <see langword="false" /></returns>
+		/// <seealso cref="Entity.IsDead"/>
+		/// <seealso cref="IsInjured"/>
+		public new bool Exists()
+		{
+			return EntityType == EntityType.Ped;
+		}
+
+		private IntPtr PedIntelligenceAddress
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return IntPtr.Zero;
+				}
+
+				return S
