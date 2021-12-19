@@ -205,4 +205,86 @@ namespace GTA
 		}
 
 		/// <summary>
-		/
+		/// Sets how high up on this <see cref="Ped"/>s body water should be visible.
+		/// </summary>
+		/// <value>
+		/// The height ranges from 0.0f to 1.99f, 0.0f being no water visible, 1.99f being covered in water.
+		/// </value>
+		public float WetnessHeight
+		{
+			set
+			{
+				if (value == 0.0f)
+				{
+					Function.Call(Hash.CLEAR_PED_WETNESS, Handle);
+				}
+				else
+				{
+					Function.Call<float>(Hash.SET_PED_WETNESS_HEIGHT, Handle, value);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Configuration
+
+		/// <summary>
+		/// Gets or sets how much armor this <see cref="Ped"/> is wearing as an <see cref="int"/>.
+		/// </summary>
+		/// <remarks>if you need to get or set the value precisely, use <see cref="ArmorFloat"/> instead.</remarks>
+		/// <value>
+		/// The armor as an <see cref="int"/>.
+		/// </value>
+		public int Armor
+		{
+			get => Function.Call<int>(Hash.GET_PED_ARMOUR, Handle);
+			set => Function.Call(Hash.SET_PED_ARMOUR, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets or sets how much Armor this <see cref="Ped"/> is wearing as a <see cref="float"/>.
+		/// </summary>
+		/// <value>
+		/// The armor as a <see cref="float"/>.
+		/// </value>
+		public float ArmorFloat
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.ArmorOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.ArmorOffset);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.ArmorOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.ArmorOffset, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets how much money this <see cref="Ped"/> is carrying.
+		/// </summary>
+		public int Money
+		{
+			get => Function.Call<int>(Hash.GET_PED_MONEY, Handle);
+			set => Function.Call(Hash.SET_PED_MONEY, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the maximum health of this <see cref="Ped"/> as an <see cref="int"/>.
+		/// </summary>
+		/// <value>
+		/// The maximum health as an <see cref="int"/>.
+		/// </value>
+		public over
