@@ -287,4 +287,72 @@ namespace GTA
 		/// <value>
 		/// The maximum health as an <see cref="int"/>.
 		/// </value>
-		public over
+		public override int MaxHealth
+		{
+			get => Function.Call<int>(Hash.GET_PED_MAX_HEALTH, Handle);
+			set => Function.Call(Hash.SET_PED_MAX_HEALTH, Handle, value);
+		}
+
+		public bool IsPlayer => Function.Call<bool>(Hash.IS_PED_A_PLAYER, Handle);
+
+		public bool GetConfigFlag(int flagID)
+		{
+			return Function.Call<bool>(Hash.GET_PED_CONFIG_FLAG, Handle, flagID, true);
+		}
+
+		public void SetConfigFlag(int flagID, bool value)
+		{
+			Function.Call(Hash.SET_PED_CONFIG_FLAG, Handle, flagID, value);
+		}
+
+		public void ResetConfigFlag(int flagID)
+		{
+			Function.Call(Hash.SET_PED_RESET_FLAG, Handle, flagID, true);
+		}
+
+		/// <summary>
+		/// Sets a value indicating whether this <see cref="Entity"/> is persistent.
+		/// Unlike <see cref="Entity.IsPersistent"/>, calling this method does not affect assigned tasks.
+		/// </summary>
+		public void SetIsPersistentNoClearTask(bool value)
+		{
+			if (value)
+			{
+				PopulationType = EntityPopulationType.Mission;
+			}
+			else
+			{
+				PopulationType = EntityPopulationType.RandomAmbient;
+			}
+		}
+
+		/// <summary>
+		/// Gets a collection of the <see cref="PedBone"/>s in this <see cref="Ped"/>.
+		/// </summary>
+		public new PedBoneCollection Bones => _pedBones ?? (_pedBones = new PedBoneCollection(this));
+
+		#endregion
+
+		#region Tasks
+
+		public bool IsIdle => !IsInjured && !IsRagdoll && !IsInAir && !IsOnFire && !IsDucking && !IsGettingIntoVehicle && !IsInCombat && !IsInMeleeCombat && (!IsInVehicle() || IsSittingInVehicle());
+
+		public bool IsProne => Function.Call<bool>(Hash.IS_PED_PRONE, Handle);
+
+		public bool IsGettingUp => Function.Call<bool>(Hash.IS_PED_GETTING_UP, Handle);
+
+		public bool IsDiving => Function.Call<bool>(Hash.IS_PED_DIVING, Handle);
+
+		public bool IsJumping => Function.Call<bool>(Hash.IS_PED_JUMPING, Handle);
+
+		public bool IsFalling => Function.Call<bool>(Hash.IS_PED_FALLING, Handle);
+
+		public bool IsVaulting => Function.Call<bool>(Hash.IS_PED_VAULTING, Handle);
+
+		public bool IsClimbing => Function.Call<bool>(Hash.IS_PED_CLIMBING, Handle);
+
+		public bool IsClimbingLadder => Function.Call<bool>(Hash.GET_IS_TASK_ACTIVE, Handle, 1 /* CTaskClimbLadder */);
+
+		public bool IsWalking => Function.Call<bool>(Hash.IS_PED_WALKING, Handle);
+
+		public bool IsRunning => Func
