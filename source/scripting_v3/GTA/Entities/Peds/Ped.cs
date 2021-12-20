@@ -355,4 +355,50 @@ namespace GTA
 
 		public bool IsWalking => Function.Call<bool>(Hash.IS_PED_WALKING, Handle);
 
-		public bool IsRunning => Func
+		public bool IsRunning => Function.Call<bool>(Hash.IS_PED_RUNNING, Handle);
+
+		public bool IsSprinting => Function.Call<bool>(Hash.IS_PED_SPRINTING, Handle);
+
+		public bool IsStopped => Function.Call<bool>(Hash.IS_PED_STOPPED, Handle);
+
+		public bool IsSwimming => Function.Call<bool>(Hash.IS_PED_SWIMMING, Handle);
+
+		public bool IsSwimmingUnderWater => Function.Call<bool>(Hash.IS_PED_SWIMMING_UNDER_WATER, Handle);
+
+		public bool IsDucking
+		{
+			get => Function.Call<bool>(Hash.IS_PED_DUCKING, Handle);
+			set => Function.Call(Hash.SET_PED_DUCKING, Handle, value);
+		}
+
+		public bool IsHeadtracking(Entity entity)
+		{
+			return Function.Call<bool>(Hash.IS_PED_HEADTRACKING_ENTITY, Handle, entity.Handle);
+		}
+
+		/// <summary>
+		/// Sets whether this <see cref="Ped"/> keeps their tasks when they are marked as no longer needed by <see cref="Entity.MarkAsNoLongerNeeded"/>.
+		/// </summary>
+		/// <value>
+		/// <para>
+		/// If set to <see langword="false" />, this <see cref="Ped"/>'s task will be immediately cleared and start some ambient tasks
+		/// (most likely start wandering) when they are marked as no longer needed.
+		/// </para>
+		/// <para>
+		/// If set to <see langword="true" />, this <see cref="Ped"/> will keep their scripted task.
+		/// Once this <see cref="Ped"/> has no script tasks, their task will clear and they'll start some ambient tasks (one-time-only).
+		/// </para>
+		/// </value>
+		public bool KeepTaskWhenMarkedAsNoLongerNeeded
+		{
+			set => Function.Call(Hash.SET_PED_KEEP_TASK, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets whether this <see cref="Ped"/> keeps their tasks when they are marked as no longer needed by <see cref="Entity.MarkAsNoLongerNeeded"/>.
+		/// Despite the property name, this property does not determine whether permanent events can interrupt the <see cref="Ped"/>'s tasks (e.g. seeing hated peds or getting shot at).
+		/// </summary>
+		/// <inheritdoc cref="KeepTaskWhenMarkedAsNoLongerNeeded"/>
+		[Obsolete("Ped.AlwaysKeepTask is obsolete because it does not indicate it only affects when the ped is marked as no longer needed. Use Ped.KeepTaskWhenMarkedAsNoLongerNeeded instead.")]
+
+		p
