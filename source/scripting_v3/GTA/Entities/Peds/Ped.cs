@@ -401,4 +401,53 @@ namespace GTA
 		/// <inheritdoc cref="KeepTaskWhenMarkedAsNoLongerNeeded"/>
 		[Obsolete("Ped.AlwaysKeepTask is obsolete because it does not indicate it only affects when the ped is marked as no longer needed. Use Ped.KeepTaskWhenMarkedAsNoLongerNeeded instead.")]
 
-		p
+		public bool AlwaysKeepTask
+		{
+			set => KeepTaskWhenMarkedAsNoLongerNeeded = value;
+		}
+
+		/// <summary>
+		/// Opens a list of <see cref="TaskInvoker"/> that this <see cref="Ped"/> can carry out.
+		/// </summary>
+		public TaskInvoker Task => _tasks ?? (_tasks = new TaskInvoker(this));
+
+		/// <summary>
+		/// Gets the stage of the <see cref="TaskSequence"/> this <see cref="Ped"/> is currently executing.
+		/// </summary>
+		public int TaskSequenceProgress => Function.Call<int>(Hash.GET_SEQUENCE_PROGRESS, Handle);
+
+		/// <summary>
+		/// Gets the task status of specified scripted task on this <see cref="Ped"/>.
+		/// </summary>
+		public ScriptTaskStatus GetTaskStatus(ScriptTaskNameHash taskNameHash) => Function.Call<ScriptTaskStatus>(Hash.GET_SCRIPT_TASK_STATUS, Handle, taskNameHash);
+
+		#endregion
+
+		#region Events
+
+		/// <summary>
+		/// Gets or sets the decision maker of this <see cref="Ped"/>, which determines what and how this <see cref="Ped"/> should response to events.
+		/// Events can cause <see cref="Ped"/>s to start certain tasks. You can see how decision makers are configured in <c>events.meta</c>.
+		/// </summary>
+		public DecisionMaker DecisionMaker
+		{
+			get
+			{
+				if (PedIntelligenceAddress == IntPtr.Zero || SHVDN.NativeMemory.PedIntelligenceDecisionMakerHashOffset == 0)
+				{
+					return default;
+				}
+
+				return new DecisionMaker(SHVDN.NativeMemory.ReadInt32(PedIntelligenceAddress + SHVDN.NativeMemory.PedIntelligenceDecisionMakerHashOffset));
+			}
+			set => Function.Call(Hash.SET_DECISION_MAKER, Handle, value.Hash);
+		}
+
+		/// <summary>
+		/// Sets whether permanent events are blocked for this <see cref="Ped"/>.
+		/// <para>
+		/// If set to <see langword="true" />, this <see cref="Ped"/> will no longer react to permanent events and will only do as they're told.
+		/// For example, the <see cref="Ped"/> will not flee when get shot at and they will not begin combat even if <see cref="DecisionMaker"/> specifies that seeing a hated ped should.
+		/// However, the <see cref="Ped"/> will still respond to temporary events like walking around other peds or vehicles even if this property is set to <see langword="true" />.
+		/// </para>
+		/// 
