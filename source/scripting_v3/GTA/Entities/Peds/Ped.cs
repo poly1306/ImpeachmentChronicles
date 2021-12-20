@@ -450,4 +450,53 @@ namespace GTA
 		/// For example, the <see cref="Ped"/> will not flee when get shot at and they will not begin combat even if <see cref="DecisionMaker"/> specifies that seeing a hated ped should.
 		/// However, the <see cref="Ped"/> will still respond to temporary events like walking around other peds or vehicles even if this property is set to <see langword="true" />.
 		/// </para>
-		/// 
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if permanent events are blocked; otherwise, <see langword="false" />.
+		/// </value>
+		public bool BlockPermanentEvents
+		{
+			set => Function.Call(Hash.SET_BLOCKING_OF_NON_TEMPORARY_EVENTS, Handle, value);
+		}
+
+		/// <summary>
+		/// Indicates whether this <see cref="Ped"/> has received the event of <paramref name="eventType"/>.
+		/// <see cref="EventType.Invalid"/> can be used to test if the <see cref="Ped"/> has received any event.
+		/// </summary>
+		/// <value>
+		///   <see langword="true"/> if the <see cref="Ped"/> has received the event  of <paramref name="eventType"/>; otherwise, <see langword="false" />.
+		/// </value>
+		/// <remarks>This is similar to <see cref="IsRespondingToEvent(EventType)"/>, but will work with blocking of non-temporary events with <see cref="BlockPermanentEvents"/>.</remarks>
+
+		public bool HasReceivedEvent(EventType eventType)
+		{
+			if ((int)Game.Version < (int)GameVersion.v1_0_1868_0_Steam)
+			{
+				return Function.Call<bool>(Hash.HAS_PED_RECEIVED_EVENT, Handle, GetEventTypeIndexForB1737OrOlder(eventType));
+			}
+
+			return Function.Call<bool>(Hash.HAS_PED_RECEIVED_EVENT, Handle, eventType);
+		}
+
+		/// <summary>
+		/// Indicates whether this <see cref="Ped"/> is responding to an event of <paramref name="eventType"/>.
+		/// <see cref="EventType.Invalid"/> can be used to test if the <see cref="Ped"/> is responding to any event.
+		/// </summary>
+		/// <value>
+		///   <see langword="true"/> if this <see cref="Ped"/> is responding to an event of <paramref name="eventType"/> and subsequent tasks are running; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsRespondingToEvent(EventType eventType)
+		{
+			if ((int)Game.Version < (int)GameVersion.v1_0_1868_0_Steam)
+			{
+				return Function.Call<bool>(Hash.IS_PED_RESPONDING_TO_EVENT, Handle, GetEventTypeIndexForB1737OrOlder(eventType));
+			}
+
+			return Function.Call<bool>(Hash.IS_PED_RESPONDING_TO_EVENT, Handle, eventType);
+		}
+
+		private int GetEventTypeIndexForB1737OrOlder(EventType eventType)
+		{
+			if (eventType == EventType.Incapacitated)
+			{
+				throw new ArgumentException("EventType.Incapacitated is not available in the game ve
