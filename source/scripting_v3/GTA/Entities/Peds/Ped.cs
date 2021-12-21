@@ -551,4 +551,60 @@ namespace GTA
 
 
 		/// <summary>
+		/// Indicates whether this <see cref="Ped"/> is ragdolling.
+		/// Will return <see langword="false"/> when the <see cref="Ped"/> is getting up or writhing as a part of a ragdoll task.
+		/// </summary>
+		public bool IsRagdoll => Function.Call<bool>(Hash.IS_PED_RAGDOLL, Handle);
+
+		/// <summary>
+		/// Indicates whether this <see cref="Ped"/> is running a ragdoll task which manages its ragdoll.
+		/// Will return <see langword="true"/> when <see cref="IsRagdoll"/> returns <see langword="true"/> or the <see cref="Ped"/> is getting up or writhing as a part of a ragdoll task.
+		/// </summary>
+		public bool IsRunningRagdollTask => Function.Call<bool>(Hash.IS_PED_RUNNING_RAGDOLL_TASK, Handle);
+
+		public bool CanRagdoll
+		{
+			get => Function.Call<bool>(Hash.CAN_PED_RAGDOLL, Handle);
+			set => Function.Call(Hash.SET_PED_CAN_RAGDOLL, Handle, value);
+		}
+
+		/// <summary>
+		/// Opens a list of <see cref="GTA.NaturalMotion.Euphoria"/> Helpers which can be applied to this <see cref="Ped"/>.
+		/// </summary>
+		public Euphoria Euphoria => _euphoria ?? (_euphoria = new Euphoria(this));
+
+		#endregion
+
+		#region Weapon Interaction
+
+		/// <summary>
+		/// Gets or sets how accurate this <see cref="Ped"/>s shooting ability is.
+		///  The higher the value of this property is, the more likely it is that this <see cref="Ped"/> will shoot at exactly where they are aiming at.
+		/// </summary>
+		/// <value>
+		/// The accuracy from 0 to 100, 0 being very inaccurate, which means this <see cref="Ped"/> cannot shoot at exactly where they are aiming at,
+		///  100 being perfectly accurate.
+		/// </value>
+		public int Accuracy
+		{
+			get => Function.Call<int>(Hash.GET_PED_ACCURACY, Handle);
+			set => Function.Call(Hash.SET_PED_ACCURACY, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets the rate this <see cref="Ped"/> will shoot at.
+		/// </summary>
+		/// <value>
+		/// The shoot rate from 0.0f to 1000.0f, 100.0f is the default value.
+		/// </value>
+		public int ShootRate
+		{
+			set => Function.Call(Hash.SET_PED_SHOOT_RATE, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets of sets the pattern this <see cref="Ped"/> uses to fire weapons.
+		/// </summary>
+		public FiringPattern FiringPattern
+		{
 		
