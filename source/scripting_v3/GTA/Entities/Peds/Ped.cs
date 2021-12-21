@@ -499,4 +499,56 @@ namespace GTA
 		{
 			if (eventType == EventType.Incapacitated)
 			{
-				throw new ArgumentException("EventType.Incapacitated is not available in the game ve
+				throw new ArgumentException("EventType.Incapacitated is not available in the game versions prior to v1.0.1868.0.", nameof(eventType));
+			}
+			if (eventType == EventType.ShockingBrokenGlass)
+			{
+				throw new ArgumentException("EventType.ShockingBrokenGlass is not available in the game versions prior to v1.0.1868.0.", nameof(eventType));
+			}
+
+			int eventTypeCorrected = (int)eventType;
+			if (eventTypeCorrected >= (int)EventType.ShockingCarAlarm)
+			{
+				eventTypeCorrected -= 2;
+			}
+			else if (eventTypeCorrected >= (int)EventType.LeaderEnteredCarAsDriver)
+			{
+				--eventTypeCorrected;
+			}
+			return eventTypeCorrected;
+		}
+
+		#endregion
+
+		#region Euphoria & Ragdoll
+
+		/// <inheritdoc cref="Ragdoll(int, RagdollType, bool)"/>
+		public void Ragdoll(int duration = -1, RagdollType ragdollType = RagdollType.Relax)
+		{
+			Ragdoll(duration, ragdollType, false);
+		}
+		/// <summary>
+		/// Switches this <see cref="Ped"/> to a ragdoll by starting a ragdoll task and applying to this <see cref="Ped"/>.
+		/// If <paramref name="ragdollType"/> is not set to <see cref="RagdollType.Relax"/> or <see cref="RagdollType.ScriptControl"/>, the ragdoll behavior for <see cref="RagdollType.Balance"/> will be used.
+		/// </summary>
+		/// <param name="duration">The duration how long the ragdoll task will run in milliseconds.</param>
+		/// <param name="ragdollType">The ragdoll type.</param>
+		/// <param name="forceScriptControl">
+		/// Specifies whether this <see cref="Ped"/> will not get injured or killed by being lower health than <see cref="InjuryHealthThreshold"/> or <see cref="FatalInjuryHealthThreshold"/>.
+		/// If ped's health goes lower than <see cref="InjuryHealthThreshold"/>, the ragdoll task will keep their health to <see cref="InjuryHealthThreshold"/> plus 5.0 until the task ends.
+		/// </param>
+		public void Ragdoll(int duration, RagdollType ragdollType, bool forceScriptControl = false)
+		{
+			CanRagdoll = true;
+			// Looks like 4th and 5th parameter are completely unused
+			Function.Call(Hash.SET_PED_TO_RAGDOLL, Handle, duration, duration, ragdollType, false, false, forceScriptControl);
+		}
+
+		public void CancelRagdoll()
+		{
+			Function.Call(Hash.SET_PED_TO_RAGDOLL, Handle, 1, 1, 1, false, false, false);
+		}
+
+
+		/// <summary>
+		
