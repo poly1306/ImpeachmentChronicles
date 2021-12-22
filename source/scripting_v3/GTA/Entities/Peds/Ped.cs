@@ -607,4 +607,76 @@ namespace GTA
 		/// </summary>
 		public FiringPattern FiringPattern
 		{
-		
+			get
+			{
+				if (SHVDN.NativeMemory.FiringPatternOffset == 0)
+				{
+					return 0;
+				}
+
+				var address = PedIntelligenceAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0;
+				}
+
+				return (FiringPattern)SHVDN.NativeMemory.ReadInt32(address + SHVDN.NativeMemory.FiringPatternOffset);
+			}
+			set => Function.Call(Hash.SET_PED_FIRING_PATTERN, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets a collection of all this <see cref="Ped"/>s <see cref="Weapon"/>s.
+		/// </summary>
+		public WeaponCollection Weapons => _weapons ?? (_weapons = new WeaponCollection(this));
+
+		/// <summary>
+		/// Gets the vehicle weapon this <see cref="Ped"/> is using.
+		/// <remarks>The vehicle weapon, returns <see cref="VehicleWeaponHash.Invalid"/> if this <see cref="Ped"/> isnt using a vehicle weapon.</remarks>
+		/// </summary>
+		public VehicleWeaponHash VehicleWeapon
+		{
+			get
+			{
+				unsafe
+				{
+					int hash;
+					return Function.Call<bool>(Hash.GET_CURRENT_PED_VEHICLE_WEAPON, Handle, &hash) ?
+						(VehicleWeaponHash)hash : VehicleWeaponHash.Invalid;
+				}
+			}
+			set
+			{
+				Function.Call(Hash.SET_CURRENT_PED_VEHICLE_WEAPON, Handle, value);
+			}
+		}
+
+		/// <summary>
+		/// Sets if this <see cref="Ped"/> can switch between different weapons.
+		/// </summary>
+		public bool CanSwitchWeapons
+		{
+			set => Function.Call(Hash.SET_PED_CAN_SWITCH_WEAPON, Handle, value);
+		}
+
+		#endregion
+
+		#region Vehicle Interaction
+
+		public bool IsOnBike => Function.Call<bool>(Hash.IS_PED_ON_ANY_BIKE, Handle);
+
+		public bool IsOnFoot => Function.Call<bool>(Hash.IS_PED_ON_FOOT, Handle);
+
+		public bool IsInSub => Function.Call<bool>(Hash.IS_PED_IN_ANY_SUB, Handle);
+
+		public bool IsInTaxi => Function.Call<bool>(Hash.IS_PED_IN_ANY_TAXI, Handle);
+
+		public bool IsInTrain => Function.Call<bool>(Hash.IS_PED_IN_ANY_TRAIN, Handle);
+
+		public bool IsInHeli => Function.Call<bool>(Hash.IS_PED_IN_ANY_HELI, Handle);
+
+		public bool IsInPlane => Function.Call<bool>(Hash.IS_PED_IN_ANY_PLANE, Handle);
+
+		public bool IsInFlyingVehicle => Function.Call<bool>(Hash.IS_PED_IN_FLYING_VEHICLE, Handle);
+
+		public bool IsInBoat => Function.Call<
