@@ -801,4 +801,91 @@ namespace GTA
 			get
 			{
 				var address = MemoryAddress;
-				if (address == IntPtr.Zero || SHVDN.
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.SeatIndexOffset == 0)
+				{
+					return VehicleSeat.None;
+				}
+
+				int seatIndex = (sbyte)SHVDN.NativeMemory.ReadByte(address + SHVDN.NativeMemory.SeatIndexOffset);
+				return (seatIndex >= 0 && IsInVehicle()) ? (VehicleSeat)(seatIndex - 1) : VehicleSeat.None;
+			}
+		}
+
+		#endregion
+
+		#region Driving
+
+		public float DrivingSpeed
+		{
+			set => Function.Call(Hash.SET_DRIVE_TASK_CRUISE_SPEED, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets the maximum driving speed this <see cref="Ped"/> can drive at.
+		/// </summary>
+		public float MaxDrivingSpeed
+		{
+			set => Function.Call(Hash.SET_DRIVE_TASK_MAX_CRUISE_SPEED, Handle, value);
+		}
+
+		public DrivingStyle DrivingStyle
+		{
+			set => Function.Call(Hash.SET_DRIVE_TASK_DRIVING_STYLE, Handle, value);
+		}
+
+		public VehicleDrivingFlags VehicleDrivingFlags
+		{
+			set => Function.Call(Hash.SET_DRIVE_TASK_DRIVING_STYLE, Handle, value);
+		}
+
+		#endregion
+
+		#region Jacking
+
+		public bool IsJacking => Function.Call<bool>(Hash.IS_PED_JACKING, Handle);
+
+		public bool IsBeingJacked => Function.Call<bool>(Hash.IS_PED_BEING_JACKED, Handle);
+
+		/// <summary>
+		/// Sets a value indicating whether this <see cref="Ped"/> will stay in the vehicle when the driver gets jacked.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if <see cref="Ped"/> stays in vehicle when jacked; otherwise, <see langword="false" />.
+		/// </value>
+		public bool StaysInVehicleWhenJacked
+		{
+			set => Function.Call(Hash.SET_PED_STAY_IN_VEHICLE_WHEN_JACKED, Handle, value);
+		}
+
+		public Ped Jacker
+		{
+			get
+			{
+				var ped = new Ped(Function.Call<int>(Hash.GET_PEDS_JACKER, Handle));
+				return ped.Exists() ? ped : null;
+			}
+		}
+
+		public Ped JackTarget
+		{
+			get
+			{
+				var ped = new Ped(Function.Call<int>(Hash.GET_JACK_TARGET, Handle));
+				return ped.Exists() ? ped : null;
+			}
+		}
+
+		#endregion
+
+		#region Parachuting
+
+		public bool IsInParachuteFreeFall => Function.Call<bool>(Hash.IS_PED_IN_PARACHUTE_FREE_FALL, Handle);
+
+		public void OpenParachute()
+		{
+			Function.Call(Hash.FORCE_PED_TO_OPEN_PARACHUTE, Handle);
+		}
+
+		public ParachuteState ParachuteState => Function.Call<ParachuteState>(Hash.GET_PED_PARACHUTE_STATE, Handle);
+
+		public Pa
