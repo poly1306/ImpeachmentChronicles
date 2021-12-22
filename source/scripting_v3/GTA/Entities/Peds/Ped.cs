@@ -679,4 +679,65 @@ namespace GTA
 
 		public bool IsInFlyingVehicle => Function.Call<bool>(Hash.IS_PED_IN_FLYING_VEHICLE, Handle);
 
-		public bool IsInBoat => Function.Call<
+		public bool IsInBoat => Function.Call<bool>(Hash.IS_PED_IN_ANY_BOAT, Handle);
+
+		public bool IsInPoliceVehicle => Function.Call<bool>(Hash.IS_PED_IN_ANY_POLICE_VEHICLE, Handle);
+
+		public bool IsGettingIntoVehicle => Function.Call<bool>(Hash.IS_PED_GETTING_INTO_A_VEHICLE, Handle);
+
+		public bool IsExitingVehicle => Function.Call<bool>(Hash.GET_IS_TASK_ACTIVE, Handle, 2 /* CTaskExitVehicle */);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Ped"/> is jumping out of their vehicle.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Ped"/> is jumping out of their vehicle; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsJumpingOutOfVehicle => Function.Call<bool>(Hash.IS_PED_JUMPING_OUT_OF_VEHICLE, Handle);
+
+		public bool IsTryingToEnterALockedVehicle => Function.Call<bool>(Hash.IS_PED_TRYING_TO_ENTER_A_LOCKED_VEHICLE, Handle);
+
+		public bool CanBeDraggedOutOfVehicle
+		{
+			set => Function.Call(Hash.SET_PED_CAN_BE_DRAGGED_OUT, Handle, value);
+		}
+
+		public bool CanBeKnockedOffBike
+		{
+			set => Function.Call(Hash.SET_PED_CAN_BE_KNOCKED_OFF_VEHICLE, Handle, !value);
+		}
+
+		public bool CanFlyThroughWindscreen
+		{
+			get => Function.Call<bool>(Hash.GET_PED_CONFIG_FLAG, Handle, 32, true);
+			set => Function.Call(Hash.SET_PED_CONFIG_FLAG, Handle, 32, value);
+		}
+
+		public bool IsInVehicle()
+		{
+			return Function.Call<bool>(Hash.IS_PED_IN_ANY_VEHICLE, Handle, 0);
+		}
+		public bool IsInVehicle(Vehicle vehicle)
+		{
+			return Function.Call<bool>(Hash.IS_PED_IN_VEHICLE, Handle, vehicle.Handle, 0);
+		}
+
+		public bool IsSittingInVehicle()
+		{
+			return Function.Call<bool>(Hash.IS_PED_SITTING_IN_ANY_VEHICLE, Handle);
+		}
+		public bool IsSittingInVehicle(Vehicle vehicle)
+		{
+			return Function.Call<bool>(Hash.IS_PED_SITTING_IN_VEHICLE, Handle, vehicle.Handle);
+		}
+
+		public void SetIntoVehicle(Vehicle vehicle, VehicleSeat seat)
+		{
+			Function.Call(Hash.SET_PED_INTO_VEHICLE, Handle, vehicle.Handle, seat);
+		}
+
+		/// <summary>
+		/// Gets the last <see cref="Vehicle"/> this <see cref="Ped"/> used.
+		/// </summary>
+		/// <remarks>returns <see langword="null" /> if the last vehicle doesn't exist.</remarks>
+		public
