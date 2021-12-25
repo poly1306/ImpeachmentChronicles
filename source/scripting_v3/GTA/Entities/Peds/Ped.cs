@@ -1177,4 +1177,91 @@ namespace GTA
 					return 0.0f;
 				}
 
-				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.InjuryHealthThr
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.InjuryHealthThresholdOffset);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.InjuryHealthThresholdOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.InjuryHealthThresholdOffset, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the fatal injury health threshold for this <see cref="Ped"/>.
+		/// The pedestrian health will be set to 0.0 when it drops below this value.
+		/// </summary>
+		/// <value>
+		/// The fatal injury health threshold. Should be below <see cref="Entity.MaxHealth"/>.
+		/// </value>
+		/// <remarks>
+		/// Note on player controlled pedestrians: One of the game scripts will consider the player wasted when their health drops below <see cref="Ped.InjuryHealthThreshold"/>, regardless of this setting.
+		/// </remarks>
+		public float FatalInjuryHealthThreshold
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.FatalInjuryHealthThresholdOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.FatalInjuryHealthThresholdOffset);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.FatalInjuryHealthThresholdOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.FatalInjuryHealthThresholdOffset, value);
+			}
+		}
+
+		public Vector3 LastWeaponImpactPosition
+		{
+			get
+			{
+				NativeVector3 position;
+				unsafe
+				{
+					if (Function.Call<bool>(Hash.GET_PED_LAST_WEAPON_IMPACT_COORD, Handle, &position))
+					{
+						return position;
+					}
+				}
+				return Vector3.Zero;
+			}
+		}
+
+		#endregion
+
+		#region Relationship
+
+		public Relationship GetRelationshipWithPed(Ped ped)
+		{
+			return (Relationship)Function.Call<int>(Hash.GET_RELATIONSHIP_BETWEEN_PEDS, Handle, ped.Handle);
+		}
+
+		public RelationshipGroup RelationshipGroup
+		{
+			get => new RelationshipGroup(Function.Call<int>(Hash.GET_PED_RELATIONSHIP_GROUP_HASH, Handle));
+			set => Function.Call(Hash.SET_PED_RELATIONSHIP_GROUP_HASH, Handle, value.Hash);
+		}
+
+		#endregion
+
+		#region Perception
+
+		public float SeeingRange
+		{
+			get
+			{
+				if (SHVDN.NativeMemory.SeeingRangeOff
