@@ -939,4 +939,68 @@ namespace GTA
 
 		public bool IsBeingStunned => Function.Call<bool>(Hash.IS_PED_BEING_STUNNED, Handle);
 
-		public bool IsBeingStealthKilled => Function.Call<bool>(Hash.IS_PED_BEING_STEALTH_KILLED
+		public bool IsBeingStealthKilled => Function.Call<bool>(Hash.IS_PED_BEING_STEALTH_KILLED, Handle);
+
+		public bool IsPerformingStealthKill => Function.Call<bool>(Hash.IS_PED_PERFORMING_STEALTH_KILL, Handle);
+
+		public bool IsInCover => Function.Call<bool>(Hash.IS_PED_IN_COVER, Handle, false);
+
+		public bool IsInCoverFacingLeft => Function.Call<bool>(Hash.IS_PED_IN_COVER_FACING_LEFT, Handle);
+
+		public bool CanBeTargetted
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.PedDropsWeaponsWhenDeadOffset == 0)
+				{
+					return false;
+				}
+
+				return !SHVDN.NativeMemory.IsBitSet(address + SHVDN.NativeMemory.PedDropsWeaponsWhenDeadOffset, 9);
+			}
+			set => Function.Call(Hash.SET_PED_CAN_BE_TARGETTED, Handle, value);
+		}
+
+		public bool CanBeShotInVehicle
+		{
+			set => Function.Call(Hash.SET_PED_CAN_BE_SHOT_IN_VEHICLE, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Ped"/> was killed by a stealth attack.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if this <see cref="Ped"/> was killed by stealth; otherwise, <see langword="false" />.
+		/// </value>
+		public bool WasKilledByStealth => Function.Call<bool>(Hash.WAS_PED_KILLED_BY_STEALTH, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Ped"/> was killed by a takedown.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Ped"/> was killed by a takedown; otherwise, <see langword="false" />.
+		/// </value>
+		public bool WasKilledByTakedown => Function.Call<bool>(Hash.WAS_PED_KILLED_BY_TAKEDOWN, Handle);
+
+		public Ped MeleeTarget
+		{
+			get
+			{
+				var ped = new Ped(Function.Call<int>(Hash.GET_MELEE_TARGET_FOR_PED, Handle));
+				return ped.Exists() ? ped : null;
+			}
+		}
+
+		public bool IsInCombatAgainst(Ped target)
+		{
+			return Function.Call<bool>(Hash.IS_PED_IN_COMBAT, Handle, target.Handle);
+		}
+
+		/// <summary>
+		/// Gets the <see cref="Entity"/> that killed this <see cref="Ped"/>.
+		/// </summary>
+		public Entity Killer => FromHandle(Function.Call<int>(Hash.GET_PED_SOURCE_OF_DEATH, Handle));
+
+		/// <summary>
+		/// Gets the <see cref="WeaponHash"/> that this <see cref="Ped"/> is killed with. The return value is not necessarily a weapon hash for a human <see cref="P
