@@ -1110,4 +1110,71 @@ namespace GTA
 		}
 
 		/// <summary>
-		/// Sets whether this <see cref="Ped"
+		/// Sets whether this <see cref="Ped"/> will drop the equipped weapon when they get killed.
+		///  Note that <see cref="Ped"/>s will drop only their equipped weapon when they get killed.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if <see cref="Ped"/> drops the equipped weapon when killed; otherwise, <see langword="false" />.
+		/// </value>
+		public bool DropsEquippedWeaponOnDeath
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.PedDropsWeaponsWhenDeadOffset == 0)
+				{
+					return false;
+				}
+
+				return !SHVDN.NativeMemory.IsBitSet(address + SHVDN.NativeMemory.PedDropsWeaponsWhenDeadOffset, 14);
+			}
+			set => Function.Call(Hash.SET_PED_DROPS_WEAPONS_WHEN_DEAD, Handle, value);
+		}
+
+		public void ApplyDamage(int damageAmount)
+		{
+			Function.Call(Hash.APPLY_DAMAGE_TO_PED, Handle, damageAmount, true);
+		}
+
+		public override bool HasBeenDamagedBy(WeaponHash weapon)
+		{
+			return Function.Call<bool>(Hash.HAS_PED_BEEN_DAMAGED_BY_WEAPON, Handle, weapon, 0);
+		}
+
+		public override bool HasBeenDamagedByAnyWeapon()
+		{
+			return Function.Call<bool>(Hash.HAS_PED_BEEN_DAMAGED_BY_WEAPON, Handle, 0, 2);
+		}
+
+		public override bool HasBeenDamagedByAnyMeleeWeapon()
+		{
+			return Function.Call<bool>(Hash.HAS_PED_BEEN_DAMAGED_BY_WEAPON, Handle, 0, 1);
+		}
+
+		public override void ClearLastWeaponDamage()
+		{
+			Function.Call(Hash.CLEAR_PED_LAST_WEAPON_DAMAGE, Handle);
+		}
+
+		/// <summary>
+		/// Gets or sets the injury health threshold for this <see cref="Ped"/>.
+		/// The pedestrian is considered injured when its health drops below this value.
+		/// The pedestrian dies on attacks when its health is below this value.
+		/// </summary>
+		/// <value>
+		/// The injury health threshold. Should be below <see cref="Entity.MaxHealth"/>.
+		/// </value>
+		/// <remarks>
+		/// Note on player controlled pedestrians: One of the game scripts will consider the player wasted when their health drops below this setting value.
+		/// </remarks>
+		public float InjuryHealthThreshold
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.InjuryHealthThresholdOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.InjuryHealthThr
