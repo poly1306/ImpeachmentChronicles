@@ -1264,4 +1264,110 @@ namespace GTA
 		{
 			get
 			{
-				if (SHVDN.NativeMemory.SeeingRangeOff
+				if (SHVDN.NativeMemory.SeeingRangeOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				var address = PedIntelligenceAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.SeeingRangeOffset);
+			}
+			set => Function.Call(Hash.SET_PED_SEEING_RANGE, Handle, value);
+		}
+
+		public float HearingRange
+		{
+			get
+			{
+				if (SHVDN.NativeMemory.HearingRangeOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				var address = PedIntelligenceAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.HearingRangeOffset);
+			}
+			set => Function.Call(Hash.SET_PED_HEARING_RANGE, Handle, value);
+		}
+
+		public float VisualFieldMinAngle
+		{
+			get
+			{
+				if (SHVDN.NativeMemory.VisualFieldMinAngleOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				var address = PedIntelligenceAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VisualFieldMinAngleOffset);
+			}
+			set => Function.Call(Hash.SET_PED_VISUAL_FIELD_MIN_ANGLE, Handle, value);
+		}
+
+		public float VisualFieldMaxAngle
+		{
+			get
+			{
+				if (SHVDN.NativeMemory.VisualFieldMaxAngleOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				var address = PedIntelligenceAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VisualFieldMaxAngleOffset);
+			}
+			set => Function.Call(Hash.SET_PED_VISUAL_FIELD_MAX_ANGLE, Handle, value);
+		}
+
+		public float VisualFieldMinElevationAngle
+		{
+			get
+			{
+				if (SHVDN.NativeMemory.VisualFieldMinElevationAngleOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				var address = PedIntelligenceAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VisualFieldMinElevationAngleOffset);
+			}
+			set => Function.Call(Hash.SET_PED_VISUAL_FIELD_MIN_ELEVATION_ANGLE, Handle, value);
+		}
+
+		public float VisualFieldMaxElevationAngle
+		{
+			get
+			{
+				if (SHVDN.NativeMemory.VisualFieldMaxElevationAngleOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				var address = PedIntelligenceAddress;
+			
