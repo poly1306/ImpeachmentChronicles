@@ -1044,4 +1044,70 @@ namespace GTA
 
 		/// <summary>
 		/// <para>Clears the time record when this <see cref="Ped"/> is killed. Can be useful after resurrecting this <see cref="Ped"/>.</para>
-		/// <para>Internally, when a <see cref="Ped"/> killed and the value fo
+		/// <para>Internally, when a <see cref="Ped"/> killed and the value for the time of death in the instance of this <see cref="Ped"/> is not <c>0</c>, the game does not write the game time value for the time of death.</para>
+		/// </summary>
+		public void ClearTimeOfDeathRecord()
+		{
+			var address = MemoryAddress;
+			if (address == IntPtr.Zero || SHVDN.NativeMemory.PedTimeOfDeathOffset == 0)
+			{
+				return;
+			}
+
+			SHVDN.NativeMemory.WriteInt32(address + SHVDN.NativeMemory.PedTimeOfDeathOffset, 0);
+		}
+
+		#endregion
+
+		#region Damaging
+
+		public bool CanWrithe
+		{
+			get => !GetConfigFlag(281);
+			set => SetConfigFlag(281, !value);
+		}
+
+		/// <summary>
+		/// Gets or Sets whether this <see cref="Ped"/> can suffer critical damage (which deals 1000 times base damages to non-player characters with default weapon configs) when bullets hit this <see cref="Ped"/>'s head bone or its child bones.
+		///  If this <see cref="Ped"/> can't suffer critical damage, they will take base damage of weapons when bullets hit their head bone or its child bones, just like when bullets hit a bone other than their head bone, its child bones, or limb bones.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if this <see cref="Ped"/> can suffer critical damage; otherwise, <see langword="false" />.
+		/// </value>
+		public bool CanSufferCriticalHits
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.PedSuffersCriticalHitOffset == 0)
+				{
+					return false;
+				}
+
+				return !SHVDN.NativeMemory.IsBitSet(address + SHVDN.NativeMemory.PedSuffersCriticalHitOffset, 2);
+			}
+			set => Function.Call(Hash.SET_PED_SUFFERS_CRITICAL_HITS, Handle, value);
+		}
+
+		public bool DiesOnLowHealth
+		{
+			set => Function.Call(Hash.SET_PED_DIES_WHEN_INJURED, Handle, value);
+		}
+
+		public bool DiesInstantlyInWater
+		{
+			set => Function.Call(Hash.SET_PED_DIES_INSTANTLY_IN_WATER, Handle, value);
+		}
+
+		public bool DrownsInWater
+		{
+			set => Function.Call(Hash.SET_PED_DIES_IN_WATER, Handle, value);
+		}
+
+		public bool DrownsInSinkingVehicle
+		{
+			set => Function.Call(Hash.SET_PED_DIES_IN_SINKING_VEHICLE, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets whether this <see cref="Ped"
