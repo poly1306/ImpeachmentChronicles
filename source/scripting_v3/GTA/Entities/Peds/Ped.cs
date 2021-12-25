@@ -888,4 +888,55 @@ namespace GTA
 
 		public ParachuteState ParachuteState => Function.Call<ParachuteState>(Hash.GET_PED_PARACHUTE_STATE, Handle);
 
-		public Pa
+		public ParachuteLandingType ParachuteLandingType => Function.Call<ParachuteLandingType>(Hash.GET_PED_PARACHUTE_LANDING_TYPE, Handle);
+
+		#endregion
+
+		#region Combat
+
+		public bool IsEnemy
+		{
+			set => Function.Call(Hash.SET_PED_AS_ENEMY, Handle, value);
+		}
+
+		public bool IsPriorityTargetForEnemies
+		{
+			set => Function.Call(Hash.SET_ENTITY_IS_TARGET_PRIORITY, Handle, value, 0);
+		}
+
+		public bool IsFleeing => Function.Call<bool>(Hash.IS_PED_FLEEING, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Ped"/> is injured (<see cref="Entity.Health"/> of the <see cref="Ped"/> is lower than <see cref="InjuryHealthThreshold"/>) or does not exist.
+		/// Can be called safely to check if <see cref="Ped"/>s exist and are not injured without calling <see cref="Exists"/>.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> this <see cref="Ped"/> is injured or does not exist; otherwise, <see langword="false" />.
+		/// </value>
+		/// <seealso cref="Entity.IsDead"/>
+		/// <seealso cref="Exists"/>
+		public bool IsInjured => Function.Call<bool>(Hash.IS_PED_INJURED, Handle);
+
+		public bool IsInStealthMode => Function.Call<bool>(Hash.GET_PED_STEALTH_MOVEMENT, Handle);
+
+		public bool IsInCombat => Function.Call<bool>(Hash.IS_PED_IN_COMBAT, Handle);
+
+		public bool IsInMeleeCombat => Function.Call<bool>(Hash.IS_PED_IN_MELEE_COMBAT, Handle);
+
+		public bool IsAiming => GetConfigFlag(78);
+
+		public bool IsPlantingBomb => Function.Call<bool>(Hash.IS_PED_PLANTING_BOMB, Handle);
+
+		public bool IsShooting => Function.Call<bool>(Hash.IS_PED_SHOOTING, Handle);
+
+		public bool IsReloading => Function.Call<bool>(Hash.IS_PED_RELOADING, Handle);
+
+		public bool IsDoingDriveBy => Function.Call<bool>(Hash.IS_PED_DOING_DRIVEBY, Handle);
+
+		public bool IsGoingIntoCover => Function.Call<bool>(Hash.IS_PED_GOING_INTO_COVER, Handle);
+
+		public bool IsAimingFromCover => Function.Call<bool>(Hash.IS_PED_AIMING_FROM_COVER, Handle);
+
+		public bool IsBeingStunned => Function.Call<bool>(Hash.IS_PED_BEING_STUNNED, Handle);
+
+		public bool IsBeingStealthKilled => Function.Call<bool>(Hash.IS_PED_BEING_STEALTH_KILLED
