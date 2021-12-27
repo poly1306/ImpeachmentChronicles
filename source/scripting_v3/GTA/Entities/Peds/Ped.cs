@@ -1370,4 +1370,92 @@ namespace GTA
 				}
 
 				var address = PedIntelligenceAddress;
-			
+				if (address == IntPtr.Zero)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VisualFieldMaxElevationAngleOffset);
+			}
+			set => Function.Call(Hash.SET_PED_VISUAL_FIELD_MAX_ELEVATION_ANGLE, Handle, value);
+		}
+
+		public float VisualFieldPeripheralRange
+		{
+			get
+			{
+				if (SHVDN.NativeMemory.VisualFieldPeripheralRangeOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				var address = PedIntelligenceAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VisualFieldPeripheralRangeOffset);
+			}
+			set => Function.Call(Hash.SET_PED_VISUAL_FIELD_PERIPHERAL_RANGE, Handle, value);
+		}
+
+		public float VisualFieldCenterAngle
+		{
+			get
+			{
+				if (SHVDN.NativeMemory.VisualFieldCenterAngleOffset == 0)
+				{
+					return 0.0f;
+				}
+
+				var address = PedIntelligenceAddress;
+				if (address == IntPtr.Zero)
+				{
+					return 0.0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VisualFieldCenterAngleOffset);
+			}
+			set => Function.Call(Hash.SET_PED_VISUAL_FIELD_CENTER_ANGLE, Handle, value);
+		}
+
+		#endregion
+
+		#region Group
+
+		/// <summary>
+		/// Gets if this <see cref="Ped"/> is in a <see cref="PedGroup"/>.
+		/// </summary>
+		public bool IsInGroup => Function.Call<bool>(Hash.IS_PED_IN_GROUP, Handle);
+
+		public void LeaveGroup()
+		{
+			Function.Call(Hash.REMOVE_PED_FROM_GROUP, Handle);
+		}
+
+		public bool NeverLeavesGroup
+		{
+			set => Function.Call(Hash.SET_PED_NEVER_LEAVES_GROUP, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets the PedGroup this <see cref="Ped"/> is in.
+		/// </summary>
+		public PedGroup PedGroup => IsInGroup ? new PedGroup(Function.Call<int>(Hash.GET_PED_GROUP_INDEX, Handle, false)) : null;
+
+		#endregion
+
+		#region Speech & Animation
+
+		public bool CanPlayGestures
+		{
+			set => Function.Call(Hash.SET_PED_CAN_PLAY_GESTURE_ANIMS, Handle, value);
+		}
+
+		public bool IsPainAudioEnabled
+		{
+			set => Function.Call(Hash.DISABLE_PED_PAIN_AUDIO, Handle, !value);
+		}
+
+		public bool IsAmbientSpeechPlaying => Function.Call<bool>(Hash.IS_AMBIENT_SPEECH_PLAYIN
