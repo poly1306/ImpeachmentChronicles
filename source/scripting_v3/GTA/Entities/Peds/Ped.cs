@@ -1458,4 +1458,62 @@ namespace GTA
 			set => Function.Call(Hash.DISABLE_PED_PAIN_AUDIO, Handle, !value);
 		}
 
-		public bool IsAmbientSpeechPlaying => Function.Call<bool>(Hash.IS_AMBIENT_SPEECH_PLAYIN
+		public bool IsAmbientSpeechPlaying => Function.Call<bool>(Hash.IS_AMBIENT_SPEECH_PLAYING, Handle);
+
+		public bool IsScriptedSpeechPlaying => Function.Call<bool>(Hash.IS_SCRIPTED_SPEECH_PLAYING, Handle);
+
+		public bool IsAnySpeechPlaying => Function.Call<bool>(Hash.IS_ANY_SPEECH_PLAYING, Handle);
+
+		public bool IsAmbientSpeechEnabled => !Function.Call<bool>(Hash.IS_AMBIENT_SPEECH_DISABLED, Handle);
+
+		public void PlayAmbientSpeech(string speechName, SpeechModifier modifier = SpeechModifier.Standard)
+		{
+			if (modifier < 0 || (int)modifier >= _speechModifierNames.Length)
+			{
+				throw new ArgumentOutOfRangeException(nameof(modifier));
+			}
+
+			Function.Call(Hash.PLAY_PED_AMBIENT_SPEECH_NATIVE, Handle, speechName, _speechModifierNames[(int)modifier]);
+		}
+		public void PlayAmbientSpeech(string speechName, string voiceName, SpeechModifier modifier = SpeechModifier.Standard)
+		{
+			if (modifier < 0 || (int)modifier >= _speechModifierNames.Length)
+			{
+				throw new ArgumentOutOfRangeException(nameof(modifier));
+			}
+
+			Function.Call(Hash.PLAY_PED_AMBIENT_SPEECH_WITH_VOICE_NATIVE, Handle, speechName, voiceName, _speechModifierNames[(int)modifier], 0);
+		}
+
+		/// <summary>
+		/// Sets the voice to use when this <see cref="Ped"/> speaks.
+		/// </summary>
+		public string Voice
+		{
+			set => Function.Call(Hash.SET_AMBIENT_VOICE_NAME, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets the animation dictionary or set this <see cref="Ped"/> should use or <see langword="null" /> to clear it.
+		/// </summary>
+		public string MovementAnimationSet
+		{
+			set
+			{
+				if (value == null)
+				{
+					Function.Call(Hash.RESET_PED_MOVEMENT_CLIPSET, Handle, 0.25f);
+					Task.ClearAll();
+				}
+				else
+				{
+					// Movement sets can be applied from animation dictionaries and animation sets (also clip sets but they use the same native as animation sets).
+					// So check if the string is a valid dictionary, if so load it as such. Otherwise load it as an animation set.
+					bool isDict = Function.Call<bool>(Hash.DOES_ANIM_DICT_EXIST, value);
+
+					Function.Call(isDict ? Hash.REQUEST_ANIM_DICT : Hash.REQUEST_ANIM_SET, value);
+					var endtime = DateTime.UtcNow + new TimeSpan(0, 0, 0, 0, 1000);
+
+					while (!Function.Call<bool>(isDict ? Hash.HAS_ANIM_DICT_LOADED : Hash.HAS_ANIM_SET_LOADED, value))
+					{
+	
