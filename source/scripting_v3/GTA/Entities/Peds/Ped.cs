@@ -1516,4 +1516,49 @@ namespace GTA
 
 					while (!Function.Call<bool>(isDict ? Hash.HAS_ANIM_DICT_LOADED : Hash.HAS_ANIM_SET_LOADED, value))
 					{
-	
+						Script.Yield();
+
+						if (DateTime.UtcNow >= endtime)
+						{
+							return;
+						}
+					}
+
+					Function.Call(Hash.SET_PED_MOVEMENT_CLIPSET, Handle, value, 0.25f);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Forces
+
+		/// <summary>
+		/// Applies a world force to this <see cref="Entity"/> using world offset.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceInternal(Vector3, Vector3, ForceType, RagdollComponent, bool, bool, bool, bool, bool)"/>
+		public void ApplyWorldForceWorldOffset(Vector3 force, Vector3 offset, ForceType forceType, RagdollComponent component, bool scaleByMass, bool triggerAudio = false, bool scaleByTimeScale = true)
+		{
+			ApplyForceInternal(force, offset, forceType, component, false, false, scaleByMass, triggerAudio, scaleByTimeScale);
+		}
+		/// <summary>
+		/// Applies a world force to this <see cref="Entity"/> using relative offset.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceInternal(Vector3, Vector3, ForceType, RagdollComponent, bool, bool, bool, bool, bool)"/>
+		public void ApplyWorldForceRelativeOffset(Vector3 force, Vector3 offset, ForceType forceType, RagdollComponent component, bool scaleByMass, bool triggerAudio = false, bool scaleByTimeScale = true)
+		{
+			ApplyForceInternal(force, offset, forceType, component, false, true, scaleByMass, triggerAudio, scaleByTimeScale);
+		}
+		/// <summary>
+		/// Applies a relative force to this <see cref="Entity"/> using world offset.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceInternal(Vector3, Vector3, ForceType, RagdollComponent, bool, bool, bool, bool, bool)"/>
+		public void ApplyRelativeForceWorldOffset(Vector3 force, Vector3 offset, ForceType forceType, RagdollComponent component, bool scaleByMass, bool triggerAudio = false, bool scaleByTimeScale = true)
+		{
+			ApplyForceInternal(force, offset, forceType, component, true, false, scaleByMass, triggerAudio, scaleByTimeScale);
+		}
+		/// <summary>
+		/// Applies a relative force to this <see cref="Entity"/> using relative offset.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceInternal(Vector3, Vector3, ForceType, RagdollComponent, bool, bool, bool, bool, bool)"/>
+		public void ApplyRelativeForceRelativeOffset(Vector
