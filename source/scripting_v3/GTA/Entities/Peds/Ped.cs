@@ -1588,4 +1588,33 @@ namespace GTA
 		/// </param>
 		/// <param name="triggerAudio">
 		/// <para>Specifies whether to play audio events related to the force being applied. The sound will play only if the entity type is <see cref="Vehicle"/> and will play a suspension squeal depending on the magnitude of the force.</para>
-		/// <para
+		/// <para>The sound will play even if regardless of <see cref="ForceType"/> (even with a value other than between 0 to 5).</para>
+		/// </param>
+		/// <param name="scaleByTimeScale">
+		/// <para>Specifies whether scale the force by the current time scale (max: <c>1.0f</c>).</para>
+		///	<para>Only affects when <paramref name="forceType"/> is <see cref="ForceType.InternalImpulse"/> or <see cref="ForceType.ExternalImpulse"/>.</para>
+		/// </param>
+		/// <exception cref="System.ArgumentOutOfRangeException">Thrown when <paramref name="component"/> not a value defined in <see cref="RagdollComponent"/>.</exception>
+		private void ApplyForceInternal(Vector3 force, Vector3 offset, ForceType forceType, RagdollComponent component, bool relativeForce, bool relativeOffset, bool scaleByMass, bool triggerAudio = false, bool scaleByTimeScale = true)
+		{
+			// The game can crash the game if component value is out of bound
+			// The native doesn't check the current frag type child count when access to the frag type child for the corresponding component index if the entity is ped
+			if ((int)component < (int)RagdollComponent.Buttocks || (int)component > (int)RagdollComponent.Head)
+			{
+				throw new ArgumentOutOfRangeException(nameof(component));
+			}
+
+			Function.Call(Hash.APPLY_FORCE_TO_ENTITY, Handle, forceType, force.X, force.Y, force.Z, offset.X, offset.Y, offset.Z, component, relativeForce, relativeOffset, scaleByMass, triggerAudio, scaleByTimeScale);
+		}
+
+		/// <summary>
+		/// Applies a world force to the center of mass of this <see cref="Entity"/>.
+		/// <paramref name="forceType"/> must not be <see cref="ForceType.ExternalForce"/> or <see cref="ForceType.ExternalImpulse"/>.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceCenterOfMassInternal(Vector3, ForceType, RagdollComponent, bool, bool, bool)"/>
+		public void ApplyWorldForceCenterOfMass(Vector3 force, ForceType forceType, RagdollComponent component, bool scaleByMass, bool applyToChildren = false)
+		{
+			ApplyForceCenterOfMassInternal(force, forceType, component, false, scaleByMass, applyToChildren);
+		}
+		/// <summary>
+		/// Applies a relative force to the center of mass of this <see c
