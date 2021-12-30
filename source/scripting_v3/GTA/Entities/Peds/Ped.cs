@@ -1642,4 +1642,40 @@ namespace GTA
 		/// <para>If <see langword="false"/>, force will be applied directly and it's effect will depend on the mass of the entity. For example, force passed in is a proper force in Newtons (force) or a step change in momentum <c>kg*m/s</c> (impulse).</para>
 		/// <para>
 		/// In other words, scaling by mass is probably easier in most situations -
-		/// if the mass of the object changes it's behaviour shouldn't, and it's easier to picture the effect because an acceleration rate of <c>10.0</c> is approximately the same as gravity (<c>9.81</c> to be more precis
+		/// if the mass of the object changes it's behaviour shouldn't, and it's easier to picture the effect because an acceleration rate of <c>10.0</c> is approximately the same as gravity (<c>9.81</c> to be more precise).
+		/// </para>
+		/// </param>
+		/// <param name="applyToChildren">Specifies whether to apply force to children components as well as the speficied component.</param>
+		/// <exception cref="System.ArgumentException">Thrown when <paramref name="forceType"/> is set to <see cref="ForceType.ExternalForce"/> or <see cref="ForceType.ExternalImpulse"/>, which is not supported by this method.</exception>
+		/// <exception cref="System.ArgumentOutOfRangeException">Thrown when <paramref name="component"/> not a value defined in <see cref="RagdollComponent"/>.</exception>
+		private void ApplyForceCenterOfMassInternal(Vector3 force, ForceType forceType, RagdollComponent component, bool relativeForce, bool scaleByMass, bool applyToChildren = false)
+		{
+			// The native won't apply the force if apply force type is one of the external types
+			if (forceType == ForceType.ExternalForce && forceType == ForceType.ExternalImpulse)
+			{
+				throw new ArgumentException(nameof(forceType), "ForceType.ExternalForce and ForceType.ExternalImpulse are not supported.");
+			}
+			// The game can crash the game if component value is out of bound
+			// The native doesn't check the current frag type child count when access to the frag type child for the corresponding component index if the entity is ped
+			if ((int)component < (int)RagdollComponent.Buttocks || (int)component > (int)RagdollComponent.Head)
+			{
+				throw new ArgumentOutOfRangeException(nameof(component));
+			}
+
+			Function.Call(Hash.APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS, Handle, forceType, force.X, force.Y, force.Z, component, relativeForce, scaleByMass, applyToChildren);
+		}
+
+		#endregion
+
+		public static PedHash[] GetAllModels()
+		{
+			return SHVDN.NativeMemory.PedModels.Select(x => (PedHash)x).ToArray();
+		}
+		/// <summary>
+		/// Gets an <c>array</c> of all loaded <see cref="PedHash"/>s that is appropriate to spawn as ambient vehicles.
+		/// The result array can contains animal hashes, which CREATE_RANDOM_PED excludes to spawn.
+		/// All the model hashes of the elements are loaded and the <see cref="Ped"/>s with the model hashes can be spawned immediately.
+		/// </summary>
+		public static PedHash[] GetAllLoadedModelsAppropriateForAmbientPeds()
+		{
+			return SHVDN.NativeM
