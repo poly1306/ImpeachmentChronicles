@@ -1678,4 +1678,9 @@ namespace GTA
 		/// </summary>
 		public static PedHash[] GetAllLoadedModelsAppropriateForAmbientPeds()
 		{
-			return SHVDN.NativeM
+			return SHVDN.NativeMemory.GetLoadedAppropriatePedHashes()
+				.Select(x => (PedHash)x)
+				.ToArray();
+		}
+	}
+}
