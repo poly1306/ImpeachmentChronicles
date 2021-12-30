@@ -1617,4 +1617,29 @@ namespace GTA
 			ApplyForceCenterOfMassInternal(force, forceType, component, false, scaleByMass, applyToChildren);
 		}
 		/// <summary>
-		/// Applies a relative force to the center of mass of this <see c
+		/// Applies a relative force to the center of mass of this <see cref="Entity"/>.
+		/// <paramref name="forceType"/> must not be <see cref="ForceType.ExternalForce"/> or <see cref="ForceType.ExternalImpulse"/>.
+		/// </summary>
+		/// <inheritdoc cref="ApplyForceCenterOfMassInternal(Vector3, ForceType, RagdollComponent, bool, bool, bool)"/>
+		public void ApplyRelativeForceCenterOfMass(Vector3 force, ForceType forceType, RagdollComponent component, bool scaleByMass, bool applyToChildren = false)
+		{
+			ApplyForceCenterOfMassInternal(force, forceType, component, true, scaleByMass, applyToChildren);
+		}
+		/// <summary>
+		/// Applies a force to the center of mass of this <see cref="Entity"/>.
+		/// <paramref name="forceType"/> must not be <see cref="ForceType.ExternalForce"/> or <see cref="ForceType.ExternalImpulse"/>.
+		/// </summary>
+		/// <param name="force">The force to be applied.</param>
+		/// <param name="forceType">Type of the force to apply.</param>
+		/// <param name="component">Component of the entity to apply the force.</param>
+		/// <param name="relativeForce">
+		/// Specifies whether the force vector passed in is in relative or world coordinates.
+		/// Relative coordinates (<see langword="true"/>) means the force will get automatically transformed into world space before being applied.
+		/// </param>
+		/// <param name="scaleByMass">
+		/// <para>Specifies whether to scale the force by mass.</para>
+		/// <para>If <see langword="true"/>, force will be multiplied by mass. For example, force passed in is in fact an acceleration rate in <c>m/s*s</c> (force) or velocity change in <c>m/s</c> (impulse).</para>
+		/// <para>If <see langword="false"/>, force will be applied directly and it's effect will depend on the mass of the entity. For example, force passed in is a proper force in Newtons (force) or a step change in momentum <c>kg*m/s</c> (impulse).</para>
+		/// <para>
+		/// In other words, scaling by mass is probably easier in most situations -
+		/// if the mass of the object changes it's behaviour shouldn't, and it's easier to picture the effect because an acceleration rate of <c>10.0</c> is approximately the same as gravity (<c>9.81</c> to be more precis
