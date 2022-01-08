@@ -88,4 +88,7 @@ namespace GTA
 		/// <summary>
 		/// Converts the value of the object to its equivalent string representation.
 		/// </summary>
-		/// <returns>The string representation of the value of this in
+		/// <returns>The string representation of the value of this instance.</returns>
+		public override string ToString() => Value.ToString();
+	}
+}
