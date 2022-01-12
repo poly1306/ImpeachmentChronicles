@@ -19,4 +19,10 @@ namespace GTA
 		NeverRoute = 64,
 		ForceBeached = 128,
 		UseWanderRoute = 256,
-		UseFleeRou
+		UseFleeRoute = 512,
+		NeverPause = 1024,
+
+		DefaultSettings = StopAtEnd | StopAtShore | AvoidShore,
+		OpenOceanSettings = StopAtEnd | StopAtShore | AvoidShore | PreferForward | NeverNavMesh | NeverRoute
+	}
+}
