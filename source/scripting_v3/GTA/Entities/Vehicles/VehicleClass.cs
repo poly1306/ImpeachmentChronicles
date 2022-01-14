@@ -21,4 +21,14 @@ namespace GTA
 		Utility,
 		Vans,
 		Cycles,
-		Bo
+		Boats,
+		Helicopters,
+		Planes,
+		Service,
+		Emergency,
+		Military,
+		Commercial,
+		Trains,
+		OpenWheel,
+	}
+}
