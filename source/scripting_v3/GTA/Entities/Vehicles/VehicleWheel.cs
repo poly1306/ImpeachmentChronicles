@@ -244,3 +244,88 @@ namespace GTA
 				}
 
 				return SHVDN.NativeMemory.IsBitSet(address + SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset, 3);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address + SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset, 3, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="VehicleWheel"/> is a steering wheel.
+		/// </summary>
+		public bool IsSteeringWheel
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset == 0)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset + 4, 3);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address + SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset + 4, 3, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="VehicleWheel"/> is a driving wheel.
+		/// </summary>
+		public bool IsDrivingWheel
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset == 0)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset + 4, 4);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.SetBit(address + SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset + 4, 4, value);
+			}
+		}
+
+		/// <summary>
+		/// Sets a value indicating whether this <see cref="VehicleWheel"/> is punctured.
+		/// </summary>
+		public bool IsPunctured
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleTireHealthOffset == 0)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VehicleWheelHealthOffset) < 1000f;
+			}
+		}
+		/// <summary>
+		/// Set
