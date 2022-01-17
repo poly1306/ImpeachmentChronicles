@@ -76,4 +76,94 @@ namespace GTA
 					break;
 				default:
 					// Natives for vehicle wheels don't support the middle 2 wheels or middle 3 wheels
-					// Can fetch some correct value even if any value outside 0 to 7 is passed as the wheel id to the natives, but it's kind of
+					// Can fetch some correct value even if any value outside 0 to 7 is passed as the wheel id to the natives, but it's kind of a undefined behavior because the array for wheel id has only 8 elements
+					Index = -1;
+					break;
+			}
+#pragma warning restore CS0618
+			#endregion
+		}
+
+		internal VehicleWheel(Vehicle owner, VehicleWheelBoneId boneIndex, IntPtr wheelAddress) : this(owner, boneIndex)
+		{
+			_cachedAddress = wheelAddress;
+		}
+
+		/// <summary>
+		/// Gets the <see cref="Vehicle"/>this <see cref="VehicleWheel"/> belongs to.
+		/// </summary>
+		public Vehicle Vehicle
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Gets the index for native functions.
+		/// Obsoleted in v3 API because there is no legiminate ways to get value from or modify any of the 4 wheels <c>wheel_lm2</c>, <c>wheel_rm2</c>, <c>wheel_lm3</c>, or <c>wheel_lm3</c> in native functions.
+		/// </summary>
+		[Obsolete("VehicleWheel.Index does not support any of the wheels wheel_lm2, wheel_rm2, wheel_lm3, or wheel_lm3, but provided for legacy scripts compatibility in v3 API. Use VehicleWheel.BoneId instead.")]
+		public int Index
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Gets the bone id this <see cref="VehicleWheel"/>.
+		/// </summary>
+		public VehicleWheelBoneId BoneId
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Gets the memory address where this <see cref="VehicleWheel"/> is stored in memory.
+		/// </summary>
+		public IntPtr MemoryAddress
+		{
+			get
+			{
+				if (!IsBoneIdValid(BoneId))
+				{
+					return IntPtr.Zero;
+				}
+
+				// Check if the vehicle is not boat, train, or submarine. This also checks if the vehicle exists (0xFFFFFFFF will be returned if doesn't exist)
+				if (!CanVehicleHaveWheels(Vehicle))
+				{
+					return IntPtr.Zero;
+				}
+
+				if (_cachedAddress != IntPtr.Zero)
+				{
+					return _cachedAddress;
+				}
+
+				return GetMemoryAddressInit();
+			}
+		}
+
+		/// <summary>
+		/// Gets the last contact position.
+		/// </summary>
+		public Vector3 LastContactPosition
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return Vector3.Zero;
+				}
+
+				return new Vector3(SHVDN.NativeMemory.ReadVector3(address + 0x40));
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the limit multiplier that affects how much this <see cref="VehicleWheel"/> can turn.
+		/// </summary>
+		public float SteeringLimitMultiplier
+		{
+			get
+			{
+		
