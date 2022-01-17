@@ -328,4 +328,80 @@ namespace GTA
 			}
 		}
 		/// <summary>
-		/// Set
+		/// Sets a value indicating whether this <see cref="VehicleWheel"/> is bursted.
+		/// </summary>
+		public bool IsBursted
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleTireHealthOffset == 0)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VehicleTireHealthOffset) <= 0f;
+			}
+		}
+		/// <summary>
+		/// Gets or sets the wheel health.
+		/// </summary>
+		public float Health
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelHealthOffset == 0)
+				{
+					return 0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VehicleWheelHealthOffset);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelHealthOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.VehicleWheelHealthOffset, value);
+			}
+		}
+		/// <summary>
+		/// Gets or sets the tire health.
+		/// If <see cref="WearMultiplier" /> is set to exactly <c>0f</c>, the value will default to <c>350f</c> if the value is positive and less than <c>1000f</c>.
+		/// </summary>
+		public float TireHealth
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleTireHealthOffset == 0)
+				{
+					return 0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VehicleTireHealthOffset);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleTireHealthOffset == 0)
+				{
+					return;
+				}
+
+				// Change value to 0 if the value is negative. IS_VEHICLE_TYRE_BURST returns true only if value is exactly 0 when the 3rd parameter (the bool completely) is a non-zero value.
+				if (value < 0f)
+				{
+					value = 0f;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.VehicleTireHealthOffset, value);
+			}
+		}
+		/// <summary>
+		/// Gets or sets the value indicating how fast the tires will wear out. The higher this value is, the greater downforce will be created.
+		/// <p
