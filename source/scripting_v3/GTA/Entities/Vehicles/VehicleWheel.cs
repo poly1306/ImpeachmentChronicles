@@ -166,4 +166,81 @@ namespace GTA
 		{
 			get
 			{
-		
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelSteeringLimitMultiplierOffset == 0)
+				{
+					return 0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VehicleWheelSteeringLimitMultiplierOffset);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelSteeringLimitMultiplierOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.VehicleWheelSteeringLimitMultiplierOffset, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the temperature of <see cref="VehicleWheel"/>. This value rises when <see cref="Vehicle"/> is drifting, braking, or in burnout.
+		/// If this value is kept at <c>59f</c> when <see cref="Vehicle"/> is on burnout for a short time, the tire will burst.
+		/// </summary>
+		public float Temperature
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelTemperatureOffset == 0)
+				{
+					return 0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VehicleWheelTemperatureOffset);
+			}
+			set
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelTemperatureOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.VehicleWheelTemperatureOffset, value);
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="VehicleWheel"/> is touching any surface.
+		/// </summary>
+		public bool IsTouchingSurface
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsWheelTouchingSurface(address, Vehicle.MemoryAddress);
+			}
+		}
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="VehicleWheel"/>'s tire is on fire.
+		/// </summary>
+		public bool IsTireOnFire
+		{
+			get
+			{
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset == 0)
+				{
+					return false;
+				}
+
+				return SHVDN.NativeMemory.IsBitSet(address + SHVDN.NativeMemory.VehicleWheelTouchingFlagsOffset, 3);
