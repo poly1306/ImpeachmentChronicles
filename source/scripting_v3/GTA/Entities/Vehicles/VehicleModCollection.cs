@@ -327,3 +327,175 @@ namespace GTA
 
 				return (VehicleColor)color;
 			}
+			set
+			{
+				if (Game.Version < GameVersion.v1_0_505_2_Steam)
+				{
+					throw new GameVersionNotSupportedException(GameVersion.v1_0_505_2_Steam, nameof(VehicleModCollection), nameof(TrimColor));
+				}
+
+				Function.Call(Hash.SET_VEHICLE_EXTRA_COLOUR_5, _owner.Handle, value);
+			}
+		}
+		public VehicleColor DashboardColor
+		{
+			get
+			{
+				if (Game.Version < GameVersion.v1_0_505_2_Steam)
+				{
+					throw new GameVersionNotSupportedException(GameVersion.v1_0_505_2_Steam, nameof(VehicleModCollection), nameof(DashboardColor));
+				}
+
+				int color;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_EXTRA_COLOUR_6, _owner.Handle, &color);
+				}
+
+				return (VehicleColor)color;
+			}
+			set
+			{
+				if (Game.Version < GameVersion.v1_0_505_2_Steam)
+				{
+					throw new GameVersionNotSupportedException(GameVersion.v1_0_505_2_Steam, nameof(VehicleModCollection), nameof(DashboardColor));
+				}
+
+				Function.Call(Hash.SET_VEHICLE_EXTRA_COLOUR_6, _owner.Handle, value);
+			}
+		}
+
+		public int ColorCombination
+		{
+			get => Function.Call<int>(Hash.GET_VEHICLE_COLOUR_COMBINATION, _owner.Handle);
+			set => Function.Call(Hash.SET_VEHICLE_COLOUR_COMBINATION, _owner.Handle, value);
+		}
+
+		public int ColorCombinationCount => Function.Call<int>(Hash.GET_NUMBER_OF_VEHICLE_COLOURS, _owner.Handle);
+
+		public Color TireSmokeColor
+		{
+			get
+			{
+				int red, green, blue;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_TYRE_SMOKE_COLOR, _owner.Handle, &red, &green, &blue);
+				}
+
+				return Color.FromArgb(red, green, blue);
+			}
+			set
+			{
+				Function.Call(Hash.SET_VEHICLE_TYRE_SMOKE_COLOR, _owner.Handle, value.R, value.G, value.B);
+			}
+		}
+		public Color NeonLightsColor
+		{
+			get
+			{
+				int red, green, blue;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_NEON_COLOUR, _owner.Handle, &red, &green, &blue);
+				}
+
+				return Color.FromArgb(red, green, blue);
+			}
+			set
+			{
+				Function.Call(Hash.SET_VEHICLE_NEON_COLOUR, _owner.Handle, value.R, value.G, value.B);
+			}
+		}
+
+		public bool HasNeonLight(VehicleNeonLight neonLight)
+		{
+			switch (neonLight)
+			{
+				case VehicleNeonLight.Left:
+					return _owner.Bones.Contains("neon_l");
+				case VehicleNeonLight.Right:
+					return _owner.Bones.Contains("neon_r");
+				case VehicleNeonLight.Front:
+					return _owner.Bones.Contains("neon_f");
+				case VehicleNeonLight.Back:
+					return _owner.Bones.Contains("neon_b");
+				default:
+					return false;
+			}
+		}
+
+		public bool HasNeonLights => Enum.GetValues(typeof(VehicleNeonLight)).Cast<VehicleNeonLight>().Any(HasNeonLight);
+
+		public bool IsNeonLightsOn(VehicleNeonLight light)
+		{
+			return Function.Call<bool>(Hash.GET_VEHICLE_NEON_ENABLED, _owner.Handle, light);
+		}
+		public void SetNeonLightsOn(VehicleNeonLight light, bool on)
+		{
+			Function.Call(Hash.SET_VEHICLE_NEON_ENABLED, _owner.Handle, light, on);
+		}
+
+		public Color CustomPrimaryColor
+		{
+			get
+			{
+				int red, green, blue;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_CUSTOM_PRIMARY_COLOUR, _owner.Handle, &red, &green, &blue);
+				}
+
+				return Color.FromArgb(red, green, blue);
+
+			}
+			set
+			{
+				Function.Call(Hash.SET_VEHICLE_CUSTOM_PRIMARY_COLOUR, _owner.Handle, value.R, value.G, value.B);
+			}
+		}
+		public Color CustomSecondaryColor
+		{
+			get
+			{
+				int red, green, blue;
+				unsafe
+				{
+					Function.Call(Hash.GET_VEHICLE_CUSTOM_SECONDARY_COLOUR, _owner.Handle, &red, &green, &blue);
+				}
+
+				return Color.FromArgb(red, green, blue);
+			}
+			set
+			{
+				Function.Call(Hash.SET_VEHICLE_CUSTOM_SECONDARY_COLOUR, _owner.Handle, value.R, value.G, value.B);
+			}
+		}
+
+		public bool IsPrimaryColorCustom => Function.Call<bool>(Hash.GET_IS_VEHICLE_PRIMARY_COLOUR_CUSTOM, _owner.Handle);
+		public bool IsSecondaryColorCustom => Function.Call<bool>(Hash.GET_IS_VEHICLE_SECONDARY_COLOUR_CUSTOM, _owner.Handle);
+
+		public void ClearCustomPrimaryColor()
+		{
+			Function.Call(Hash.CLEAR_VEHICLE_CUSTOM_PRIMARY_COLOUR, _owner.Handle);
+		}
+		public void ClearCustomSecondaryColor()
+		{
+			Function.Call(Hash.CLEAR_VEHICLE_CUSTOM_SECONDARY_COLOUR, _owner.Handle);
+		}
+
+		public string LicensePlate
+		{
+			get => Function.Call<string>(Hash.GET_VEHICLE_NUMBER_PLATE_TEXT, _owner.Handle);
+			set => Function.Call(Hash.SET_VEHICLE_NUMBER_PLATE_TEXT, _owner.Handle, value);
+		}
+
+		public LicensePlateType LicensePlateType => Function.Call<LicensePlateType>(Hash.GET_VEHICLE_PLATE_TYPE, _owner.Handle);
+
+		public LicensePlateStyle LicensePlateStyle
+		{
+			get => Function.Call<LicensePlateStyle>(Hash.GET_VEHICLE_NUMBER_PLATE_TEXT_INDEX, _owner.Handle);
+			set => Function.Call(Hash.SET_VEHICLE_NUMBER_PLATE_TEXT_INDEX, _owner.Handle, value);
+		}
+	}
+}
