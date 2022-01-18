@@ -404,4 +404,71 @@ namespace GTA
 		}
 		/// <summary>
 		/// Gets or sets the value indicating how fast the tires will wear out. The higher this value is, the greater downforce will be created.
-		/// <p
+		/// <para>Only supported in v1.0.1868.0 and later versions. Will throw <see cref="GameVersionNotSupportedException"/> if the setter is called in earlier versions (the getter always returns <see langword="false"/> in earlier versions).</para>
+		/// </summary>
+		/// <exception cref="GameVersionNotSupportedException"></exception>
+		public float WearMultiplier
+		{
+			get
+			{
+				if (Game.Version < GameVersion.v1_0_1868_0_Steam)
+				{
+					return 0f;
+				}
+
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleTireWearMultiplierOffset == 0)
+				{
+					return 0f;
+				}
+
+				return SHVDN.NativeMemory.ReadFloat(address + SHVDN.NativeMemory.VehicleTireWearMultiplierOffset);
+			}
+			set
+			{
+				if (Game.Version < GameVersion.v1_0_1868_0_Steam)
+				{
+					throw new GameVersionNotSupportedException(GameVersion.v1_0_1868_0_Steam, nameof(VehicleWheel), nameof(WearMultiplier));
+				}
+
+				var address = MemoryAddress;
+				if (address == IntPtr.Zero || SHVDN.NativeMemory.VehicleTireWearMultiplierOffset == 0)
+				{
+					return;
+				}
+
+				SHVDN.NativeMemory.WriteFloat(address + SHVDN.NativeMemory.VehicleTireWearMultiplierOffset, value);
+			}
+		}
+
+		/// <summary>
+		/// Fixes this <see cref="VehicleWheel"/>'s tire.
+		/// </summary>
+		public void Fix()
+		{
+			// Do what SET_VEHICLE_TYRE_FIXED exactly does
+			Fix(false);
+		}
+		/// <summary>
+		/// Fixes this <see cref="VehicleWheel"/>'s tire.
+		/// </summary>
+		/// <param name="leaveOtherBurstedTiresNotShowing">If set to <see langword="false"/>, bursted tires will appear again just like <c>SET_VEHICLE_TYRE_FIXED</c> does.</param>
+		public void Fix(bool leaveOtherBurstedTiresNotShowing)
+		{
+			var address = MemoryAddress;
+			if (address == IntPtr.Zero)
+			{
+				return;
+			}
+
+			SHVDN.NativeMemory.FixVehicleWheel(address);
+
+			if (!leaveOtherBurstedTiresNotShowing)
+			{
+				var customShaderEffectVehicleAddr = SHVDN.NativeMemory.ReadAddress(SHVDN.NativeMemory.ReadAddress(Vehicle.MemoryAddress + 0x48) + 0x20);
+				SHVDN.NativeMemory.SetBit(customShaderEffectVehicleAddr + SHVDN.NativeMemory.ShouldShowOnlyVehicleTiresWithPositiveHealthOffset, 1, false);
+			}
+		}
+
+		/// <summary>
+		/// Punctures this <se
