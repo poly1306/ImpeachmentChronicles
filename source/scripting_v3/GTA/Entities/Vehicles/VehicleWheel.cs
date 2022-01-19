@@ -471,4 +471,69 @@ namespace GTA
 		}
 
 		/// <summary>
-		/// Punctures this <se
+		/// Punctures this <see cref="VehicleWheel"/>'s tire.
+		/// </summary>
+		/// <param name="damage">How much damage this <see cref="VehicleWheel"/> will take.</param>
+		public void Puncture(float damage = 1000f)
+		{
+			var address = MemoryAddress;
+			if (address == IntPtr.Zero)
+			{
+				return;
+			}
+
+			// Do what SET_VEHICLE_TYRE_BURST exactly does with false (zero) as 3rd parameter
+			SHVDN.NativeMemory.PunctureTire(address, damage, Vehicle.MemoryAddress);
+		}
+
+		/// <summary>
+		/// Bursts this <see cref="VehicleWheel"/>'s tire completely.
+		/// </summary>
+		public void Burst()
+		{
+			var address = MemoryAddress;
+			if (address == IntPtr.Zero)
+			{
+				return;
+			}
+
+			// Do what SET_VEHICLE_TYRE_BURST exactly does with true (non-zero) as 3rd parameter and 1000f as 4th parameter
+			SHVDN.NativeMemory.BurstTireOnRim(address, Vehicle.MemoryAddress);
+		}
+
+		// boats, trains, and submarines cannot have wheels
+		internal static bool CanVehicleHaveWheels(Vehicle vehicle) => (uint)vehicle.Type <= 0xC;
+		private IntPtr GetMemoryAddressInit()
+		{
+			var vehicleAddr = Vehicle.MemoryAddress;
+
+			var wheelIndexOfArrayPtr = SHVDN.NativeMemory.ReadByte(vehicleAddr + SHVDN.NativeMemory.WheelBoneIdToPtrArrayIndexOffset + ((int)BoneId - 11));
+			if (wheelIndexOfArrayPtr == 0xFF)
+			{
+				return IntPtr.Zero;
+			}
+
+			var vehicleWheelArrayAddr = SHVDN.NativeMemory.ReadAddress(vehicleAddr + SHVDN.NativeMemory.WheelPtrArrayOffset);
+			_cachedAddress = SHVDN.NativeMemory.ReadAddress(vehicleWheelArrayAddr + 0x8 * wheelIndexOfArrayPtr);
+
+			return _cachedAddress;
+		}
+		internal static bool IsBoneIdValid(VehicleWheelBoneId boneId)
+		{
+			switch (boneId)
+			{
+				case VehicleWheelBoneId.WheelLeftFront:
+				case VehicleWheelBoneId.WheelRightFront:
+				case VehicleWheelBoneId.WheelLeftRear:
+				case VehicleWheelBoneId.WheelRightRear:
+				case VehicleWheelBoneId.WheelLeftMiddle1:
+				case VehicleWheelBoneId.WheelRightMiddle1:
+				case VehicleWheelBoneId.WheelLeftMiddle2:
+				case VehicleWheelBoneId.WheelRightMiddle2:
+				case VehicleWheelBoneId.WheelLeftMiddle3:
+				case VehicleWheelBoneId.WheelRightMiddle3:
+					return true;
+				default:
+					return false;
+			}
+		}
