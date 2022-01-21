@@ -44,4 +44,75 @@ namespace GTA
 				}
 				// Use a special array in case some scripts access to index 6 or 7 wheel and read Index property
 				else
-				
+				{
+					if (_vehicleWheelsForIndex6And7 == null)
+					{
+						_vehicleWheelsForIndex6And7 = new VehicleWheel[2];
+					}
+
+					return _vehicleWheelsForIndex6And7[index - 6] ?? (_vehicleWheelsForIndex6And7[index - 6] = new VehicleWheel(Vehicle, index));
+				}
+			}
+		}
+
+		public VehicleWheel this[VehicleWheelBoneId boneId]
+		{
+			get
+			{
+				if (!VehicleWheel.IsBoneIdValid(boneId))
+				{
+					throw new ArgumentOutOfRangeException(nameof(boneId));
+				}
+
+				int boneIndexZeroBased = (int)boneId - 11;
+				return _vehicleWheels[boneIndexZeroBased] ?? (_vehicleWheels[boneIndexZeroBased] = new VehicleWheel(Vehicle, boneId));
+			}
+		}
+
+		/// <summary>
+		/// Gets the <see cref="VehicleWheel"/> by index.
+		/// </summary>
+		/// <param name="index">The index of the wheel collection. The order is the same as how the wheel array of the owner <see cref="Vehicle"/> is aligned.</param>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public VehicleWheel GetWheelByIndexOfCollection(int index)
+		{
+			if (index < 0 || index >= Count)
+			{
+				throw new ArgumentOutOfRangeException(nameof(index));
+			}
+
+			var vehicleAddr = Vehicle.MemoryAddress;
+			if (vehicleAddr == IntPtr.Zero)
+			{
+				return null;
+			}
+
+			var wheelAddr = SHVDN.NativeMemory.GetVehicleWheelAddressByIndexOfWheelArray(vehicleAddr, index);
+			if (wheelAddr == IntPtr.Zero)
+			{
+				return null;
+			}
+
+			var boneId = (VehicleWheelBoneId)SHVDN.NativeMemory.ReadInt32(wheelAddr + SHVDN.NativeMemory.VehicleWheelIdOffset);
+			int boneIndexZeroBased = (int)boneId - 11;
+			return _vehicleWheels[boneIndexZeroBased] ?? (_vehicleWheels[boneIndexZeroBased] = new VehicleWheel(Vehicle, boneId, wheelAddr));
+		}
+
+		public IEnumerator<VehicleWheel> GetEnumerator()
+		{
+			// No elements will be returned if the vehicle is a boat, a train or a submarine
+			if (!VehicleWheel.CanVehicleHaveWheels(Vehicle))
+			{
+				yield break;
+			}
+
+			var wheelCount = Count;
+			for (int i = 0; i < wheelCount; i++)
+			{
+				var vehicleAddr = Vehicle.MemoryAddress;
+				if (vehicleAddr == IntPtr.Zero)
+				{
+					yield break;
+				}
+
+				var wheelAddress = SHVDN.NativeMemory.GetVehicleWheelAddressByIn
