@@ -537,3 +537,5 @@ namespace GTA
 					return false;
 			}
 		}
+	}
+}
