@@ -24,4 +24,31 @@ namespace GTA
 		InternalImpulse,
 		/// <summary>
 		/// Add a continuous external force to the entity.
-		/// Unlike <s
+		/// Unlike <see cref="InternalForce"/>, force itself can detach any fragment parts of props.
+		/// </summary>
+		ExternalForce,
+		/// <summary>
+		/// Add an instant external impulse to the entity.
+		/// Unlike <see cref="InternalImpulse"/>, impulse itself can detach any fragment parts of props.
+		/// </summary>
+		ExternalImpulse,
+		/// <summary>
+		/// Angular velocity will be changed with this value used, but it is unknown what kind of vector should be used.
+		/// </summary>
+		ForceNoRot,
+		/// <summary>
+		/// Angular velocity will be changed with this value used, but it is unknown what kind of vector should be used.
+		/// Basically works just like <see cref="ForceNoRot"/>, but the force will be multiplied by 102.931, which is calculated by <c>1.75f / (0.0340035 / 2.0f)</c>.
+		/// </summary>
+		ForceRotPlusForce,
+
+		[Obsolete("ForceType.MinForce is obsolete because it is incorrect, use ForceType.InternalForce instead.")]
+		MinForce = 0,
+		[Obsolete("ForceType.MaxForceRot is obsolete because it is incorrect, use ForceType.InternalImpulse instead.")]
+		MaxForceRot = 1,
+		[Obsolete("ForceType.MinForce2 is obsolete because it is incorrect, use ForceType.ExternalForce instead.")]
+		MinForce2 = 2,
+		[Obsolete("ForceType.MaxForceRot2 is obsolete because it is incorrect, use ForceType.ExternalImpulse instead.")]
+		MaxForceRot2 = 3,
+	}
+}
