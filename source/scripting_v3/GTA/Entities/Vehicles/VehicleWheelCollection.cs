@@ -177,4 +177,13 @@ namespace GTA
 				returnWheelArray[i] = vehicleWheelInstance;
 
 				int boneIndexZeroBased = (int)boneId - 11;
-				if (_vehicleWheels[boneInd
+				if (_vehicleWheels[boneIndexZeroBased] == null)
+				{
+					_vehicleWheels[boneIndexZeroBased] = vehicleWheelInstance;
+				}
+			}
+
+			return returnWheelArray;
+		}
+	}
+}
