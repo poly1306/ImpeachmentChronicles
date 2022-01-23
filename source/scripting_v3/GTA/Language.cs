@@ -12,4 +12,14 @@ namespace GTA
 		German,
 		Italian,
 		Spanish,
-		Portugues
+		Portuguese,
+		Polish,
+		Russian,
+		Korean,
+		/// <summary>Traditional Chinese</summary>
+		Chinese,
+		Japanese,
+		Mexican,
+		ChineseSimplified,
+	}
+}
