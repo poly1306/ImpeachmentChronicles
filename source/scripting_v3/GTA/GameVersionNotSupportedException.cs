@@ -39,4 +39,7 @@ namespace GTA
 			string versionRegexPattern = @"v1\.0\.\d{3,5}\.\d";
 			string maximumNotSupportedGameVersionWithoutPlatformName = Regex.Match(maximumNotSupportedGameVersionEnumStr, versionRegexPattern).Value;
 
-			return $"{className}.{propertyOrMethodName} is not supported in be
+			return $"{className}.{propertyOrMethodName} is not supported in between v1.0.335.2 to {maximumNotSupportedGameVersionWithoutPlatformName}.";
+		}
+	}
+}
