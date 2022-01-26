@@ -72,4 +72,74 @@ namespace GTA
 		/// Attempts to load this <see cref="ParticleEffectAsset"/> into memory so it can be used for starting <see cref="ParticleEffect"/>s.
 		/// </summary>
 		/// <param name="timeout">How long in milliseconds should the game wait while the model hasn't been loaded before giving up</param>
-		/// <returns><see langword="true" /> if th
+		/// <returns><see langword="true" /> if the <see cref="ParticleEffectAsset"/> is Loaded; otherwise, <see langword="false" /></returns>
+		public bool Request(int timeout)
+		{
+			Request();
+
+			DateTime endtime = timeout >= 0 ? DateTime.UtcNow + new TimeSpan(0, 0, 0, 0, timeout) : DateTime.MaxValue;
+
+			while (!IsLoaded)
+			{
+				Script.Yield();
+				Request();
+
+				if (DateTime.UtcNow >= endtime)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Tells the game we have finished using this <see cref="ParticleEffectAsset"/> and it can be freed from memory.
+		/// </summary>
+		public void MarkAsNoLongerNeeded()
+		{
+			Function.Call(Hash.REMOVE_NAMED_PTFX_ASSET, AssetName);
+		}
+
+		public bool Equals(ParticleEffectAsset asset)
+		{
+			return AssetName == asset.AssetName;
+		}
+		public override bool Equals(object obj)
+		{
+			if (obj is ParticleEffectAsset asset)
+			{
+				return Equals(asset);
+			}
+
+			return false;
+		}
+
+		public static bool operator ==(ParticleEffectAsset left, ParticleEffectAsset right)
+		{
+			return left.Equals(right);
+		}
+		public static bool operator !=(ParticleEffectAsset left, ParticleEffectAsset right)
+		{
+			return !left.Equals(right);
+		}
+
+		/// <summary>
+		/// Converts a <see cref="ParticleEffectAsset"/> to a native input argument.
+		/// </summary>
+		public static implicit operator InputArgument(ParticleEffectAsset asset)
+		{
+			return new InputArgument(asset.AssetName);
+		}
+
+		public override int GetHashCode()
+		{
+			return AssetName.GetHashCode();
+		}
+
+		public override string ToString()
+		{
+			return AssetName;
+		}
+	}
+}
