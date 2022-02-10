@@ -81,4 +81,22 @@ namespace GTA
 		/// <param name="left">The left <see cref="Pickup"/>.</param>
 		/// <param name="right">The right <see cref="Pickup"/>.</param>
 		/// <returns><see langword="true" /> if <paramref name="left"/> is not the same pickup as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
-		public static bool operator !=(Pickup left, Pi
+		public static bool operator !=(Pickup left, Pickup right)
+		{
+			return !(left == right);
+		}
+
+		/// <summary>
+		/// Converts a <see cref="Pickup"/> to a native input argument.
+		/// </summary>
+		public static implicit operator InputArgument(Pickup value)
+		{
+			return new InputArgument((ulong)value.Handle);
+		}
+
+		public override int GetHashCode()
+		{
+			return Handle.GetHashCode();
+		}
+	}
+}
