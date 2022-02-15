@@ -347,4 +347,58 @@ namespace GTA
 		/// Gets or sets a value indicating whether this <see cref="Player"/> can control its <see cref="Ped"/>.
 		/// </summary>
 		/// <value>
-		/// <see langword="true" /> if this <see cref="Player"/> can control its <see c
+		/// <see langword="true" /> if this <see cref="Player"/> can control its <see cref="Ped"/>; otherwise, <see langword="false" />.
+		/// </value>
+		public bool CanControlCharacter
+		{
+			get => Function.Call<bool>(Hash.IS_PLAYER_CONTROL_ON, Handle);
+			set => Function.Call(Hash.SET_PLAYER_CONTROL, Handle, value, 0);
+		}
+
+		/// <summary>
+		/// Attempts to change the <see cref="Model"/> of this <see cref="Player"/>.
+		/// </summary>
+		/// <param name="model">The <see cref="Model"/> to change this <see cref="Player"/> to.</param>
+		/// <returns><see langword="true" /> if the change was successful; otherwise, <see langword="false" />.</returns>
+		public bool ChangeModel(Model model)
+		{
+			if (!model.IsInCdImage || !model.IsPed || !model.Request(1000))
+			{
+				return false;
+			}
+
+			Function.Call(Hash.SET_PLAYER_MODEL, Handle, model.Hash);
+			model.MarkAsNoLongerNeeded();
+			return true;
+		}
+
+		/// <summary>
+		/// Gets how long this <see cref="Player"/> can remain sprinting for.
+		/// </summary>
+		public float RemainingSprintTime => Function.Call<float>(Hash.GET_PLAYER_SPRINT_TIME_REMAINING, Handle);
+
+		/// <summary>
+		/// Gets how much sprint stamina this <see cref="Player"/> currently has.
+		/// </summary>
+		public float RemainingSprintStamina => Function.Call<float>(Hash.GET_PLAYER_SPRINT_STAMINA_REMAINING, Handle);
+
+		/// <summary>
+		/// Gets how long this <see cref="Player"/> can stay underwater before they start losing health.
+		/// </summary>
+		public float RemainingUnderwaterTime => Function.Call<float>(Hash.GET_PLAYER_UNDERWATER_TIME_REMAINING, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Player"/> is using their special ability.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> is using their special ability; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsSpecialAbilityActive => Function.Call<bool>(Hash.IS_SPECIAL_ABILITY_ACTIVE, Handle);
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Player"/> can use their special ability.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this  <see cref="Player"/> can use their special ability; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsS
