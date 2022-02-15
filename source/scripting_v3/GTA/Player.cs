@@ -283,4 +283,68 @@ namespace GTA
 		/// <value>
 		///   <see langword="true" /> if this <see cref="Player"/> is ignored by the police; otherwise, <see langword="false" />.
 		/// </value>
-		
+		public bool IgnoredByPolice
+		{
+			set => Function.Call(Hash.SET_POLICE_IGNORE_PLAYER, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets a value indicating whether this <see cref="Player"/> is ignored by everyone.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if this <see cref="Player"/> is ignored by everyone; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IgnoredByEveryone
+		{
+			set => Function.Call(Hash.SET_EVERYONE_IGNORE_PLAYER, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets a value indicating whether cops will be dispatched for this <see cref="Player"/>
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if cops will be dispatched; otherwise, <see langword="false" />.
+		/// </value>
+		public bool DispatchsCops
+		{
+			set => Function.Call(Hash.SET_DISPATCH_COPS_FOR_PLAYER, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets a value indicating whether this <see cref="Player"/> can use cover.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> can use cover; otherwise, <see langword="false" />.
+		/// </value>
+		public bool CanUseCover
+		{
+			set => Function.Call(Hash.SET_PLAYER_CAN_USE_COVER, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Player"/> can start a mission.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> can start a mission; otherwise, <see langword="false" />.
+		/// </value>
+		public bool CanStartMission
+		{
+			get => Function.Call<bool>(Hash.CAN_PLAYER_START_MISSION, Handle);
+		}
+
+		/// <summary>
+		/// Sets a value indicating whether this <see cref="Player"/> can control ragdoll.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> can control ragdoll; otherwise, <see langword="false" />.
+		/// </value>
+		public bool CanControlRagdoll
+		{
+			set => Function.Call(Hash.GIVE_PLAYER_RAGDOLL_CONTROL, Handle, value);
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Player"/> can control its <see cref="Ped"/>.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> can control its <see c
