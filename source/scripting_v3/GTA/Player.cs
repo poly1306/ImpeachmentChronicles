@@ -229,4 +229,58 @@ namespace GTA
 		/// Gets a value indicating whether this <see cref="Player"/> is aiming.
 		/// </summary>
 		/// <value>
-		///   <see langword="true" /> if this <see cref="Player"/> is aiming; otherwise, <see lan
+		///   <see langword="true" /> if this <see cref="Player"/> is aiming; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsAiming => Function.Call<bool>(Hash.IS_PLAYER_FREE_AIMING, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Player"/> is climbing.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> is climbing; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsClimbing => Function.Call<bool>(Hash.IS_PLAYER_CLIMBING, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Player"/> is riding a train.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> is riding a train; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsRidingTrain => Function.Call<bool>(Hash.IS_PLAYER_RIDING_TRAIN, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Player"/> is pressing a horn.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> is pressing a horn; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsPressingHorn => Function.Call<bool>(Hash.IS_PLAYER_PRESSING_HORN, Handle);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Player"/> is playing.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> is playing; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsPlaying => Function.Call<bool>(Hash.IS_PLAYER_PLAYING, Handle);
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Player"/> is invincible.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> is invincible; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsInvincible
+		{
+			get => Function.Call<bool>(Hash.GET_PLAYER_INVINCIBLE, Handle);
+			set => Function.Call(Hash.SET_PLAYER_INVINCIBLE, Handle, value);
+		}
+
+		/// <summary>
+		/// Sets a value indicating whether this <see cref="Player"/> is ignored by the police.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if this <see cref="Player"/> is ignored by the police; otherwise, <see langword="false" />.
+		/// </value>
+		
