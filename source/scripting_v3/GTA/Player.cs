@@ -401,4 +401,66 @@ namespace GTA
 		/// <value>
 		/// <see langword="true" /> if this  <see cref="Player"/> can use their special ability; otherwise, <see langword="false" />.
 		/// </value>
-		public bool IsS
+		public bool IsSpecialAbilityEnabled
+		{
+			get => Function.Call<bool>(Hash.IS_SPECIAL_ABILITY_ENABLED, Handle);
+			set => Function.Call(Hash.ENABLE_SPECIAL_ABILITY, Handle, value);
+		}
+
+		/// <summary>
+		/// Charges the special ability for this <see cref="Player"/>.
+		/// </summary>
+		/// <param name="absoluteAmount">The absolute amount.</param>
+		public void ChargeSpecialAbility(int absoluteAmount)
+		{
+			Function.Call(Hash.SPECIAL_ABILITY_CHARGE_ABSOLUTE, Handle, absoluteAmount, true);
+		}
+
+		/// <summary>
+		/// Charges the special ability for this <see cref="Player"/>.
+		/// </summary>
+		/// <param name="normalizedRatio">The amount between <c>0.0f</c> and <c>1.0f</c></param>
+		public void ChargeSpecialAbility(float normalizedRatio)
+		{
+			Function.Call(Hash.SPECIAL_ABILITY_CHARGE_NORMALIZED, Handle, normalizedRatio, true);
+		}
+
+		/// <summary>
+		/// Refills the special ability for this <see cref="Player"/>.
+		/// </summary>
+		public void RefillSpecialAbility()
+		{
+			Function.Call(Hash.SPECIAL_ABILITY_FILL_METER, Handle, 1);
+		}
+
+		/// <summary>
+		/// Depletes the special ability for this <see cref="Player"/>.
+		/// </summary>
+		public void DepleteSpecialAbility()
+		{
+			Function.Call(Hash.SPECIAL_ABILITY_DEPLETE_METER, Handle, 1);
+		}
+
+		/// <summary>
+		/// Gets the last <see cref="Vehicle"/> this <see cref="Player"/> used.
+		/// </summary>
+		/// <remarks>returns <see langword="null" /> if the last vehicle doesn't exist.</remarks>
+		public Vehicle LastVehicle => Function.Call<Vehicle>(Hash.GET_PLAYERS_LAST_VEHICLE);
+
+		/// <summary>
+		/// Determines whether this <see cref="Player"/> is targeting the specified <see cref="Entity"/>.
+		/// </summary>
+		/// <param name="entity">The <see cref="Entity"/> to check.</param>
+		/// <returns>
+		///   <see langword="true" /> if this <see cref="Player"/> is targeting the specified <see cref="Entity"/>; otherwise, <see langword="false" />.
+		/// </returns>
+		public bool IsTargeting(Entity entity)
+		{
+			return Function.Call<bool>(Hash.IS_PLAYER_FREE_AIMING_AT_ENTITY, Handle, entity.Handle);
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Player"/> is targeting anything.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if this <see cref="Player"/> is targeti
