@@ -604,4 +604,52 @@ namespace GTA
 		}
 
 		/// <summary>
-		/// Determines if an <see cref="object"/> refers to the same player as this <se
+		/// Determines if an <see cref="object"/> refers to the same player as this <see cref="Player"/>.
+		/// </summary>
+		/// <param name="obj">The <see cref="object"/> to check.</param>
+		/// <returns><see langword="true" /> if the <paramref name="obj"/> is the same player as this <see cref="Player"/>; otherwise, <see langword="false" />.</returns>
+		public override bool Equals(object obj)
+		{
+			if (obj is Player player)
+			{
+				return Handle == player.Handle;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Determines if two <see cref="Player"/>s refer to the same player.
+		/// </summary>
+		/// <param name="left">The left <see cref="Player"/>.</param>
+		/// <param name="right">The right <see cref="Player"/>.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> is the same player as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator ==(Player left, Player right)
+		{
+			return left is null ? right is null : left.Equals(right);
+		}
+		/// <summary>
+		/// Determines if two <see cref="Player"/>s don't refer to the same player.
+		/// </summary>
+		/// <param name="left">The left <see cref="Player"/>.</param>
+		/// <param name="right">The right <see cref="Player"/>.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> is not the same player as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator !=(Player left, Player right)
+		{
+			return !(left == right);
+		}
+
+		/// <summary>
+		/// Converts a <see cref="Player"/> to a native input argument.
+		/// </summary>
+		public static implicit operator InputArgument(Player value)
+		{
+			return new InputArgument((ulong)value.Handle);
+		}
+
+		public override int GetHashCode()
+		{
+			return Handle.GetHashCode();
+		}
+	}
+}
