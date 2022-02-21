@@ -463,4 +463,70 @@ namespace GTA
 		/// Gets a value indicating whether this <see cref="Player"/> is targeting anything.
 		/// </summary>
 		/// <value>
-		/// <see langword="true" /> if this <see cref="Player"/> is targeti
+		/// <see langword="true" /> if this <see cref="Player"/> is targeting anything; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsTargetingAnything => Function.Call<bool>(Hash.IS_PLAYER_TARGETTING_ANYTHING, Handle);
+
+		/// <summary>
+		/// Gets the <see cref="Entity"/> this <see cref="Player"/> is free aiming.
+		/// </summary>
+		/// <returns>The <see cref="Entity"/> if this <see cref="Player"/> is free aiming any <see cref="Entity"/>; otherwise, <see langword="null" /></returns>
+		public Entity TargetedEntity
+		{
+			get
+			{
+				int entityHandle;
+				unsafe
+				{
+					if (Function.Call<bool>(Hash.GET_ENTITY_PLAYER_IS_FREE_AIMING_AT, Handle, &entityHandle))
+					{
+						return Entity.FromHandle(entityHandle);
+					}
+				}
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the <see cref="Entity"/> this <see cref="Player"/> is locking on when they are aiming with a firearm using a controller or they are locking on unarmed or with a melee weapon.
+		/// </summary>
+		/// <returns>The <see cref="Entity"/> if this <see cref="Player"/> is automatically locking on any <see cref="Entity"/>; otherwise, <see langword="null" /></returns>
+		public Entity LockedOnEntity
+		{
+			get
+			{
+				int entityHandle;
+				unsafe
+				{
+					if (Function.Call<bool>(Hash.GET_PLAYER_TARGET_ENTITY, Handle, &entityHandle))
+					{
+						return Entity.FromHandle(entityHandle);
+					}
+				}
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Sets a value indicating whether the player is forced to aim.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> to make the player always be aiming; otherwise, <see langword="false" />.
+		/// </value>
+		public bool ForcedAim
+		{
+			set => Function.Call(Hash.SET_PLAYER_FORCED_AIM, Handle, value);
+		}
+
+		/// <summary>
+		/// Prevents this <see cref="Player"/> firing this frame.
+		/// </summary>
+		public void DisableFiringThisFrame()
+		{
+			Function.Call(Hash.DISABLE_PLAYER_FIRING, Handle, 0);
+		}
+
+		/// <summary>
+		/// Sets the run speed multiplier for this <see cref="Player"/> this frame.
+		/// </summary>
+		/// <param name="mult">The factor - min: <c>0.0f</c>, default
