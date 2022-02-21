@@ -529,4 +529,79 @@ namespace GTA
 		/// <summary>
 		/// Sets the run speed multiplier for this <see cref="Player"/> this frame.
 		/// </summary>
-		/// <param name="mult">The factor - min: <c>0.0f</c>, default
+		/// <param name="mult">The factor - min: <c>0.0f</c>, default: <c>1.0f</c>, max: <c>1.499f</c>.</param>
+		public void SetRunSpeedMultThisFrame(float mult)
+		{
+			if (mult > 1.499f)
+			{
+				mult = 1.499f;
+			}
+
+			Function.Call(Hash.SET_RUN_SPRINT_MULTIPLIER_FOR_PLAYER, Handle, mult);
+		}
+
+		/// <summary>
+		/// Sets the swim speed multiplier for this <see cref="Player"/> this frame.
+		/// </summary>
+		/// <param name="mult">The factor - min: <c>0.0f</c>, default: <c>1.0f</c>, max: <c>1.499f</c>.</param>
+		public void SetSwimSpeedMultThisFrame(float mult)
+		{
+			if (mult > 1.499f)
+			{
+				mult = 1.499f;
+			}
+
+			Function.Call(Hash.SET_SWIM_MULTIPLIER_FOR_PLAYER, Handle, mult);
+		}
+
+		/// <summary>
+		/// Makes this <see cref="Player"/> shoot fire bullets this frame.
+		/// </summary>
+		public void SetFireAmmoThisFrame()
+		{
+			Function.Call(Hash.SET_FIRE_AMMO_THIS_FRAME, Handle);
+		}
+
+		/// <summary>
+		/// Makes this <see cref="Player"/> shoot explosive bullets this frame.
+		/// </summary>
+		public void SetExplosiveAmmoThisFrame()
+		{
+			Function.Call(Hash.SET_EXPLOSIVE_AMMO_THIS_FRAME, Handle);
+		}
+
+		/// <summary>
+		/// Makes this <see cref="Player"/> have an explosive melee attack this frame.
+		/// </summary>
+		public void SetExplosiveMeleeThisFrame()
+		{
+			Function.Call(Hash.SET_EXPLOSIVE_MELEE_THIS_FRAME, Handle);
+		}
+
+		/// <summary>
+		/// Lets this <see cref="Player"/> jump really high this frame.
+		/// </summary>
+		public void SetSuperJumpThisFrame()
+		{
+			Function.Call(Hash.SET_SUPER_JUMP_THIS_FRAME, Handle);
+		}
+
+		/// <summary>
+		/// Blocks this <see cref="Player"/> from entering any <see cref="Vehicle"/> this frame.
+		/// </summary>
+		public void SetMayNotEnterAnyVehicleThisFrame()
+		{
+			Function.Call(Hash.SET_PLAYER_MAY_NOT_ENTER_ANY_VEHICLE, Handle);
+		}
+
+		/// <summary>
+		/// Only lets this <see cref="Player"/> enter a specific <see cref="Vehicle"/> this frame.
+		/// </summary>
+		/// <param name="vehicle">The <see cref="Vehicle"/> this <see cref="Player"/> is allowed to enter.</param>
+		public void SetMayOnlyEnterThisVehicleThisFrame(Vehicle vehicle)
+		{
+			Function.Call(Hash.SET_PLAYER_MAY_ONLY_ENTER_THIS_VEHICLE, Handle, vehicle.Handle);
+		}
+
+		/// <summary>
+		/// Determines if an <see cref="object"/> refers to the same player as this <se
