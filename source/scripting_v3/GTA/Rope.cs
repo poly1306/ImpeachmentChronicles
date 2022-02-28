@@ -129,4 +129,63 @@ namespace GTA
 		/// <summary>
 		/// Determines if this <see cref="Rope"/> exists.
 		/// </summary>
-		/// <returns><see langword="true" /> if this <see cref="Rope"/> exi
+		/// <returns><see langword="true" /> if this <see cref="Rope"/> exists; otherwise, <see langword="false" />.</returns>
+		public override bool Exists()
+		{
+			int handle = Handle;
+			unsafe
+			{
+				return Function.Call<bool>(Hash.DOES_ROPE_EXIST, &handle);
+			}
+		}
+
+		/// <summary>
+		/// Determines if an <see cref="object"/> refers to the same rope as this <see cref="Rope"/>.
+		/// </summary>
+		/// <param name="obj">The <see cref="object"/> to check.</param>
+		/// <returns><see langword="true" /> if the <paramref name="obj"/> is the same rope as this <see cref="Rope"/>; otherwise, <see langword="false" />.</returns>
+		public override bool Equals(object obj)
+		{
+			if (obj is Rope rope)
+			{
+				return Handle == rope.Handle;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Determines if two <see cref="Rope"/>s refer to the same rope.
+		/// </summary>
+		/// <param name="left">The left <see cref="Rope"/>.</param>
+		/// <param name="right">The right <see cref="Rope"/>.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> is the same rope as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator ==(Rope left, Rope right)
+		{
+			return left is null ? right is null : left.Equals(right);
+		}
+		/// <summary>
+		/// Determines if two <see cref="Rope"/>s don't refer to the same rope.
+		/// </summary>
+		/// <param name="left">The left <see cref="Rope"/>.</param>
+		/// <param name="right">The right <see cref="Rope"/>.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> is not the same rope as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator !=(Rope left, Rope right)
+		{
+			return !(left == right);
+		}
+
+		/// <summary>
+		/// Converts a <see cref="Rope"/> to a native input argument.
+		/// </summary>
+		public static implicit operator InputArgument(Rope value)
+		{
+			return new InputArgument((ulong)value.Handle);
+		}
+
+		public override int GetHashCode()
+		{
+			return Handle.GetHashCode();
+		}
+	}
+}
