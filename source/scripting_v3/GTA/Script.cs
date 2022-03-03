@@ -85,4 +85,105 @@ namespace GTA
 
 		/// <summary>
 		/// An event that is raised when a key is lifted.
-		/// The <see cref="System.Windows.Forms.KeyEventArgs"/> contains the key tha
+		/// The <see cref="System.Windows.Forms.KeyEventArgs"/> contains the key that was lifted.
+		/// </summary>
+		public event WinForms.KeyEventHandler KeyUp
+		{
+			add
+			{
+				var script = SHVDN.ScriptDomain.CurrentDomain.LookupScript(this);
+				if (script != null)
+				{
+					script.KeyUp += value;
+				}
+			}
+			remove
+			{
+				var script = SHVDN.ScriptDomain.CurrentDomain.LookupScript(this);
+				if (script != null)
+				{
+					script.KeyUp -= value;
+				}
+			}
+		}
+		/// <summary>
+		/// An event that is raised when a key is first pressed.
+		/// The <see cref="System.Windows.Forms.KeyEventArgs"/> contains the key that was pressed.
+		/// </summary>
+		public event WinForms.KeyEventHandler KeyDown
+		{
+			add
+			{
+				var script = SHVDN.ScriptDomain.CurrentDomain.LookupScript(this);
+				if (script != null)
+				{
+					script.KeyDown += value;
+				}
+			}
+			remove
+			{
+				var script = SHVDN.ScriptDomain.CurrentDomain.LookupScript(this);
+				if (script != null)
+				{
+					script.KeyDown -= value;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets the name of this <see cref="Script"/>.
+		/// </summary>
+		public string Name
+		{
+			get;
+		}
+		/// <summary>
+		/// Gets the filename of this <see cref="Script"/>.
+		/// </summary>
+		public string Filename
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Gets the Directory where this <see cref="Script"/> is stored.
+		/// </summary>
+		public string BaseDirectory => Path.GetDirectoryName(Filename);
+
+		/// <summary>
+		/// Checks if this <see cref="Script"/> is paused.
+		/// </summary>
+		public bool IsPaused
+		{
+			get
+			{
+				return SHVDN.ScriptDomain.CurrentDomain.LookupScript(this).IsPaused;
+			}
+		}
+
+		/// <summary>
+		/// Checks if this <see cref="Script"/> is running.
+		/// </summary>
+		public bool IsRunning
+		{
+			get
+			{
+				return SHVDN.ScriptDomain.CurrentDomain.LookupScript(this).IsRunning;
+			}
+		}
+
+		/// <summary>
+		/// Checks if this <see cref="Script"/> is executing.
+		/// </summary>
+		public bool IsExecuting
+		{
+			get
+			{
+				return SHVDN.ScriptDomain.CurrentDomain.LookupScript(this).IsExecuting;
+			}
+		}
+
+		/// <summary>
+		/// Gets an INI file associated with this <see cref="Script"/>.
+		/// The File will be in the same location as this <see cref="Script"/> but with an extension of ".ini".
+		/// Use th
