@@ -273,3 +273,42 @@ namespace GTA
 		/// <summary>
 		/// Pauses execution of the <see cref="Script"/> for a specific amount of time.
 		/// Must be called inside the main script loop (the <see cref="Tick"/> event or any sub methods called from it).
+		/// </summary>
+		/// <param name="ms">The time in milliseconds to pause for.</param>
+		public static void Wait(int ms)
+		{
+			var script = SHVDN.ScriptDomain.ExecutingScript;
+			if (script == null || !script.IsRunning || !script.IsUsingThread)
+			{
+				throw new InvalidOperationException("Illegal call to 'Script.Wait()' outside main loop!");
+			}
+
+			script.Wait(ms);
+		}
+		/// <summary>
+		/// Yields the execution of the script for 1 frame.
+		/// </summary>
+		public static void Yield()
+		{
+			Wait(0);
+		}
+
+		/// <summary>
+		/// Spawns a new <see cref="Script"/> instance of the specified type.
+		/// </summary>
+		public static T InstantiateScript<T>() where T : Script
+		{
+			var task = new InstantiateScriptTask { type = typeof(T) };
+			SHVDN.ScriptDomain.CurrentDomain.ExecuteTask(task);
+
+			if (task.script == null)
+			{
+				return null;
+			}
+
+			task.script.Start();
+
+			return (T)task.script.ScriptInstance;
+		}
+	}
+}
