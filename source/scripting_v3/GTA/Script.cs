@@ -186,4 +186,90 @@ namespace GTA
 		/// <summary>
 		/// Gets an INI file associated with this <see cref="Script"/>.
 		/// The File will be in the same location as this <see cref="Script"/> but with an extension of ".ini".
-		/// Use th
+		/// Use this to save and load settings for this <see cref="Script"/>.
+		/// </summary>
+		public ScriptSettings Settings
+		{
+			get
+			{
+				if (_settings == null)
+				{
+					string path = Path.ChangeExtension(Filename, ".ini");
+
+					_settings = ScriptSettings.Load(path);
+				}
+
+				return _settings;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the interval in ms between <see cref="Tick"/> for this <see cref="Script"/>.
+		/// Default value is 0 meaning the event will execute once each frame.
+		/// </summary>
+		protected int Interval
+		{
+			get
+			{
+				return SHVDN.ScriptDomain.CurrentDomain.LookupScript(this).Interval;
+			}
+			set
+			{
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				var script = SHVDN.ScriptDomain.CurrentDomain.LookupScript(this);
+				if (script != null)
+				{
+					script.Interval = value;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns a string that represents this <see cref="Script"/>.
+		/// </summary>
+		public override string ToString()
+		{
+			return Name;
+		}
+
+		/// <summary>
+		/// Gets the full file path for a file relative to this <see cref="Script"/>.
+		/// e.g: <c>GetRelativeFilePath("ScriptFiles\texture1.png")</c> may return <c>"C:\Program Files\Rockstar Games\Grand Theft Auto V\scripts\ScriptFiles\texture1.png"</c>.
+		/// </summary>
+		/// <param name="filePath">The file path relative to the location of this <see cref="Script"/>.</param>
+		public string GetRelativeFilePath(string filePath)
+		{
+			return Path.Combine(BaseDirectory, filePath);
+		}
+
+		/// <summary>
+		/// Aborts execution of this <see cref="Script"/>.
+		/// </summary>
+		public void Abort()
+		{
+			SHVDN.ScriptDomain.CurrentDomain.LookupScript(this).Abort();
+		}
+
+		/// <summary>
+		/// Pause execution of this <see cref="Script"/>.
+		/// </summary>
+		public void Pause()
+		{
+			SHVDN.ScriptDomain.CurrentDomain.LookupScript(this).Pause();
+		}
+
+		/// <summary>
+		/// Starts execution of this <see cref="Script"/> after it has been Paused.
+		/// </summary>
+		public void Resume()
+		{
+			SHVDN.ScriptDomain.CurrentDomain.LookupScript(this).Resume();
+		}
+
+		/// <summary>
+		/// Pauses execution of the <see cref="Script"/> for a specific amount of time.
+		/// Must be called inside the main script loop (the <see cref="Tick"/> event or any sub methods called from it).
