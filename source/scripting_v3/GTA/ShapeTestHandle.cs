@@ -30,4 +30,52 @@ namespace GTA
 
 		/// <summary>
 		/// Gets the native representation of this <see cref="Model"/>.
-		/// </summar
+		/// </summary>
+		public ulong NativeValue
+		{
+			get => (ulong)Handle;
+			set => Handle = unchecked((int)value);
+		}
+
+		/// <summary>
+		/// Gets if the request of <see cref="ShapeTestHandle"/> is failed.
+		/// There is a limit to the number that can be in the system. Therefore, native functions for shape tests may fail to create the shapetest requests.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if the request is failed; otherwise, <see langword="false" />.
+		/// </value>
+		public bool IsRequestFailed => Handle == 0;
+
+		/// <summary>
+		/// If status returned is <see cref="ShapeTestStatus.Ready"/>, then returns whether something was hit, and if so nearest hit position and normal.
+		/// You need to call this method until the result is ready since the shape test result may not be finished in the same frame you start the shape test.
+		/// </summary>
+		/// <remarks>
+		/// The shape test request is destroyed by this call if <see cref="ShapeTestStatus.Ready"/> is returned.
+		/// If this is not called every frame then the request will be destroyed.
+		/// </remarks>
+		public ShapeTestStatus GetResult(out ShapeTestResult result)
+		{
+			NativeVector3 hitPositionArg;
+			bool hitSomethingArg;
+			int guidHandleArg;
+			NativeVector3 surfaceNormalArg;
+			ShapeTestStatus shapeTestStatus;
+			unsafe
+			{
+				shapeTestStatus = Function.Call<ShapeTestStatus>(Hash.GET_SHAPE_TEST_RESULT, Handle, &hitSomethingArg, &hitPositionArg, &surfaceNormalArg, &guidHandleArg);
+			}
+			result = new ShapeTestResult(hitSomethingArg, hitPositionArg, surfaceNormalArg, guidHandleArg);
+
+			return shapeTestStatus;
+		}
+
+		/// <summary>
+		/// If status returned is <see cref="ShapeTestStatus.Ready"/>, then returns whether something was hit, and if so nearest hit position and normal.
+		/// You need to call this method until the result is ready since the shape test result may not be finished in the same frame you start the shape test.
+		/// </summary>
+		/// <remarks>
+		/// The shape test request is destroyed by this call if <see cref="ShapeTestStatus.Ready"/> is returned.
+		/// If this is not called every frame then the request will be destroyed.
+		/// </remarks>
+		public (ShapeTestStatus status, ShapeTestResult resu
