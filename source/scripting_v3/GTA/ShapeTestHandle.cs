@@ -78,4 +78,48 @@ namespace GTA
 		/// The shape test request is destroyed by this call if <see cref="ShapeTestStatus.Ready"/> is returned.
 		/// If this is not called every frame then the request will be destroyed.
 		/// </remarks>
-		public (ShapeTestStatus status, ShapeTestResult resu
+		public (ShapeTestStatus status, ShapeTestResult result) GetResult()
+		{
+			var status = GetResult(out var result);
+			return (status, result);
+		}
+
+		/// <summary>
+		/// If status returned is <see cref="ShapeTestStatus.Ready"/>, then returns whether something was hit, and if so nearest hit position, normal, and a hash of the material name.
+		/// You need to call this method until the result is ready since the shape test result may not be finished in the same frame you start the shape test.
+		/// </summary>
+		/// <remarks>
+		/// The shape test request is destroyed by this call if <see cref="ShapeTestStatus.Ready"/> is returned.
+		/// If this is not called every frame then the request will be destroyed.
+		/// </remarks>
+		public ShapeTestStatus GetResultIncludingMaterial(out ShapeTestResult result, out MaterialHash materialHash)
+		{
+			NativeVector3 hitPositionArg;
+			bool hitSomethingArg;
+			int materialHashArg;
+			int guidHandleArg;
+			NativeVector3 surfaceNormalArg;
+			ShapeTestStatus shapeTestStatus;
+
+			unsafe
+			{
+				shapeTestStatus = Function.Call<ShapeTestStatus>(Hash.GET_SHAPE_TEST_RESULT_INCLUDING_MATERIAL, Handle, &hitSomethingArg, &hitPositionArg, &surfaceNormalArg, &materialHashArg, &guidHandleArg);
+			}
+			result = new ShapeTestResult(hitSomethingArg, hitPositionArg, surfaceNormalArg, guidHandleArg);
+			materialHash = (MaterialHash)materialHashArg;
+
+			return shapeTestStatus;
+		}
+
+		/// <summary>
+		/// If status returned is <see cref="ShapeTestStatus.Ready"/>, then returns whether something was hit, and if so nearest hit position, normal, and a hash of the material name.
+		/// You need to call this method until the result is ready since the shape test result may not be finished in the same frame you start the shape test.
+		/// </summary>
+		/// <remarks>
+		/// The shape test request is destroyed by this call if <see cref="ShapeTestStatus.Ready"/> is returned.
+		/// If this is not called every frame then the request will be destroyed.
+		/// </remarks>
+		public (ShapeTestStatus status, ShapeTestResult result, MaterialHash materialHash) GetResultIncludingMaterial()
+		{
+			var status = GetResultIncludingMaterial(out var result, out var materialHash);
+			return (status, result, materialHash);
