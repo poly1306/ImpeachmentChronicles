@@ -123,3 +123,39 @@ namespace GTA
 		{
 			var status = GetResultIncludingMaterial(out var result, out var materialHash);
 			return (status, result, materialHash);
+		}
+
+		public bool Equals(ShapeTestHandle model)
+		{
+			return Handle == model.Handle;
+		}
+		public override bool Equals(object obj)
+		{
+			if (obj is ShapeTestHandle model)
+			{
+				return Equals(model);
+			}
+
+			return false;
+		}
+
+		public static bool operator ==(ShapeTestHandle left, ShapeTestHandle right)
+		{
+			return left.Equals(right);
+		}
+		public static bool operator !=(ShapeTestHandle left, ShapeTestHandle right)
+		{
+			return !left.Equals(right);
+		}
+
+		public static implicit operator InputArgument(ShapeTestHandle value)
+		{
+			return new InputArgument((ulong)value.Handle);
+		}
+
+		public override int GetHashCode()
+		{
+			return Handle;
+		}
+	}
+}
