@@ -48,4 +48,17 @@ namespace GTA
 		/// <remarks>Returns <see cref="Vector3.Zero"/> if the shape test didn't hit anything.</remarks>
 		/// </summary>
 		public Vector3 HitPosition
-		
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Gets the normal of the surface where this shape test hit.
+		/// <remarks>Returns <see cref="Vector3.Zero"/> if the shape test didn't hit anything.</remarks>
+		/// </summary>
+		public Vector3 SurfaceNormal
+		{
+			get;
+		}
+	}
+}
