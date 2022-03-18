@@ -289,4 +289,50 @@ namespace GTA
 				case WeaponHash.SpecialCarbine:
 					return "WT_SPCARBINE";
 				case WeaponHash.HeavyShotgun:
-			
+					return "WT_HVYSHOT";
+				case WeaponHash.Musket:
+					return "WT_MUSKET";
+				case WeaponHash.MarksmanRifle:
+					return "WT_MKRIFLE";
+				case WeaponHash.Firework:
+					return "WT_FWRKLNCHR";
+				case WeaponHash.HomingLauncher:
+					return "WT_HOMLNCH";
+				case WeaponHash.Railgun:
+					return "WT_RAILGUN";
+				case WeaponHash.ProximityMine:
+					return "WT_PRXMINE";
+				// there is no WeaponShopItem for the weapon snowballs, so listed here
+				case WeaponHash.Snowball:
+					return "WT_SNWBALL";
+			}
+
+			DlcWeaponData data;
+			for (int i = 0, max = Function.Call<int>(Native.Hash.GET_NUM_DLC_WEAPONS); i < max; i++)
+			{
+				unsafe
+				{
+					if (Function.Call<bool>(Native.Hash.GET_DLC_WEAPON_DATA, i, &data))
+					{
+						if (data.Hash == hash)
+						{
+							return data.DisplayName;
+						}
+					}
+				}
+			}
+
+			return "WT_INVALID";
+		}
+
+		public static WeaponHash[] GetAllWeaponHashesForHumanPeds()
+		{
+			return SHVDN.NativeMemory.GetAllWeaponHashesForHumanPeds().Select(x => (WeaponHash)x).ToArray();
+		}
+
+		public static Model[] GetAllModels()
+		{
+			return SHVDN.NativeMemory.WeaponModels.Select(x => new Model(x)).ToArray();
+		}
+	}
+}
