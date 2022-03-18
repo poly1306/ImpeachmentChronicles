@@ -44,4 +44,75 @@ namespace GTA
 		public bool IsValid => Function.Call<bool>(Native.Hash.IS_WEAPON_VALID, Hash);
 
 		/// <summary>
-		/// Gets a valu
+		/// Gets a value indicating whether this <see cref="WeaponAsset"/> is valid as a weapon hash.
+		/// </summary>
+		public bool IsValidAsWeaponHash => SHVDN.NativeMemory.IsHashValidAsWeaponHash((uint)Hash);
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="WeaponAsset"/> is loaded so it can be spawned.
+		/// </summary>
+		public bool IsLoaded => Function.Call<bool>(Native.Hash.HAS_WEAPON_ASSET_LOADED, Hash);
+
+		/// <summary>
+		/// Attempts to load this <see cref="WeaponAsset"/> into memory.
+		/// </summary>
+		public void Request()
+		{
+			Function.Call(Native.Hash.REQUEST_WEAPON_ASSET, Hash, 31, 0);
+		}
+		/// <summary>
+		/// Attempts to load this <see cref="WeaponAsset"/> into memory for a given period of time.
+		/// </summary>
+		/// <param name="timeout">The time (in milliseconds) before giving up trying to load this <see cref="WeaponAsset"/>.</param>
+		/// <returns><see langword="true" /> if this <see cref="WeaponAsset"/> is loaded; otherwise, <see langword="false" />.</returns>
+		public bool Request(int timeout)
+		{
+			Request();
+
+			DateTime endtime = timeout >= 0 ? DateTime.UtcNow + new TimeSpan(0, 0, 0, 0, timeout) : DateTime.MaxValue;
+
+			while (!IsLoaded)
+			{
+				Script.Yield();
+				Request();
+
+				if (DateTime.UtcNow >= endtime)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Tells the game we have finished using this <see cref="WeaponAsset"/> and it can be freed from memory.
+		/// </summary>
+		public void MarkAsNoLongerNeeded()
+		{
+			Function.Call(Native.Hash.REMOVE_WEAPON_ASSET, Hash);
+		}
+
+		public string DisplayName => IsValidAsWeaponHash ? Weapon.GetDisplayNameFromHash((WeaponHash)Hash) : string.Empty;
+
+		public string LocalizedName => IsValidAsWeaponHash ? Game.GetLocalizedString(Weapon.GetDisplayNameFromHash((WeaponHash)Hash)) : string.Empty;
+
+		public bool Equals(WeaponAsset weaponAsset)
+		{
+			return Hash == weaponAsset.Hash;
+		}
+		public override bool Equals(object obj)
+		{
+			if (obj is WeaponAsset asset)
+			{
+				return Equals(asset);
+			}
+
+			return false;
+		}
+
+		public static bool operator ==(WeaponAsset left, WeaponAsset right)
+		{
+			return left.Equals(right);
+		}
+		public static bool operator !=
