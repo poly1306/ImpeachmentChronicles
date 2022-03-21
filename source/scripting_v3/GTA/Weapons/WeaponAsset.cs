@@ -115,4 +115,37 @@ namespace GTA
 		{
 			return left.Equals(right);
 		}
-		public static bool operator !=
+		public static bool operator !=(WeaponAsset left, WeaponAsset right)
+		{
+			return !left.Equals(right);
+		}
+
+		public static implicit operator WeaponAsset(int hash)
+		{
+			return new WeaponAsset(hash);
+		}
+		public static implicit operator WeaponAsset(uint hash)
+		{
+			return new WeaponAsset(hash);
+		}
+		public static implicit operator WeaponAsset(WeaponHash hash)
+		{
+			return new WeaponAsset(hash);
+		}
+
+		public static implicit operator InputArgument(WeaponAsset value)
+		{
+			return new InputArgument((ulong)value.Hash);
+		}
+
+		public override int GetHashCode()
+		{
+			return Hash;
+		}
+
+		public override string ToString()
+		{
+			return "0x" + Hash.ToString("X");
+		}
+	}
+}
