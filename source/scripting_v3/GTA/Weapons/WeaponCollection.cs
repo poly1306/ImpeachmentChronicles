@@ -85,4 +85,68 @@ namespace GTA
 			}
 		}
 
-		public b
+		public bool HasWeapon(WeaponHash weaponHash)
+		{
+			return Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON, owner.Handle, weaponHash);
+		}
+
+		public bool IsWeaponValid(WeaponHash hash)
+		{
+			return Function.Call<bool>(Hash.IS_WEAPON_VALID, hash);
+		}
+
+		public Prop CurrentWeaponObject
+		{
+			get
+			{
+				if (Current.Hash == WeaponHash.Unarmed)
+				{
+					return null;
+				}
+
+				return new Prop(Function.Call<int>(Hash.GET_CURRENT_PED_WEAPON_ENTITY_INDEX, owner.Handle));
+			}
+		}
+
+		public bool Select(Weapon weapon)
+		{
+			if (!weapon.IsPresent)
+			{
+				return false;
+			}
+
+			Function.Call(Hash.SET_CURRENT_PED_WEAPON, owner.Handle, weapon.Hash, true);
+
+			return true;
+		}
+		public bool Select(WeaponHash weaponHash)
+		{
+			return Select(weaponHash, true);
+		}
+		public bool Select(WeaponHash weaponHash, bool equipNow)
+		{
+			if (!Function.Call<bool>(Hash.HAS_PED_GOT_WEAPON, owner.Handle, weaponHash))
+			{
+				return false;
+			}
+
+			Function.Call(Hash.SET_CURRENT_PED_WEAPON, owner.Handle, weaponHash, equipNow);
+
+			return true;
+		}
+
+
+		/// <summary>
+		/// Gives the speficied weapon if the owner <see cref="Ped"/> does not have one, or selects the weapon if they have one and <paramref name="equipNow"/> is set to <see langword="true" />.
+		/// </summary>
+		/// <param name="weaponHash">The weapon hash.</param>
+		/// <param name="ammoCount">The ammo count to be added to the weapon inventory of the owner <see cref="Ped"/>.</param>
+		/// <param name="equipNow">If set to <see langword="true" />, the owner <see cref="Ped"/> will switch their weapon to the weapon of <paramref name="weaponHash"/> as soon as they can (not instantly).</param>
+		/// <param name="isAmmoLoaded">
+		/// Does not work since the ammo in clip is always full if not selected unless the game code related to auto-reload is modified.
+		/// This was supposed to determine if the ammo will be loaded after the weapon is given to the owner <see cref="Ped"/>.
+		/// </param>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter")]
+		public Weapon Give(WeaponHash weaponHash, int ammoCount, bool equipNow, bool isAmmoLoaded)
+		{
+			if (!weapons.TryGetValue(weap
