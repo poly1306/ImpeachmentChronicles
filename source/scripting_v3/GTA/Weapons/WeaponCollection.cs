@@ -149,4 +149,59 @@ namespace GTA
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter")]
 		public Weapon Give(WeaponHash weaponHash, int ammoCount, bool equipNow, bool isAmmoLoaded)
 		{
-			if (!weapons.TryGetValue(weap
+			if (!weapons.TryGetValue(weaponHash, out Weapon weapon))
+			{
+				weapon = new Weapon(owner, weaponHash);
+				weapons.Add(weaponHash, weapon);
+			}
+
+			if (weapon.IsPresent)
+			{
+				if (equipNow)
+				{
+					Select(weapon);
+				}
+			}
+			else
+			{
+				// Set the 4th argument to false for consistency. If 4th argument is set to true when 5th one is set to true, the ped will instantly select the added weapon in any case.
+				Function.Call(Hash.GIVE_WEAPON_TO_PED, owner.Handle, weapon.Hash, ammoCount, false, equipNow);
+			}
+
+			return weapon;
+		}
+
+		public Weapon Give(string name, int ammoCount, bool equipNow, bool isAmmoLoaded)
+		{
+			return Give((WeaponHash)Game.GenerateHash(name), ammoCount, equipNow, isAmmoLoaded);
+		}
+
+		public void Drop()
+		{
+			Function.Call(Hash.SET_PED_DROPS_WEAPON, owner.Handle);
+		}
+
+		public void Remove(Weapon weapon)
+		{
+			WeaponHash hash = weapon.Hash;
+
+			if (weapons.ContainsKey(hash))
+			{
+				weapons.Remove(hash);
+			}
+
+			Remove(weapon.Hash);
+		}
+		public void Remove(WeaponHash weaponHash)
+		{
+			Function.Call(Hash.REMOVE_WEAPON_FROM_PED, owner.Handle, weaponHash);
+		}
+
+		public void RemoveAll()
+		{
+			Function.Call(Hash.REMOVE_ALL_PED_WEAPONS, owner.Handle, true);
+
+			weapons.Clear();
+		}
+	}
+}
