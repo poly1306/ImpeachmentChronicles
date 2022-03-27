@@ -107,4 +107,83 @@ namespace GTA
 					}
 				}
 			}
-			retu
+			return _invalidComponent;
+		}
+
+		/// <summary>
+		/// Gets the number of compatible clip components.
+		/// </summary>
+		public int ClipVariationsCount
+		{
+			get
+			{
+				int count = 0;
+				foreach (var component in this)
+				{
+					if (component.AttachmentPoint == WeaponAttachmentPoint.Clip ||
+					component.AttachmentPoint == WeaponAttachmentPoint.Clip2)
+					{
+						count++;
+					}
+				}
+				return count;
+			}
+		}
+
+		/// <summary>
+		/// Gets the scope component at the index.
+		/// </summary>
+		/// <param name="index">The index of the scope component subset of all the weapon component array.</param>
+		/// <returns>
+		/// A <see cref="WeaponComponent"/> instance if the <see cref="WeaponComponent"/> at the <paramref name="index"/> of the scope component subset is found;
+		/// otherwise, the <see cref="WeaponComponent"/> instance representing the invalid component.
+		/// </returns>
+		public WeaponComponent GetScopeComponent(int index)
+		{
+			foreach (var component in this)
+			{
+				if (component.AttachmentPoint == WeaponAttachmentPoint.Scope ||
+					component.AttachmentPoint == WeaponAttachmentPoint.Scope2)
+				{
+					if (index-- == 0)
+					{
+						return component;
+					}
+				}
+			}
+			return _invalidComponent;
+		}
+
+		/// <summary>
+		/// Gets the number of compatible scope components.
+		/// </summary>
+		public int ScopeVariationsCount
+		{
+			get
+			{
+				int count = 0;
+				foreach (var component in this)
+				{
+					if (component.AttachmentPoint == WeaponAttachmentPoint.Scope ||
+					component.AttachmentPoint == WeaponAttachmentPoint.Scope2)
+					{
+						count++;
+					}
+				}
+				return count;
+			}
+		}
+
+		/// <summary>
+		/// Gets the barrel component at the index.
+		/// </summary>
+		/// <param name="index">The index of the barrel component subset of all the weapon component array.</param>
+		/// <returns>
+		/// A <see cref="WeaponComponent"/> instance if the <see cref="WeaponComponent"/> at the <paramref name="index"/> of the barrel component subset is found;
+		/// otherwise, the <see cref="WeaponComponent"/> instance representing the invalid component.
+		/// </returns>
+		public WeaponComponent GetBarrelComponent(int index)
+		{
+			foreach (var component in this)
+			{
+				if (component.Attachm
