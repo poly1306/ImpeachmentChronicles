@@ -186,4 +186,83 @@ namespace GTA
 		{
 			foreach (var component in this)
 			{
-				if (component.Attachm
+				if (component.AttachmentPoint == WeaponAttachmentPoint.Barrel)
+				{
+					if (index-- == 0)
+					{
+						return component;
+					}
+				}
+			}
+			return _invalidComponent;
+		}
+
+		/// <summary>
+		/// Gets the number of compatible barrel components.
+		/// </summary>
+		public int BarrelVariationsCount
+		{
+			get
+			{
+				int count = 0;
+				foreach (var component in this)
+				{
+					if (component.AttachmentPoint == WeaponAttachmentPoint.Barrel)
+					{
+						count++;
+					}
+				}
+				return count;
+			}
+		}
+
+		/// <summary>
+		/// Gets the suppressor or muzzle brake component at the index.
+		/// </summary>
+		/// <param name="index">The index of the subset of the suppressor and muzzle brake components of all the weapon component array.</param>
+		/// <returns>
+		/// A <see cref="WeaponComponent"/> instance if the <see cref="WeaponComponent"/> at the <paramref name="index"/> of the subset of the suppressor and muzzle brake components is found;
+		/// otherwise, the <see cref="WeaponComponent"/> instance representing the invalid component.
+		/// </returns>
+		public WeaponComponent GetSuppressorOrMuzzleBrakeComponent(int index)
+		{
+			foreach (var component in this)
+			{
+				if (component.AttachmentPoint == WeaponAttachmentPoint.Supp ||
+					component.AttachmentPoint == WeaponAttachmentPoint.Supp2)
+				{
+					if (index-- == 0)
+					{
+						return component;
+					}
+				}
+			}
+			return _invalidComponent;
+		}
+
+		/// <summary>
+		/// Gets the number of compatible suppressor and muzzle brake components.
+		/// </summary>
+		public int SuppressorAndMuzzleBrakeVariationsCount
+		{
+			get
+			{
+				int count = 0;
+				foreach (var component in this)
+				{
+					if (component.AttachmentPoint == WeaponAttachmentPoint.Supp ||
+						component.AttachmentPoint == WeaponAttachmentPoint.Supp2)
+					{
+						count++;
+					}
+				}
+				return count;
+			}
+		}
+
+		/// <summary>
+		/// Gets the component for <see cref="WeaponAttachmentPoint.GunRoot"/> at the index.
+		/// </summary>
+		/// <param name="index">The index of the components for <see cref="WeaponAttachmentPoint.GunRoot"/> subset of all the weapon component array.</param>
+		/// <returns>
+		/// A <see cref="WeaponComponent"/> instance if the <see cref="Weap
