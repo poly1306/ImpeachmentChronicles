@@ -334,4 +334,49 @@ namespace GTA
 		{
 			foreach (var component in this)
 			{
-				// COMPONENT_AT_RAILCOVER_01 is the only component that attaches the flashlight position other than actual
+				// COMPONENT_AT_RAILCOVER_01 is the only component that attaches the flashlight position other than actual flashlights
+				if (component.ComponentHash == WeaponComponentHash.AtRailCover01)
+				{
+					continue;
+				}
+
+				if (component.AttachmentPoint == WeaponAttachmentPoint.FlashLaser ||
+					component.AttachmentPoint == WeaponAttachmentPoint.FlashLaser2)
+				{
+					return component;
+				}
+			}
+			return _invalidComponent;
+		}
+
+		/// <summary>
+		/// Gets the first component of all the components for <see cref="WeaponAttachmentPoint.GunRoot"/>.
+		/// Despite the method name, return value is not guaranteed to a <see cref="WeaponComponent"/> instance that represents the luxury finish component.
+		/// </summary>
+		/// <returns>
+		/// The <see cref="WeaponComponent"/> instance if the first component of all the components for <see cref="WeaponAttachmentPoint.GunRoot"/> is found;
+		/// otherwise, the <see cref="WeaponComponent"/> instance representing the invalid component.
+		/// </returns>
+		[Obsolete("WeaponComponentCollection.GetLuxuryFinishComponent is wrongly named and cannot necessarily get all of the components for gun_root (e.g. camo components), please use WeaponComponentCollection.GetGunRootComponent instead.")]
+		public WeaponComponent GetLuxuryFinishComponent()
+		{
+			foreach (var component in this)
+			{
+				if (component.AttachmentPoint == WeaponAttachmentPoint.GunRoot)
+				{
+					return component;
+				}
+			}
+			return _invalidComponent;
+		}
+
+		/// <summary>
+		/// Gets all the compatible weapon component hashes for the speficied weapon hash.
+		/// </summary>
+		/// <param name="hash">The weapon hash.</param>
+		static WeaponComponentHash[] GetComponentsFromHash(WeaponHash hash)
+		{
+			return SHVDN.NativeMemory.GetAllCompatibleWeaponComponentHashes((uint)hash).Select(x => (WeaponComponentHash)x).ToArray();
+		}
+	}
+}
