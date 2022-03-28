@@ -265,4 +265,73 @@ namespace GTA
 		/// </summary>
 		/// <param name="index">The index of the components for <see cref="WeaponAttachmentPoint.GunRoot"/> subset of all the weapon component array.</param>
 		/// <returns>
-		/// A <see cref="WeaponComponent"/> instance if the <see cref="Weap
+		/// A <see cref="WeaponComponent"/> instance if the <see cref="WeaponComponent"/> at the <paramref name="index"/> of the components for <see cref="WeaponAttachmentPoint.GunRoot"/> is found;
+		/// otherwise, the <see cref="WeaponComponent"/> instance representing the invalid component.
+		/// </returns>
+		public WeaponComponent GetGunRootComponent(int index)
+		{
+			foreach (var component in this)
+			{
+				if (component.AttachmentPoint == WeaponAttachmentPoint.GunRoot)
+				{
+					if (index-- == 0)
+					{
+						return component;
+					}
+				}
+			}
+			return _invalidComponent;
+		}
+
+		/// <summary>
+		/// Gets the number of compatible components for <see cref="WeaponAttachmentPoint.GunRoot"/>.
+		/// </summary>
+		public int GunRootVariationsCount
+		{
+			get
+			{
+				int count = 0;
+				foreach (var component in this)
+				{
+					if (component.AttachmentPoint == WeaponAttachmentPoint.GunRoot)
+					{
+						count++;
+					}
+				}
+				return count;
+			}
+		}
+
+		/// <summary>
+		/// Gets the suppressor component.
+		/// </summary>
+		/// <returns>
+		/// The <see cref="WeaponComponent"/> instance if the suppressor component is found;
+		/// otherwise, the <see cref="WeaponComponent"/> instance representing the invalid component.
+		/// </returns>
+		// This should get the suppressor instance, but we could add additional validations by checking if the weapon component info class is CWeaponComponentSuppressorInfo
+		public WeaponComponent GetSuppressorComponent()
+		{
+			foreach (var component in this)
+			{
+				if (component.AttachmentPoint == WeaponAttachmentPoint.Supp ||
+					component.AttachmentPoint == WeaponAttachmentPoint.Supp2)
+				{
+					return component;
+				}
+			}
+			return _invalidComponent;
+		}
+
+		/// <summary>
+		/// Gets the flashlight component.
+		/// </summary>
+		/// <returns>
+		/// The <see cref="WeaponComponent"/> instance if the flashlight component is found;
+		/// otherwise, the <see cref="WeaponComponent"/> instance representing the invalid component.
+		/// </returns>
+		public WeaponComponent GetFlashLightComponent()
+		{
+			foreach (var component in this)
+			{
+				// COMPONENT_AT_RAILCOVER_01 is the only component that attaches the flashlight position other than actual
