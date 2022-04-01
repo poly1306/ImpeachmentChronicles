@@ -18,4 +18,10 @@ namespace GTA
 		ThunderStorm,
 		Clearing,
 		Neutral,
-		S
+		Snowing,
+		Blizzard,
+		Snowlight,
+		Christmas,
+		Halloween,
+	}
+}
