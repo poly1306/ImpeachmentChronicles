@@ -235,3 +235,94 @@ namespace GTA
 		}
 
 		#endregion
+
+		#region Wind
+		public static float WindSpeed
+		{
+			get => Function.Call<float>(Hash.GET_WIND_SPEED);
+			set
+			{
+				if (value < 0f)
+				{
+					value = 0;
+				}
+
+				if (value > 12f)
+				{
+					value = 12f;
+				}
+
+				Function.Call(Hash.SET_WIND_SPEED, value);
+			}
+		}
+
+		public static Vector3 WindDirection => Function.Call<Vector3>(Hash.GET_WIND_DIRECTION);
+		#endregion
+
+		#region Blips
+
+		/// <summary>
+		/// Gets the waypoint blip.
+		/// </summary>
+		/// <returns>The <see cref="Vector3"/> coordinates of the Waypoint <see cref="Blip"/></returns>
+		/// <remarks>
+		/// Returns <see langword="null" /> if a waypoint <see cref="Blip"/> hasn't been set
+		/// </remarks>
+		public static Blip WaypointBlip
+		{
+			get
+			{
+				var handle = SHVDN.NativeMemory.GetWaypointBlip();
+
+				if (handle != 0)
+				{
+					return new Blip(handle);
+				}
+
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Removes the waypoint.
+		/// </summary>
+		public static void RemoveWaypoint()
+		{
+			Function.Call(Hash.SET_WAYPOINT_OFF);
+		}
+
+		/// <summary>
+		/// Gets or sets the waypoint position.
+		/// </summary>
+		/// <returns>The <see cref="Vector3"/> coordinates of the Waypoint <see cref="Blip"/></returns>
+		/// <remarks>
+		/// Returns an empty <see cref="Vector3"/> if a waypoint <see cref="Blip"/> hasn't been set
+		/// If the game engine cant extract height information the Z component will be 0.0f
+		/// </remarks>
+		public static Vector3 WaypointPosition
+		{
+			get
+			{
+				Blip waypointBlip = WaypointBlip;
+				if (waypointBlip == null)
+				{
+					return Vector3.Zero;
+				}
+
+				Vector3 position = waypointBlip.Position;
+				position.Z = GetGroundHeight((Vector2)position);
+				return position;
+			}
+			set
+			{
+				Function.Call(Hash.SET_NEW_WAYPOINT, value.X, value.Y);
+			}
+		}
+
+		/// <summary>
+		/// Gets an <c>array</c> of all the <see cref="Blip"/>s on the map with a given <see cref="BlipSprite"/>.
+		/// </summary>
+		/// <param name="blipTypes">The blip types to include, leave blank to get all <see cref="Blip"/>s.</param>
+		public static Blip[] GetAllBlips(params BlipSprite[] blipTypes)
+		{
+			int[] blipTypesInt =
