@@ -325,4 +325,50 @@ namespace GTA
 		/// <param name="blipTypes">The blip types to include, leave blank to get all <see cref="Blip"/>s.</param>
 		public static Blip[] GetAllBlips(params BlipSprite[] blipTypes)
 		{
-			int[] blipTypesInt =
+			int[] blipTypesInt = Array.ConvertAll(blipTypes, blipType => (int)blipType);
+			return Array.ConvertAll(SHVDN.NativeMemory.GetNonCriticalRadarBlipHandles(blipTypesInt), handle => new Blip(handle));
+		}
+
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Blip"/>s in a given region in the World.
+		/// </summary>
+		/// <param name="position">The position to check the <see cref="Blip"/> against.</param>
+		/// <param name="radius">The maximum distance from the <paramref name="position"/> to detect <see cref="Blip"/>s.</param>
+		/// <param name="blipTypes">The blip types to include, leave blank to get all <see cref="Blip"/>s.</param>
+		public static Blip[] GetNearbyBlips(Vector3 position, float radius, params BlipSprite[] blipTypes)
+		{
+			int[] blipTypesInt = Array.ConvertAll(blipTypes, blipType => (int)blipType);
+			return Array.ConvertAll(SHVDN.NativeMemory.GetNonCriticalRadarBlipHandles(position.ToArray(), radius, blipTypesInt), handle => new Blip(handle));
+		}
+
+		/// <summary>
+		/// Creates a <see cref="Blip"/> at the given position on the map.
+		/// </summary>
+		/// <param name="position">The position of the blip on the map.</param>
+		public static Blip CreateBlip(Vector3 position)
+		{
+			return new Blip(Function.Call<int>(Hash.ADD_BLIP_FOR_COORD, position.X, position.Y, position.Z));
+		}
+		/// <summary>
+		/// Creates a <see cref="Blip"/> for a circular area at the given position on the map.
+		/// </summary>
+		/// <param name="position">The position of the blip on the map.</param>
+		/// <param name="radius">The radius of the area on the map.</param>
+		public static Blip CreateBlip(Vector3 position, float radius)
+		{
+			return new Blip(Function.Call<int>(Hash.ADD_BLIP_FOR_RADIUS, position.X, position.Y, position.Z, radius));
+		}
+
+		#endregion
+
+		#region Entities
+
+		/// <summary>
+		/// A fast way to get the total number of <see cref="Vehicle"/>s spawned in the world.
+		/// </summary>
+		public static int VehicleCount => SHVDN.NativeMemory.GetVehicleCount();
+		/// <summary>
+		/// A fast way to get the total number of <see cref="Ped"/>s spawned in the world.
+		/// </summary>
+		public static int PedCount => SHVDN.NativeMemory.GetPedCount();
+		/// <summary
