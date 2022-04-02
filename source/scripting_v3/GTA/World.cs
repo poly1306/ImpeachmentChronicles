@@ -371,4 +371,48 @@ namespace GTA
 		/// A fast way to get the total number of <see cref="Ped"/>s spawned in the world.
 		/// </summary>
 		public static int PedCount => SHVDN.NativeMemory.GetPedCount();
-		/// <summary
+		/// <summary>
+		/// A fast way to get the total number of <see cref="Prop"/>s spawned in the world.
+		/// </summary>
+		public static int PropCount => SHVDN.NativeMemory.GetObjectCount();
+		/// <summary>
+		/// A fast way to get the total number of <see cref="Prop"/>s in the world associated with a <see cref="Pickup"/>.
+		/// </summary>
+		public static int PickupObjectCount => SHVDN.NativeMemory.GetPickupObjectCount();
+
+		/// <summary>
+		/// A fast way to get the total number of <see cref="Building"/>s spawned in the world.
+		/// </summary>
+		public static int BuildingCount => SHVDN.NativeMemory.GetBuildingCount();
+		/// <summary>
+		/// A fast way to get the total number of <see cref="AnimatedBuilding"/>s spawned in the world.
+		/// </summary>
+		public static int AnimatedBuildingCount => SHVDN.NativeMemory.GetAnimatedBuildingCount();
+		/// <summary>
+		/// A fast way to get the total number of <see cref="InteriorInstance"/>s spawned in the world.
+		/// </summary>
+		public static int InteriorInstanceCount => SHVDN.NativeMemory.GetInteriorInstCount();
+		/// <summary>
+		/// A fast way to get the total number of <see cref="InteriorProxy"/>s managed in the <see cref="InteriorProxy"/> pool.
+		/// </summary>
+		public static int InteriorProxyCount => SHVDN.NativeMemory.GetInteriorProxyCount();
+
+		/// <summary>
+		/// A fast way to get the total number of <see cref="Projectile"/>s spawned in the world.
+		/// </summary>
+		public static int ProjectileCount => SHVDN.NativeMemory.GetProjectileCount();
+
+		/// <summary>
+		/// Returns the total number of <see cref="Entity"/> colliders used.
+		/// </summary>
+		public static int EntityColliderCount => SHVDN.NativeMemory.GetEntityColliderCount();
+
+		/// <summary>
+		/// The total number of <see cref="Vehicle"/>s that can exist in the world.
+		/// </summary>
+		/// <remarks>The game will crash when the number of <see cref="Vehicle"/> is the same as this limit and the game tries to create a <see cref="Vehicle"/>.</remarks>
+		public static int VehicleCapacity => SHVDN.NativeMemory.GetVehicleCapacity();
+		/// <summary>
+		/// The total number of <see cref="Ped"/>s that can exist in the world.
+		/// </summary>
+		/// <remarks>The g
