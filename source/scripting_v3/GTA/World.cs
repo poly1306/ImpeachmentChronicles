@@ -450,3 +450,39 @@ namespace GTA
 		/// <summary>
 		/// <para>The total number of <see cref="Entity"/> colliders can be used. The return value can be different in different versions.</para>
 		/// <para>When <see cref="EntityColliderCount"/> reaches this value, no more <see cref="Entity"/> will not be able to be physically moved
+		/// and <see cref="Vehicle"/>s and <see cref="Prop"/>s will not be able to detach fragment parts properly.</para>
+		/// </summary>
+		public static int EntityColliderCapacity => SHVDN.NativeMemory.GetEntityColliderCapacity();
+
+		/// <summary>
+		/// Gets the closest <see cref="Ped"/> to a given position in the World.
+		/// </summary>
+		/// <param name="position">The position to find the nearest <see cref="Ped"/>.</param>
+		/// <param name="radius">The maximum distance from the <paramref name="position"/> to detect <see cref="Ped"/>s.</param>
+		/// <param name="models">The <see cref="Model"/> of <see cref="Ped"/>s to get, leave blank for all <see cref="Ped"/> <see cref="Model"/>s.</param>
+		/// <remarks>Returns <see langword="null" /> if no <see cref="Ped"/> was in the given region.</remarks>
+		public static Ped GetClosestPed(Vector3 position, float radius, params Model[] models)
+		{
+			return GetClosest(position, GetNearbyPeds(position, radius, models));
+		}
+
+		/// <summary>
+		/// Gets an <c>array</c>of all <see cref="Ped"/>s in the World.
+		/// </summary>
+		/// <param name="models">The <see cref="Model"/> of <see cref="Ped"/>s to get, leave blank for all <see cref="Ped"/> <see cref="Model"/>s.</param>
+		public static Ped[] GetAllPeds(params Model[] models)
+		{
+			int[] hashes = Array.ConvertAll(models, model => model.Hash);
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPedHandles(hashes), handle => new Ped(handle));
+		}
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Ped"/>s near a given <see cref="Ped"/> in the world
+		/// </summary>
+		/// <param name="ped">The ped to check.</param>
+		/// <param name="radius">The maximun distance from the <paramref name="ped"/> to detect <see cref="Ped"/>s.</param>
+		/// <param name="models">The <see cref="Model"/> of <see cref="Ped"/>s to get, leave blank for all <see cref="Ped"/> <see cref="Model"/>s.</param>
+		/// <remarks>Doesnt include the <paramref name="ped"/> in the result</remarks>
+		public static Ped[] GetNearbyPeds(Ped ped, float radius, params Model[] models)
+		{
+			int[] hashes = Array.ConvertAll(models, model => model.Hash);
+			int[] handles = SHVDN.NativeMemory.GetPedHandles(ped.Position.To
