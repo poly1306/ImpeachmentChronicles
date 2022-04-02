@@ -155,4 +155,83 @@ namespace GTA
 			}
 			set
 			{
-				if (Enum.IsDefined(typeof(Weathe
+				if (Enum.IsDefined(typeof(Weather), value) && value != Weather.Unknown)
+				{
+					Function.Call(Hash.SET_WEATHER_TYPE_NOW, weatherNames[(int)value]);
+				}
+			}
+		}
+		/// <summary>
+		/// Gets or sets the next weather.
+		/// </summary>
+		/// <value>
+		/// The next weather.
+		/// </value>
+		public static Weather NextWeather
+		{
+			get
+			{
+				for (int i = 0; i < weatherNames.Length; i++)
+				{
+					if (Function.Call<bool>(Hash.IS_NEXT_WEATHER_TYPE, weatherNames[i]))
+					{
+						return (Weather)i;
+					}
+				}
+
+				return Weather.Unknown;
+			}
+			set
+			{
+				if (Enum.IsDefined(typeof(Weather), value) && value != Weather.Unknown)
+				{
+					int currentWeatherHash, nextWeatherHash;
+					float weatherTransition;
+					unsafe
+					{
+						Function.Call(Hash.GET_CURR_WEATHER_STATE, &currentWeatherHash, &nextWeatherHash, &weatherTransition);
+					}
+					Function.Call(Hash.SET_CURR_WEATHER_STATE, currentWeatherHash, Game.GenerateHash(weatherNames[(int)value]), 0.0f);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Transitions to weather.
+		/// </summary>
+		/// <param name="weather">The weather.</param>
+		/// <param name="duration">The duration.</param>
+		public static void TransitionToWeather(Weather weather, float duration)
+		{
+			if (Enum.IsDefined(typeof(Weather), weather) && weather != Weather.Unknown)
+			{
+				Function.Call(Hash.SET_WEATHER_TYPE_OVERTIME_PERSIST, weatherNames[(int)weather], duration);
+			}
+		}
+
+		/// <summary>
+		/// Sets the gravity level for all <see cref="World"/> objects.
+		/// </summary>
+		/// <value>
+		/// The gravity level:
+		/// 9.8f - Default gravity.
+		/// 2.4f - Moon gravity.
+		/// 0.1f - Very low gravity.
+		/// 0.0f - No gravity.
+		/// </value>
+		public static float GravityLevel
+		{
+			get => SHVDN.NativeMemory.WorldGravity;
+			set
+			{
+				// Write the value you want to the first item in the array where the native reads the gravity level choices from
+				SHVDN.NativeMemory.WorldGravity = value;
+				// Call set_gravity_level normally using 0 as gravity type
+				// The native will then set the gravity level to what we just wrote
+				Function.Call(Hash.SET_GRAVITY_LEVEL, 0);
+				// Reset the array item back to 9.8 so as to restore behavior of the native
+				SHVDN.NativeMemory.WorldGravity = 9.800000f;
+			}
+		}
+
+		#endregion
