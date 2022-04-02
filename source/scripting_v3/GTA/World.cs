@@ -74,4 +74,85 @@ namespace GTA
 				int year = Function.Call<int>(Hash.GET_CLOCK_YEAR);
 				int month = Function.Call<int>(Hash.GET_CLOCK_MONTH) + 1;
 				int day = System.Math.Min(Function.Call<int>(Hash.GET_CLOCK_DAY_OF_MONTH), calendar.GetDaysInMonth(year, month));
-				in
+				int hour = Function.Call<int>(Hash.GET_CLOCK_HOURS);
+				int minute = Function.Call<int>(Hash.GET_CLOCK_MINUTES);
+				int second = Function.Call<int>(Hash.GET_CLOCK_SECONDS);
+
+				return new DateTime(year, month, day, hour, minute, second);
+			}
+			set
+			{
+				Function.Call(Hash.SET_CLOCK_DATE, value.Day, value.Month - 1, value.Year);
+				Function.Call(Hash.SET_CLOCK_TIME, value.Hour, value.Minute, value.Second);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the current time of day in the GTA World.
+		/// </summary>
+		/// <value>
+		/// The current time of day
+		/// </value>
+		public static TimeSpan CurrentTimeOfDay
+		{
+			get
+			{
+				int hours = Function.Call<int>(Hash.GET_CLOCK_HOURS);
+				int minutes = Function.Call<int>(Hash.GET_CLOCK_MINUTES);
+				int seconds = Function.Call<int>(Hash.GET_CLOCK_SECONDS);
+
+				return new TimeSpan(hours, minutes, seconds);
+			}
+			set => Function.Call(Hash.SET_CLOCK_TIME, value.Hours, value.Minutes, value.Seconds);
+		}
+
+		/// <summary>
+		/// Gets or sets how many milliseconds in the real world one game minute takes.
+		/// </summary>
+		/// <value>
+		/// The milliseconds one game minute takes in the real world.
+		/// </value>
+		public static int MillisecondsPerGameMinute
+		{
+			get => Function.Call<int>(Hash.GET_MILLISECONDS_PER_GAME_MINUTE);
+			set => SHVDN.NativeMemory.MillisecondsPerGameMinute = value;
+		}
+
+		#endregion
+
+		#region Weather & Effects
+
+		/// <summary>
+		/// Sets a value indicating whether lights in the <see cref="World"/> should be rendered.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if blackout; otherwise, <see langword="false" />.
+		/// </value>
+		public static bool Blackout
+		{
+			set => Function.Call(Hash.SET_ARTIFICIAL_LIGHTS_STATE, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the weather.
+		/// </summary>
+		/// <value>
+		/// The weather.
+		/// </value>
+		public static Weather Weather
+		{
+			get
+			{
+				for (int i = 0; i < weatherNames.Length; i++)
+				{
+					if (Function.Call<int>(Hash.GET_PREV_WEATHER_TYPE_HASH_NAME) == Game.GenerateHash(weatherNames[i]))
+					{
+						return (Weather)i;
+					}
+				}
+
+				return Weather.Unknown;
+			}
+			set
+			{
+				if (Enum.IsDefined(typeof(Weathe
