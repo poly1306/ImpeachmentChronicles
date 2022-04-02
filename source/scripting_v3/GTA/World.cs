@@ -415,4 +415,38 @@ namespace GTA
 		/// <summary>
 		/// The total number of <see cref="Ped"/>s that can exist in the world.
 		/// </summary>
-		/// <remarks>The g
+		/// <remarks>The game will crash when the number of <see cref="Ped"/> is the same as this limit and the game tries to create a <see cref="Ped"/>.</remarks>
+		public static int PedCapacity => SHVDN.NativeMemory.GetPedCapacity();
+		/// <summary>
+		/// The total number of <see cref="Prop"/>s that can exist in the world.
+		/// </summary>
+		/// <remarks>The game will crash when the number of <see cref="Prop"/> is the same as this limit and the game tries to create a <see cref="Prop"/>.</remarks>
+		public static int PropCapacity => SHVDN.NativeMemory.GetObjectCapacity();
+		/// <summary>
+		/// The total number of <see cref="Prop"/>s in the world associated with a <see cref="Pickup"/> that can exist in the world.
+		/// </summary>
+		public static int PickupObjectCapacity => SHVDN.NativeMemory.GetPickupObjectCapacity();
+		/// <summary>
+		/// The total number of <see cref="Projectile"/>s that can exist in the world.
+		/// Always returns 50 currently since the limit is hard-coded in the exe.
+		/// </summary>
+		public static int ProjectileCapacity => SHVDN.NativeMemory.GetProjectileCapacity();
+		/// <summary>
+		/// The total number of <see cref="Building"/>s that can exist in the world.
+		/// </summary>
+		public static int BuildingCapacity => SHVDN.NativeMemory.GetBuildingCapacity();
+		/// <summary>
+		/// The total number of <see cref="AnimatedBuilding"/>s that can exist in the world.
+		/// </summary>
+		public static int AnimatedBuildingCapacity => SHVDN.NativeMemory.GetAnimatedBuildingCapacity();
+		/// <summary>
+		/// The total number of <see cref="InteriorInstance"/>s that can exist in the world.
+		/// </summary>
+		public static int InteriorInstanceCapacity => SHVDN.NativeMemory.GetInteriorInstCapacity();
+		/// <summary>
+		/// The total number of <see cref="InteriorProxy"/>s the game can manage at the same time in the <see cref="InteriorProxy"/> pool.
+		/// </summary>
+		public static int InteriorProxyCapacity => SHVDN.NativeMemory.GetInteriorProxyCapacity();
+		/// <summary>
+		/// <para>The total number of <see cref="Entity"/> colliders can be used. The return value can be different in different versions.</para>
+		/// <para>When <see cref="EntityColliderCount"/> reaches this value, no more <see cref="Entity"/> will not be able to be physically moved
