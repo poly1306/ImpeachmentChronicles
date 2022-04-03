@@ -611,4 +611,45 @@ namespace GTA
 		/// </summary>
 		/// <param name="position">The position to find the nearest <see cref="Prop"/>.</param>
 		/// <param name="radius">The maximum distance from the <paramref name="position"/> to detect <see cref="Prop"/>s.</param>
-		/// <remarks>Returns <see 
+		/// <remarks>Returns <see langword="null" /> if no <see cref="Prop"/> was in the given region.</remarks>
+		public static Prop GetClosestPickupObject(Vector3 position, float radius)
+		{
+			return GetClosest(position, GetNearbyPickupObjects(position, radius));
+		}
+
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Prop"/>s in the World associated with a <see cref="Pickup"/>.
+		/// </summary>
+		public static Prop[] GetAllPickupObjects()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPickupObjectHandles(), handle => new Prop(handle));
+		}
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Prop"/>s in a given region in the World associated with a <see cref="Pickup"/>.
+		/// </summary>
+		/// <param name="position">The position to check the <see cref="Entity"/> against.</param>
+		/// <param name="radius">The maximun distance from the <paramref name="position"/> to detect <see cref="Prop"/>s.</param>
+		public static Prop[] GetNearbyPickupObjects(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPickupObjectHandles(position.ToArray(), radius), handle => new Prop(handle));
+		}
+		/// <summary>
+		/// Gets the closest <see cref="Projectile"/> to a given position in the World.
+		/// </summary>
+		/// <param name="position">The position to find the nearest <see cref="Projectile"/>.</param>
+		/// <param name="radius">The maximum distance from the <paramref name="position"/> to detect <see cref="Projectile"/>s.</param>
+		/// <remarks>Returns <see langword="null" /> if no <see cref="Projectile"/> was in the given region.</remarks>
+		public static Projectile GetClosestProjectile(Vector3 position, float radius)
+		{
+			return GetClosest(position, GetNearbyProjectiles(position, radius));
+		}
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Projectile"/>s in the World.
+		/// </summary>
+		public static Projectile[] GetAllProjectiles()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetProjectileHandles(), handle => new Projectile(handle));
+		}
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Projectile"/>s in a given region in the World.
+		/// </summary
