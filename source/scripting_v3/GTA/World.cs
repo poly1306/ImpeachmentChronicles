@@ -753,4 +753,63 @@ namespace GTA
 			return (T)closest;
 		}
 		/// <summary>
-		/// Gets the closest <see cref="ISpatial"/> to a given position in 
+		/// Gets the closest <see cref="ISpatial"/> to a given position in the World ignoring height.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="spatials">The spatials to check.</param>
+		/// <returns>The closest <see cref="ISpatial"/> to the <paramref name="position"/></returns>
+		public static T GetClosest<T>(Vector2 position, params T[] spatials) where T : ISpatial
+		{
+			ISpatial closest = null;
+			float closestDistance = 3e38f;
+			var position3D = new Vector3(position.X, position.Y, 0.0f);
+
+			foreach (var spatial in spatials)
+			{
+				var distance = position3D.DistanceToSquared2D(spatial.Position);
+				if (distance <= closestDistance)
+				{
+					closest = spatial;
+					closestDistance = distance;
+				}
+			}
+			return (T)closest;
+		}
+		/// <summary>
+		/// Gets the closest <see cref="Building"/> to a given position in the World.
+		/// </summary>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="buildings">The buildings to check.</param>
+		/// <returns>The closest <see cref="Building"/> to the <paramref name="position"/></returns>
+		public static Building GetClosest(Vector3 position, params Building[] buildings)
+		{
+			Building closest = null;
+			float closestDistance = 3e38f;
+
+			foreach (var building in buildings)
+			{
+				var distance = position.DistanceToSquared(building.Position);
+				if (distance <= closestDistance)
+				{
+					closest = building;
+					closestDistance = distance;
+				}
+			}
+			return closest;
+		}
+		/// <summary>
+		/// Gets the closest <see cref="Building"/> to a given position in the World ignoring height.
+		/// </summary>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="buildings">The buildings to check.</param>
+		/// <returns>The closest <see cref="Building"/> to the <paramref name="position"/></returns>
+		public static Building GetClosest(Vector2 position, params Building[] buildings)
+		{
+			Building closest = null;
+			float closestDistance = 3e38f;
+			var position3D = new Vector3(position.X, position.Y, 0.0f);
+
+			foreach (var building in buildings)
+			{
+				var distance = position3D.DistanceToSquared2D(building.Positio
