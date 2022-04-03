@@ -532,4 +532,48 @@ namespace GTA
 		public static Vehicle[] GetAllVehicles(params Model[] models)
 		{
 			int[] hashes = Array.ConvertAll(models, model => model.Hash);
-			return Array.ConvertAll(SHVDN.Native
+			return Array.ConvertAll(SHVDN.NativeMemory.GetVehicleHandles(hashes), handle => new Vehicle(handle));
+		}
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Vehicle"/>s near a given <see cref="Ped"/> in the world
+		/// </summary>
+		/// <param name="ped">The ped to check.</param>
+		/// <param name="radius">The maximun distance from the <paramref name="ped"/> to detect <see cref="Vehicle"/>s.</param>
+		/// <param name="models">The <see cref="Model"/> of <see cref="Vehicle"/>s to get, leave blank for all <see cref="Vehicle"/> <see cref="Model"/>s.</param>
+		/// <remarks>Doesnt include the <see cref="Vehicle"/> the <paramref name="ped"/> is using in the result</remarks>
+		public static Vehicle[] GetNearbyVehicles(Ped ped, float radius, params Model[] models)
+		{
+			int[] hashes = Array.ConvertAll(models, model => model.Hash);
+			int[] handles = SHVDN.NativeMemory.GetVehicleHandles(ped.Position.ToArray(), radius, hashes);
+
+			var result = new List<Vehicle>();
+			Vehicle ignore = ped.CurrentVehicle;
+
+			foreach (int handle in handles)
+			{
+				if (ignore != null && handle == ignore.Handle)
+				{
+					continue;
+				}
+
+				result.Add(new Vehicle(handle));
+			}
+
+			return result.ToArray();
+		}
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Vehicle"/>s in a given region in the World.
+		/// </summary>
+		/// <param name="position">The position to check the <see cref="Vehicle"/> against.</param>
+		/// <param name="radius">The maximun distance from the <paramref name="position"/> to detect <see cref="Vehicle"/>s.</param>
+		/// <param name="models">The <see cref="Model"/> of <see cref="Vehicle"/>s to get, leave blank for all <see cref="Vehicle"/> <see cref="Model"/>s.</param>
+		public static Vehicle[] GetNearbyVehicles(Vector3 position, float radius, params Model[] models)
+		{
+			int[] hashes = Array.ConvertAll(models, model => model.Hash);
+			return Array.ConvertAll(SHVDN.NativeMemory.GetVehicleHandles(position.ToArray(), radius, hashes), handle => new Vehicle(handle));
+		}
+
+		/// <summary>
+		/// Gets the closest <see cref="Prop"/> to a given position in the World.
+		/// </summary>
+		/// <param name="position">The position to find the nearest <see cref="Prop"/>.</para
