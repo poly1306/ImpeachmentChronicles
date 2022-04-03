@@ -697,4 +697,60 @@ namespace GTA
 		public static AnimatedBuilding[] GetNearbyAnimatedBuildings(Vector3 position, float radius)
 		{
 			return Array.ConvertAll(SHVDN.NativeMemory.GetAnimatedBuildingHandles(position.ToArray(), radius), AnimatedBuilding.FromHandle);
-		
+		}
+		public static AnimatedBuilding GetClosestAnimatedBuilding(Vector3 position, float radius)
+		{
+			return GetClosest(position, GetNearbyAnimatedBuildings(position, radius));
+		}
+
+		public static InteriorInstance[] GetAllInteriorInstances()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetInteriorInstHandles(), InteriorInstance.FromHandle);
+		}
+		public static InteriorInstance[] GetNearbyInteriorInstances(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetInteriorInstHandles(position.ToArray(), radius), InteriorInstance.FromHandle);
+		}
+		public static InteriorInstance GetClosestInteriorInstance(Vector3 position, float radius)
+		{
+			return GetClosest(position, GetNearbyInteriorInstances(position, radius));
+		}
+
+		public static InteriorProxy[] GetAllInteriorProxies()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetInteriorProxyHandles(), InteriorProxy.FromHandle);
+		}
+		public static InteriorProxy[] GetNearbyInteriorProxies(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetInteriorProxyHandles(position.ToArray(), radius), InteriorProxy.FromHandle);
+		}
+		public static InteriorProxy GetClosestInteriorProxy(Vector3 position, float radius)
+		{
+			return GetClosest(position, GetNearbyInteriorProxies(position, radius));
+		}
+
+		/// <summary>
+		/// Gets the closest <see cref="ISpatial"/> to a given position in the World.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="spatials">The spatials to check.</param>
+		/// <returns>The closest <see cref="ISpatial"/> to the <paramref name="position"/></returns>
+		public static T GetClosest<T>(Vector3 position, params T[] spatials) where T : ISpatial
+		{
+			ISpatial closest = null;
+			float closestDistance = 3e38f;
+
+			foreach (var spatial in spatials)
+			{
+				var distance = position.DistanceToSquared(spatial.Position);
+				if (distance <= closestDistance)
+				{
+					closest = spatial;
+					closestDistance = distance;
+				}
+			}
+			return (T)closest;
+		}
+		/// <summary>
+		/// Gets the closest <see cref="ISpatial"/> to a given position in 
