@@ -652,4 +652,49 @@ namespace GTA
 		}
 		/// <summary>
 		/// Gets an <c>array</c> of all <see cref="Projectile"/>s in a given region in the World.
-		/// </summary
+		/// </summary>
+		/// <param name="position">The position to check the <see cref="Projectile"/> against.</param>
+		/// <param name="radius">The maximum distance from the <paramref name="position"/> to detect <see cref="Projectile"/>s.</param>
+		public static Projectile[] GetNearbyProjectiles(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetProjectileHandles(position.ToArray(), radius), handle => new Projectile(handle));
+		}
+
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Entity"/>s in the World.
+		/// </summary>
+		public static Entity[] GetAllEntities()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetEntityHandles(), Entity.FromHandle);
+		}
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Entity"/>s in a given region in the World.
+		/// </summary>
+		/// <param name="position">The position to check the <see cref="Entity"/> against.</param>
+		/// <param name="radius">The maximun distance from the <paramref name="position"/> to detect <see cref="Entity"/>s.</param>
+		public static Entity[] GetNearbyEntities(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetEntityHandles(position.ToArray(), radius), Entity.FromHandle);
+		}
+
+		public static Building[] GetAllBuildings()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetBuildingHandles(), Building.FromHandle);
+		}
+		public static Building[] GetNearbyBuildings(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetBuildingHandles(position.ToArray(), radius), Building.FromHandle);
+		}
+		public static Building GetClosestBuilding(Vector3 position, float radius)
+		{
+			return GetClosest(position, GetNearbyBuildings(position, radius));
+		}
+
+		public static AnimatedBuilding[] GetAllAnimatedBuildings()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetAnimatedBuildingHandles(), AnimatedBuilding.FromHandle);
+		}
+		public static AnimatedBuilding[] GetNearbyAnimatedBuildings(Vector3 position, float radius)
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetAnimatedBuildingHandles(position.ToArray(), radius), AnimatedBuilding.FromHandle);
+		
