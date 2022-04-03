@@ -576,4 +576,39 @@ namespace GTA
 		/// <summary>
 		/// Gets the closest <see cref="Prop"/> to a given position in the World.
 		/// </summary>
-		/// <param name="position">The position to find the nearest <see cref="Prop"/>.</para
+		/// <param name="position">The position to find the nearest <see cref="Prop"/>.</param>
+		/// <param name="radius">The maximum distance from the <paramref name="position"/> to detect <see cref="Prop"/>s.</param>
+		/// <param name="models">The <see cref="Model"/> of <see cref="Prop"/>s to get, leave blank for all <see cref="Prop"/> <see cref="Model"/>s.</param>
+		/// <remarks>Returns <see langword="null" /> if no <see cref="Prop"/> was in the given region.</remarks>
+		public static Prop GetClosestProp(Vector3 position, float radius, params Model[] models)
+		{
+			return GetClosest(position, GetNearbyProps(position, radius, models));
+		}
+
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Prop"/>s in the World.
+		/// </summary>
+		/// <param name="models">The <see cref="Model"/> of <see cref="Prop"/>s to get, leave blank for all <see cref="Prop"/> <see cref="Model"/>s.</param>
+		public static Prop[] GetAllProps(params Model[] models)
+		{
+			int[] hashes = Array.ConvertAll(models, model => model.Hash);
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPropHandles(hashes), handle => new Prop(handle));
+		}
+		/// <summary>
+		/// Gets an <c>array</c> of all <see cref="Prop"/>s in a given region in the World.
+		/// </summary>
+		/// <param name="position">The position to check the <see cref="Prop"/> against.</param>
+		/// <param name="radius">The maximun distance from the <paramref name="position"/> to detect <see cref="Prop"/>s.</param>
+		/// <param name="models">The <see cref="Model"/> of <see cref="Prop"/>s to get, leave blank for all <see cref="Prop"/> <see cref="Model"/>s.</param>
+		public static Prop[] GetNearbyProps(Vector3 position, float radius, params Model[] models)
+		{
+			int[] hashes = Array.ConvertAll(models, model => model.Hash);
+			return Array.ConvertAll(SHVDN.NativeMemory.GetPropHandles(position.ToArray(), radius, hashes), handle => new Prop(handle));
+		}
+
+		/// <summary>
+		/// Gets the closest <see cref="Prop"/> to a given position in the World associated with a <see cref="Pickup"/>.
+		/// </summary>
+		/// <param name="position">The position to find the nearest <see cref="Prop"/>.</param>
+		/// <param name="radius">The maximum distance from the <paramref name="position"/> to detect <see cref="Prop"/>s.</param>
+		/// <remarks>Returns <see 
