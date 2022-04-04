@@ -812,4 +812,63 @@ namespace GTA
 
 			foreach (var building in buildings)
 			{
-				var distance = position3D.DistanceToSquared2D(building.Positio
+				var distance = position3D.DistanceToSquared2D(building.Position);
+				if (distance <= closestDistance)
+				{
+					closest = building;
+					closestDistance = distance;
+				}
+			}
+			return closest;
+		}
+		/// <summary>
+		/// Gets the closest <see cref="AnimatedBuilding"/> to a given position in the World.
+		/// </summary>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="animatedBuildings">The animated building to check.</param>
+		/// <returns>The closest <see cref="AnimatedBuilding"/> to the <paramref name="position"/></returns>
+		public static AnimatedBuilding GetClosest(Vector3 position, params AnimatedBuilding[] animatedBuildings)
+		{
+			AnimatedBuilding closest = null;
+			float closestDistance = 3e38f;
+
+			foreach (var animatedBuilding in animatedBuildings)
+			{
+				var distance = position.DistanceToSquared(animatedBuilding.Position);
+				if (distance <= closestDistance)
+				{
+					closest = animatedBuilding;
+					closestDistance = distance;
+				}
+			}
+			return closest;
+		}
+		/// <summary>
+		/// Gets the closest <see cref="AnimatedBuilding"/> to a given position in the World ignoring height.
+		/// </summary>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="animatedBuildings">The animated building to check.</param>
+		/// <returns>The closest <see cref="AnimatedBuilding"/> to the <paramref name="position"/></returns>
+		public static AnimatedBuilding GetClosest(Vector2 position, params AnimatedBuilding[] animatedBuildings)
+		{
+			AnimatedBuilding closest = null;
+			float closestDistance = 3e38f;
+			var position3D = new Vector3(position.X, position.Y, 0.0f);
+
+			foreach (var animatedBuilding in animatedBuildings)
+			{
+				var distance = position3D.DistanceToSquared2D(animatedBuilding.Position);
+				if (distance <= closestDistance)
+				{
+					closest = animatedBuilding;
+					closestDistance = distance;
+				}
+			}
+			return closest;
+		}
+		/// <summary>
+		/// Gets the closest <see cref="InteriorInstance"/> to a given position in the World.
+		/// </summary>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="interiorInstances">The spatials to check.</param>
+		/// <returns>The closest <see cref="InteriorInstance"/> to the <pa
