@@ -871,4 +871,67 @@ namespace GTA
 		/// </summary>
 		/// <param name="position">The position to check against.</param>
 		/// <param name="interiorInstances">The spatials to check.</param>
-		/// <returns>The closest <see cref="InteriorInstance"/> to the <pa
+		/// <returns>The closest <see cref="InteriorInstance"/> to the <paramref name="position"/></returns>
+		public static InteriorInstance GetClosest(Vector3 position, params InteriorInstance[] interiorInstances)
+		{
+			InteriorInstance closest = null;
+			float closestDistance = 3e38f;
+
+			foreach (var interiorInstance in interiorInstances)
+			{
+				var distance = position.DistanceToSquared(interiorInstance.Position);
+				if (distance <= closestDistance)
+				{
+					closest = interiorInstance;
+					closestDistance = distance;
+				}
+			}
+			return closest;
+		}
+		/// <summary>
+		/// Gets the closest <see cref="InteriorInstance"/> to a given position in the World ignoring height.
+		/// </summary>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="interiorInstances">The interior instances to check.</param>
+		/// <returns>The closest <see cref="InteriorInstance"/> to the <paramref name="interiorInstances"/></returns>
+		public static InteriorInstance GetClosest(Vector2 position, params InteriorInstance[] interiorInstances)
+		{
+			InteriorInstance closest = null;
+			float closestDistance = 3e38f;
+			var position3D = new Vector3(position.X, position.Y, 0.0f);
+
+			foreach (var interiorInstance in interiorInstances)
+			{
+				var distance = position3D.DistanceToSquared2D(interiorInstance.Position);
+				if (distance <= closestDistance)
+				{
+					closest = interiorInstance;
+					closestDistance = distance;
+				}
+			}
+			return closest;
+		}
+		/// <summary>
+		/// Gets the closest <see cref="InteriorProxy"/> to a given position in the World.
+		/// </summary>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="interiorProxies">The spatials to check.</param>
+		/// <returns>The closest <see cref="InteriorProxy"/> to the <paramref name="position"/></returns>
+		public static InteriorProxy GetClosest(Vector3 position, params InteriorProxy[] interiorProxies)
+		{
+			InteriorProxy closest = null;
+			float closestDistance = 3e38f;
+
+			foreach (var interiorProxy in interiorProxies)
+			{
+				var distance = position.DistanceToSquared(interiorProxy.Position);
+				if (distance <= closestDistance)
+				{
+					closest = interiorProxy;
+					closestDistance = distance;
+				}
+			}
+			return closest;
+		}
+		/// <summary>
+		/// Gets the closest <see cref="InteriorProxy"
