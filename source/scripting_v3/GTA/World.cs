@@ -934,4 +934,57 @@ namespace GTA
 			return closest;
 		}
 		/// <summary>
-		/// Gets the closest <see cref="InteriorProxy"
+		/// Gets the closest <see cref="InteriorProxy"/> to a given position in the World ignoring height.
+		/// </summary>
+		/// <param name="position">The position to check against.</param>
+		/// <param name="interiorProxies">The spatials to check.</param>
+		/// <returns>The closest <see cref="InteriorProxy"/> to the <paramref name="position"/></returns>
+		public static InteriorProxy GetClosest(Vector2 position, params InteriorProxy[] interiorProxies)
+		{
+			InteriorProxy closest = null;
+			float closestDistance = 3e38f;
+			var position3D = new Vector3(position.X, position.Y, 0.0f);
+
+			foreach (var interiorProxy in interiorProxies)
+			{
+				var distance = position3D.DistanceToSquared2D(interiorProxy.Position);
+				if (distance <= closestDistance)
+				{
+					closest = interiorProxy;
+					closestDistance = distance;
+				}
+			}
+			return closest;
+		}
+
+		/// <summary>
+		/// Spawns a <see cref="Ped"/> of the given <see cref="Model"/> at the position and heading specified.
+		/// </summary>
+		/// <param name="model">The <see cref="Model"/> of the <see cref="Ped"/>.</param>
+		/// <param name="position">The position to spawn the <see cref="Ped"/> at.</param>
+		/// <param name="heading">The heading of the <see cref="Ped"/>.</param>
+		/// <remarks>returns <see langword="null" /> if the <see cref="Ped"/> could not be spawned.</remarks>
+		public static Ped CreatePed(Model model, Vector3 position, float heading = 0f)
+		{
+			if (PedCount >= PedCapacity || !model.IsPed || !model.Request(1000))
+			{
+				return null;
+			}
+
+			return new Ped(Function.Call<int>(Hash.CREATE_PED, 26, model.Hash, position.X, position.Y, position.Z, heading, false, false));
+		}
+		/// <summary>
+		/// Spawns a <see cref="Ped"/> of a random <see cref="Model"/> at the position specified.
+		/// </summary>
+		/// <param name="position">The position to spawn the <see cref="Ped"/> at.</param>
+		public static Ped CreateRandomPed(Vector3 position)
+		{
+			if (PedCount >= PedCapacity)
+			{
+				return null;
+			}
+
+			return new Ped(Function.Call<int>(Hash.CREATE_RANDOM_PED, position.X, position.Y, position.Z));
+		}
+		/// <summary>
+		/// Spawns a <see cref="P
