@@ -987,4 +987,48 @@ namespace GTA
 			return new Ped(Function.Call<int>(Hash.CREATE_RANDOM_PED, position.X, position.Y, position.Z));
 		}
 		/// <summary>
-		/// Spawns a <see cref="P
+		/// Spawns a <see cref="Ped"/> of a random <see cref="Model"/> at the position specified.
+		/// </summary>
+		/// <param name="position">The position to spawn the <see cref="Ped"/> at.</param>
+		/// <param name="heading">The heading of the <see cref="Ped"/>.</param>
+		/// <param name="predicate">
+		/// The method that determines whether a model should be considered when choosing a random model for the <see cref="Ped"/>.
+		/// If <see langword="null" /> is set, gangster and animal models will not be chosen, just like CREATE_PED does.
+		/// </param>
+		public static Ped CreateRandomPed(Vector3 position, float heading, Func<Model, bool> predicate = null)
+		{
+			if (PedCount >= PedCapacity)
+			{
+				return null;
+			}
+
+			var loadedAppropriatePedModels = SHVDN.NativeMemory.GetLoadedAppropriatePedHashes().Select(x => new Model(x));
+			var filteredPedModels = predicate != null
+				? loadedAppropriatePedModels.Where(predicate).ToArray()
+				: loadedAppropriatePedModels.Where(defaultPredicateForCreateRandomPed).ToArray();
+			var filteredModelCount = filteredPedModels.Length;
+			if (filteredModelCount == 0)
+			{
+				return null;
+			}
+
+			var rand = Math.Random.Instance;
+			var pickedModel = filteredPedModels.ElementAt(rand.Next(filteredModelCount));
+
+			// the model should be loaded at this moment, so call CREATE_PED immediately
+			var createdPed = new Ped(Function.Call<int>(Hash.CREATE_PED, 26, pickedModel, position.X, position.Y, position.Z, heading, false, false));
+
+			// Randomize clothes and ped props just like CREATE_RANDOM_PED does
+			Function.Call(Hash.SET_PED_RANDOM_COMPONENT_VARIATION, createdPed.Handle, 0);
+			Function.Call(Hash.SET_PED_RANDOM_PROPS, createdPed.Handle);
+
+			return createdPed;
+		}
+
+		/// <summary>
+		/// Spawns a <see cref="Vehicle"/> of the given <see cref="Model"/> at the position and heading specified.
+		/// </summary>
+		/// <param name="model">The <see cref="Model"/> of the <see cref="Vehicle"/>.</param>
+		/// <param name="position">The position to spawn the <see cref="Vehicle"/> at.</param>
+		/// <param name="heading">The heading of the <see cref="Vehicle"/>.</param>
+		/// <remarks>returns <see langword="null" /> if the <see cref="Vehicle"/> could not be spawned.</remar
