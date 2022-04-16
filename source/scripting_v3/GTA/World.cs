@@ -1031,4 +1031,49 @@ namespace GTA
 		/// <param name="model">The <see cref="Model"/> of the <see cref="Vehicle"/>.</param>
 		/// <param name="position">The position to spawn the <see cref="Vehicle"/> at.</param>
 		/// <param name="heading">The heading of the <see cref="Vehicle"/>.</param>
-		/// <remarks>returns <see langword="null" /> if the <see cref="Vehicle"/> could not be spawned.</remar
+		/// <remarks>returns <see langword="null" /> if the <see cref="Vehicle"/> could not be spawned.</remarks>
+		public static Vehicle CreateVehicle(Model model, Vector3 position, float heading = 0f)
+		{
+			if (VehicleCount >= VehicleCapacity || !model.IsVehicle || !model.Request(1000))
+			{
+				return null;
+			}
+
+			return new Vehicle(Function.Call<int>(Hash.CREATE_VEHICLE, model.Hash, position.X, position.Y, position.Z, heading, false, false));
+		}
+		/// <summary>
+		/// Spawns a <see cref="Vehicle"/> of a random <see cref="Model"/> at the position specified.
+		/// </summary>
+		/// <param name="position">The position to spawn the <see cref="Vehicle"/> at.</param>
+		/// <param name="heading">The heading of the <see cref="Vehicle"/>.</param>
+		/// <param name="predicate">The method that determines whether a model should be considered when choosing a random model for the <see cref="Vehicle"/>.</param>
+		/// <remarks>returns <see langword="null" /> if the <see cref="Vehicle"/> could not be spawned.</remarks>
+		public static Vehicle CreateRandomVehicle(Vector3 position, float heading = 0f, Func<Model, bool> predicate = null)
+		{
+			if (VehicleCount >= VehicleCapacity)
+			{
+				return null;
+			}
+
+			var loadedAppropriateVehModels = SHVDN.NativeMemory.GetLoadedAppropriateVehicleHashes().Select(x => new Model(x));
+			var filteredVehModels = predicate != null ? loadedAppropriateVehModels.Where(predicate).ToArray() : loadedAppropriateVehModels.ToArray();
+			var filteredModelCount = filteredVehModels.Length;
+			if (filteredModelCount == 0)
+			{
+				return null;
+			}
+
+			var rand = Math.Random.Instance;
+			var pickedModel = filteredVehModels.ElementAt(rand.Next(filteredModelCount));
+
+			// the model should be loaded at this moment, so call CREATE_VEHICLE immediately
+			return new Vehicle(Function.Call<int>(Hash.CREATE_VEHICLE, pickedModel, position.X, position.Y, position.Z, heading, false, false));
+		}
+
+		/// <summary>
+		/// Spawns a <see cref="Prop"/> of the given <see cref="Model"/> at the specified position.
+		/// </summary>
+		/// <param name="model">The <see cref="Model"/> of the <see cref="Prop"/>.</param>
+		/// <param name="position">The position to spawn the <see cref="Prop"/> at.</param>
+		/// <param name="dynamic">if set to <see langword="true" /> the <see cref="Prop"/> will have physics; otherwise, it will be static.</param>
+		/// <param name="placeOnGround">if set to <see langword="true" /
