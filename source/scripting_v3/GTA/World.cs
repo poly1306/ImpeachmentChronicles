@@ -1076,4 +1076,46 @@ namespace GTA
 		/// <param name="model">The <see cref="Model"/> of the <see cref="Prop"/>.</param>
 		/// <param name="position">The position to spawn the <see cref="Prop"/> at.</param>
 		/// <param name="dynamic">if set to <see langword="true" /> the <see cref="Prop"/> will have physics; otherwise, it will be static.</param>
-		/// <param name="placeOnGround">if set to <see langword="true" /
+		/// <param name="placeOnGround">if set to <see langword="true" /> place the prop on the ground nearest to the <paramref name="position"/>.</param>
+		/// <remarks>returns <see langword="null" /> if the <see cref="Prop"/> could not be spawned.</remarks>
+		public static Prop CreateProp(Model model, Vector3 position, bool dynamic, bool placeOnGround)
+		{
+			if (PropCount >= PropCapacity || !model.Request(1000))
+			{
+				return null;
+			}
+
+			if (placeOnGround)
+			{
+				position.Z = GetGroundHeight(position);
+			}
+
+			return new Prop(Function.Call<int>(Hash.CREATE_OBJECT, model.Hash, position.X, position.Y, position.Z, 1, 1, dynamic));
+		}
+		/// <summary>
+		/// Spawns a <see cref="Prop"/> of the given <see cref="Model"/> at the specified position.
+		/// </summary>
+		/// <param name="model">The <see cref="Model"/> of the <see cref="Prop"/>.</param>
+		/// <param name="position">The position to spawn the <see cref="Prop"/> at.</param>
+		/// <param name="rotation">The rotation of the <see cref="Prop"/>.</param>
+		/// <param name="dynamic">if set to <see langword="true" /> the <see cref="Prop"/> will have physics; otherwise, it will be static.</param>
+		/// <param name="placeOnGround">if set to <see langword="true" /> place the prop on the ground nearest to the <paramref name="position"/>.</param>
+		/// <remarks>returns <see langword="null" /> if the <see cref="Prop"/> could not be spawned.</remarks>
+		public static Prop CreateProp(Model model, Vector3 position, Vector3 rotation, bool dynamic, bool placeOnGround)
+		{
+			Prop prop = CreateProp(model, position, dynamic, placeOnGround);
+
+			if (prop != null)
+			{
+				prop.Rotation = rotation;
+			}
+
+			return prop;
+		}
+		/// <summary>
+		/// Spawns a <see cref="Prop"/> of the given <see cref="Model"/> at the specified position without any offset.
+		/// </summary>
+		/// <param name="model">The <see cref="Model"/> of the <see cref="Prop"/>.</param>
+		/// <param name="position">The position to spawn the <see cref="Prop"/> at.</param>
+		/// <param name="dynamic">if set to <see langword="true" /> the <see cref="Prop"/> will have physics; otherwise, it will be static.</param>
+		/// <remarks>returns <see langword="null" /> if the <see cref="Prop"/> could not be spawned.</remarks>
