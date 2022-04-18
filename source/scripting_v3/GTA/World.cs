@@ -1119,3 +1119,74 @@ namespace GTA
 		/// <param name="position">The position to spawn the <see cref="Prop"/> at.</param>
 		/// <param name="dynamic">if set to <see langword="true" /> the <see cref="Prop"/> will have physics; otherwise, it will be static.</param>
 		/// <remarks>returns <see langword="null" /> if the <see cref="Prop"/> could not be spawned.</remarks>
+		public static Prop CreatePropNoOffset(Model model, Vector3 position, bool dynamic)
+		{
+			if (PropCount >= PropCapacity || !model.Request(1000))
+			{
+				return null;
+			}
+
+			return new Prop(Function.Call<int>(Hash.CREATE_OBJECT_NO_OFFSET, model.Hash, position.X, position.Y, position.Z, 1, 1, dynamic));
+		}
+		/// <summary>
+		/// Spawns a <see cref="Prop"/> of the given <see cref="Model"/> at the specified position without any offset.
+		/// </summary>
+		/// <param name="model">The <see cref="Model"/> of the <see cref="Prop"/>.</param>
+		/// <param name="position">The position to spawn the <see cref="Prop"/> at.</param>
+		/// <param name="rotation">The rotation of the <see cref="Prop"/>.</param>
+		/// <param name="dynamic">if set to <see langword="true" /> the <see cref="Prop"/> will have physics; otherwise, it will be static.</param>
+		/// <remarks>returns <see langword="null" /> if the <see cref="Prop"/> could not be spawned.</remarks>
+		public static Prop CreatePropNoOffset(Model model, Vector3 position, Vector3 rotation, bool dynamic)
+		{
+			Prop prop = CreatePropNoOffset(model, position, dynamic);
+
+			if (prop != null)
+			{
+				prop.Rotation = rotation;
+			}
+
+			return prop;
+		}
+
+		/// <summary>
+		/// Spawns a pickup <see cref="Prop"/> at the specified position.
+		/// </summary>
+		public static Prop CreateAmbientPickup(PickupType type, Vector3 position, Model model, int value)
+		{
+			if (!model.Request(1000))
+			{
+				return null;
+			}
+
+			int handle = Function.Call<int>(Hash.CREATE_AMBIENT_PICKUP, type, position.X, position.Y, position.Z, 0, value, model.Hash, false, true);
+
+			if (handle == 0)
+			{
+				return null;
+			}
+
+			return new Prop(handle);
+		}
+
+		/// <summary>
+		/// Spawns a <see cref="Pickup"/> at the specified position.
+		/// </summary>
+		public static Pickup CreatePickup(PickupType type, Vector3 position, Model model, int value)
+		{
+			if (!model.Request(1000))
+			{
+				return null;
+			}
+
+			int handle = Function.Call<int>(Hash.CREATE_PICKUP, type, position.X, position.Y, position.Z, 0, value, true, model.Hash);
+
+			if (handle == 0)
+			{
+				return null;
+			}
+
+			return new Pickup(handle);
+		}
+		/// <summary>
+		/// Spawns a <see cref="Pickup"/> at the specified position.
+		/// </
