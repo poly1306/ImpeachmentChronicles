@@ -1189,4 +1189,54 @@ namespace GTA
 		}
 		/// <summary>
 		/// Spawns a <see cref="Pickup"/> at the specified position.
-		/// </
+		/// </summary>
+		public static Pickup CreatePickup(PickupType type, Vector3 position, Vector3 rotation, Model model, int value)
+		{
+			if (!model.Request(1000))
+			{
+				return null;
+			}
+
+			int handle = Function.Call<int>(Hash.CREATE_PICKUP_ROTATE, type, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, 0, value, 2, true, model.Hash);
+
+			if (handle == 0)
+			{
+				return null;
+			}
+
+			return new Pickup(handle);
+		}
+
+		#endregion
+
+		#region Checkpoints
+
+		/// <summary>
+		/// Gets an <c>array</c> of all the <see cref="Checkpoint"/>s.
+		/// </summary>
+		public static Checkpoint[] GetAllCheckpoints()
+		{
+			return Array.ConvertAll(SHVDN.NativeMemory.GetCheckpointHandles(), element => new Checkpoint(element));
+		}
+
+		/// <summary>
+		/// Creates a <see cref="Checkpoint"/> in the world.
+		/// </summary>
+		/// <param name="icon">The <see cref="CheckpointIcon"/> to display inside the <see cref="Checkpoint"/>.</param>
+		/// <param name="position">The position in the World.</param>
+		/// <param name="pointTo">The position in the world where this <see cref="Checkpoint"/> should point.</param>
+		/// <param name="radius">The radius of the <see cref="Checkpoint"/>.</param>
+		/// <param name="color">The color of the <see cref="Checkpoint"/>.</param>
+		/// <remarks>returns <see langword="null" /> if the <see cref="Checkpoint"/> could not be created</remarks>
+		public static Checkpoint CreateCheckpoint(CheckpointIcon icon, Vector3 position, Vector3 pointTo, float radius, System.Drawing.Color color)
+		{
+			int handle = Function.Call<int>(Hash.CREATE_CHECKPOINT, icon, position.X, position.Y, position.Z, pointTo.X, pointTo.Y, pointTo.Z, radius, color.R, color.G, color.B, color.A, 0);
+			return handle != 0 ? new Checkpoint(handle) : null;
+		}
+		/// <summary>
+		/// Creates a <see cref="Checkpoint"/> in the world.
+		/// </summary>
+		/// <param name="icon">The <see cref="CheckpointCustomIcon"/> to display inside the <see cref="Checkpoint"/>.</param>
+		/// <param name="position">The position in the World.</param>
+		/// <param name="pointTo">The position in the world where this <see cref="Checkpoint"/> should point.</param>
+		/// <param name="radius">The radius of the <see cref="Che
