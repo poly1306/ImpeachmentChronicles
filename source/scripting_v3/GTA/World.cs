@@ -1239,4 +1239,72 @@ namespace GTA
 		/// <param name="icon">The <see cref="CheckpointCustomIcon"/> to display inside the <see cref="Checkpoint"/>.</param>
 		/// <param name="position">The position in the World.</param>
 		/// <param name="pointTo">The position in the world where this <see cref="Checkpoint"/> should point.</param>
-		/// <param name="radius">The radius of the <see cref="Che
+		/// <param name="radius">The radius of the <see cref="Checkpoint"/>.</param>
+		/// <param name="color">The color of the <see cref="Checkpoint"/>.</param>
+		/// <remarks>returns <see langword="null" /> if the <see cref="Checkpoint"/> could not be created</remarks>
+		public static Checkpoint CreateCheckpoint(CheckpointCustomIcon icon, Vector3 position, Vector3 pointTo, float radius, System.Drawing.Color color)
+		{
+			int handle = Function.Call<int>(Hash.CREATE_CHECKPOINT, 44, position.X, position.Y, position.Z, pointTo.X, pointTo.Y, pointTo.Z, radius, color.R, color.G, color.B, color.A, icon);
+			return handle != 0 ? new Checkpoint(handle) : null;
+		}
+
+		#endregion
+
+		#region Cameras
+
+		/// <summary>
+		/// Destroys all user created <see cref="Camera"/>s.
+		/// </summary>
+		public static void DestroyAllCameras()
+		{
+			Function.Call(Hash.DESTROY_ALL_CAMS, 0);
+		}
+
+		/// <summary>
+		/// Creates a <see cref="Camera"/>, use <see cref="World.RenderingCamera"/> to switch to this camera
+		/// </summary>
+		/// <param name="position">The position of the camera.</param>
+		/// <param name="rotation">The rotation of the camera.</param>
+		/// <param name="fov">The field of view of the camera.</param>
+		public static Camera CreateCamera(Vector3 position, Vector3 rotation, float fov)
+		{
+			return new Camera(Function.Call<int>(Hash.CREATE_CAM_WITH_PARAMS, "DEFAULT_SCRIPTED_CAMERA", position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, fov, 1, 2));
+		}
+
+		/// <summary>
+		/// Gets or sets the rendering camera.
+		/// </summary>
+		/// <value>
+		/// The rendering <see cref="Camera"/>.
+		/// </value>
+		/// <remarks>
+		/// Setting to <see langword="null" /> sets the rendering <see cref="Camera"/> to <see cref="GameplayCamera"/>.
+		/// </remarks>
+		public static Camera RenderingCamera
+		{
+			get
+			{
+				return new Camera(Function.Call<int>(Hash.GET_RENDERING_CAM));
+			}
+			set
+			{
+				if (value == null)
+				{
+					Function.Call(Hash.RENDER_SCRIPT_CAMS, false, 0, 3000, 1, 0);
+				}
+				else
+				{
+					value.IsActive = true;
+					Function.Call(Hash.RENDER_SCRIPT_CAMS, true, 0, 3000, 1, 0);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Particle Effects
+
+		/// <summary>
+		/// Starts a Particle Effect that runs once at a given position then is destroyed.
+		/// </summary>
+		/// <param name="asset">Th
