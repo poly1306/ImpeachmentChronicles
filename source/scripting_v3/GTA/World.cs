@@ -1307,4 +1307,35 @@ namespace GTA
 		/// <summary>
 		/// Starts a Particle Effect that runs once at a given position then is destroyed.
 		/// </summary>
-		/// <param name="asset">Th
+		/// <param name="asset">The effect asset to use.</param>
+		/// <param name="effectName">The name of the effect.</param>
+		/// <param name="pos">The World position where the effect is.</param>
+		/// <param name="rot">What rotation to apply to the effect.</param>
+		/// <param name="scale">How much to scale the size of the effect by.</param>
+		/// <param name="invertAxis">Which axis to flip the effect in.</param>
+		/// <returns><see langword="true" />If the effect was able to start; otherwise, <see langword="false" />.</returns>
+		public static bool CreateParticleEffectNonLooped(ParticleEffectAsset asset, string effectName, Vector3 pos, Vector3 rot = default, float scale = 1.0f, InvertAxisFlags invertAxis = InvertAxisFlags.None)
+		{
+			if (!asset.UseNext())
+			{
+				return false;
+			}
+
+			var invertAxisFlagX = HasFlagFast(invertAxis, InvertAxisFlags.X);
+			var invertAxisFlagY = HasFlagFast(invertAxis, InvertAxisFlags.Y);
+			var invertAxisFlagZ = HasFlagFast(invertAxis, InvertAxisFlags.Z);
+
+			return Function.Call<bool>(Hash.START_PARTICLE_FX_NON_LOOPED_AT_COORD, effectName, pos.X, pos.Y, pos.Z, rot.X, rot.Y, rot.Z, scale, invertAxisFlagX, invertAxisFlagY, invertAxisFlagZ);
+		}
+		/// <summary>
+		/// Starts a Particle Effect on an <see cref="Entity"/> that runs once then is destroyed.
+		/// </summary>
+		/// <param name="asset">The effect asset to use.</param>
+		/// <param name="effectName">the name of the effect.</param>
+		/// <param name="entity">The <see cref="Entity"/> the effect is attached to.</param>
+		/// <param name="off">The offset from the <paramref name="entity"/> to attach the effect.</param>
+		/// <param name="rot">The rotation, relative to the <paramref name="entity"/>, the effect has.</param>
+		/// <param name="scale">How much to scale the size of the effect by.</param>
+		/// <param name="invertAxis">Which axis to flip the effect in. For a car side exahust you may need to flip in the Y Axis</param>
+		/// <returns><see langword="true" />If the effect was able to start; otherwise, <see langword="false" />.</returns>
+		public static bool CreateParticleEffectNonLooped(ParticleEffectAsset asset, string effectName, Entity entity, Vector3 off = default, Vector3 rot = default, float scale = 1.0f, InvertAxisFlags invertAxis = InvertAxisFlags.Non
