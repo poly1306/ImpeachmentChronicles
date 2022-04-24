@@ -1379,4 +1379,36 @@ namespace GTA
 		/// <summary>
 		/// Creates a <see cref="ParticleEffect"/> on an <see cref="Entity"/> that runs looped.
 		/// </summary>
-		/// <param name="asset"
+		/// <param name="asset">The effect asset to use.</param>
+		/// <param name="effectName">The name of the Effect</param>
+		/// <param name="entity">The <see cref="Entity"/> the effect is attached to.</param>
+		/// <param name="offset">The offset from the <paramref name="entity"/> to attach the effect.</param>
+		/// <param name="rotation">The rotation, relative to the <paramref name="entity"/>, the effect has.</param>
+		/// <param name="scale">How much to scale the size of the effect by.</param>
+		/// <param name="invertAxis">Which axis to flip the effect in. For a car side exhaust you may need to flip in the Y Axis.</param>
+		public static ParticleEffect CreateParticleEffect(ParticleEffectAsset asset, string effectName, Entity entity, Vector3 offset = default, Vector3 rotation = default, float scale = 1.0f, InvertAxisFlags invertAxis = InvertAxisFlags.None)
+		{
+			return CreateParticleEffect(asset, effectName, entity.Bones.Core, offset, rotation, scale, invertAxis);
+		}
+		/// <summary>
+		/// Creates a <see cref="ParticleEffect"/> on an <see cref="EntityBone"/> that runs looped.
+		/// </summary>
+		/// <param name="asset">The effect asset to use.</param>
+		/// <param name="effectName">The name of the Effect</param>
+		/// <param name="entityBone">The <see cref="EntityBone"/> the effect is attached to.</param>
+		/// <param name="offset">The offset from the <paramref name="entityBone"/> to attach the effect.</param>
+		/// <param name="rotation">The rotation, relative to the <paramref name="entityBone"/>, the effect has.</param>
+		/// <param name="scale">How much to scale the size of the effect by.</param>
+		/// <param name="invertAxis">Which axis to flip the effect in. For a car side exhaust you may need to flip in the Y Axis.</param>
+		public static ParticleEffect CreateParticleEffect(ParticleEffectAsset asset, string effectName, EntityBone entityBone, Vector3 offset = default, Vector3 rotation = default, float scale = 1.0f, InvertAxisFlags invertAxis = InvertAxisFlags.None)
+		{
+			if (!asset.UseNext())
+			{
+				return null;
+			}
+
+			var invertAxisFlagX = HasFlagFast(invertAxis, InvertAxisFlags.X);
+			var invertAxisFlagY = HasFlagFast(invertAxis, InvertAxisFlags.Y);
+			var invertAxisFlagZ = HasFlagFast(invertAxis, InvertAxisFlags.Z);
+
+			int handle = Function.Call<int>(Hash.START_PARTICLE_FX_LOOPED_ON_ENT
