@@ -1411,4 +1411,50 @@ namespace GTA
 			var invertAxisFlagY = HasFlagFast(invertAxis, InvertAxisFlags.Y);
 			var invertAxisFlagZ = HasFlagFast(invertAxis, InvertAxisFlags.Z);
 
-			int handle = Function.Call<int>(Hash.START_PARTICLE_FX_LOOPED_ON_ENT
+			int handle = Function.Call<int>(Hash.START_PARTICLE_FX_LOOPED_ON_ENTITY_BONE, effectName, entityBone.Owner.Handle, offset.X, offset.Y, offset.Z, rotation.X, rotation.Y, rotation.Z, entityBone.Index, scale, invertAxisFlagX, invertAxisFlagY, invertAxisFlagZ);
+			if (handle == 0)
+			{
+				return null;
+			}
+
+			return new ParticleEffect(handle, asset.AssetName, effectName, entityBone);
+		}
+		/// <summary>
+		/// Creates a <see cref="ParticleEffect"/> at a position that runs looped.
+		/// </summary>
+		/// <param name="asset">The effect asset to use.</param>
+		/// <param name="effectName">The name of the effect.</param>
+		/// <param name="position">The world coordinates where the effect is.</param>
+		/// <param name="rotation">What rotation to apply to the effect.</param>
+		/// <param name="scale">How much to scale the size of the effect by.</param>
+		/// <param name="invertAxis">Which axis to flip the effect in.</param>
+		public static ParticleEffect CreateParticleEffect(ParticleEffectAsset asset, string effectName, Vector3 position, Vector3 rotation = default, float scale = 1.0f, InvertAxisFlags invertAxis = InvertAxisFlags.None)
+		{
+			if (!asset.UseNext())
+			{
+				return null;
+			}
+
+			var invertAxisFlagX = HasFlagFast(invertAxis, InvertAxisFlags.X);
+			var invertAxisFlagY = HasFlagFast(invertAxis, InvertAxisFlags.Y);
+			var invertAxisFlagZ = HasFlagFast(invertAxis, InvertAxisFlags.Z);
+
+			int handle = Function.Call<int>(Hash.START_PARTICLE_FX_LOOPED_AT_COORD, effectName, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, scale, invertAxisFlagX, invertAxisFlagY, invertAxisFlagZ, false);
+			if (handle == 0)
+			{
+				return null;
+			}
+
+			return new ParticleEffect(handle, asset.AssetName, effectName, null);
+		}
+
+		private static bool HasFlagFast(InvertAxisFlags flagValues, InvertAxisFlags flag) => (flagValues & flag) == flag;
+
+		/// <summary>
+		/// Stops all particle effects in a range.
+		/// </summary>
+		/// <param name="pos">The position in the world to stop particle effects.</param>
+		/// <param name="range">The maximum distance from the <paramref name="pos"/> to stop particle effects.</param>
+		public static void RemoveAllParticleEffectsInRange(Vector3 pos, float range)
+		{
+			Function.Call(Hash.
