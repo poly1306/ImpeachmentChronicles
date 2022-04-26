@@ -1457,4 +1457,46 @@ namespace GTA
 		/// <param name="range">The maximum distance from the <paramref name="pos"/> to stop particle effects.</param>
 		public static void RemoveAllParticleEffectsInRange(Vector3 pos, float range)
 		{
-			Function.Call(Hash.
+			Function.Call(Hash.REMOVE_PARTICLE_FX_IN_RANGE, pos.X, pos.Y, pos.Z, range);
+		}
+
+		#endregion
+
+		#region Others
+
+		/// <summary>
+		/// Spawns a <see cref="Rope"/>.
+		/// </summary>
+		/// <param name="type">The type of <see cref="Rope"/>.</param>
+		/// <param name="position">The position of the <see cref="Rope"/>.</param>
+		/// <param name="rotation">The rotation of the <see cref="Rope"/>.</param>
+		/// <param name="length">The length of the <see cref="Rope"/>.</param>
+		/// <param name="minLength">The minimum length of the <see cref="Rope"/>.</param>
+		/// <param name="breakable">if set to <see langword="true" /> the <see cref="Rope"/> will break if shot.</param>
+		public static Rope AddRope(RopeType type, Vector3 position, Vector3 rotation, float length, float minLength, bool breakable)
+		{
+			Function.Call(Hash.ROPE_LOAD_TEXTURES);
+
+			return new Rope(Function.Call<int>(Hash.ADD_ROPE, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, length, type, length, minLength, 0.5f, false, false, true, 1.0f, breakable, 0));
+		}
+
+		/// <summary>
+		/// Fires a single bullet in the world
+		/// </summary>
+		/// <param name="sourcePosition">Where the bullet is fired from.</param>
+		/// <param name="targetPosition">Where the bullet is fired to.</param>
+		/// <param name="owner">The <see cref="Ped"/> who fired the bullet, leave <see langword="null" /> for no one.</param>
+		/// <param name="weaponAsset">The weapon that the bullet is fired from.</param>
+		/// <param name="damage">The damage the bullet will cause.</param>
+		/// <param name="speed">The speed, only affects projectile weapons, leave -1 for default.</param>
+		public static void ShootBullet(Vector3 sourcePosition, Vector3 targetPosition, Ped owner, WeaponAsset weaponAsset, int damage, float speed = -1f)
+		{
+			Function.Call(Hash.SHOOT_SINGLE_BULLET_BETWEEN_COORDS, sourcePosition.X, sourcePosition.Y, sourcePosition.Z, targetPosition.X, targetPosition.Y, targetPosition.Z, damage, 1, weaponAsset.Hash, (owner == null ? 0 : owner.Handle), 1, 0, speed);
+		}
+
+		/// <summary>
+		/// Creates an explosion in the world
+		/// </summary>
+		/// <param name="position">The position of the explosion.</param>
+		/// <param name="type">The type of explosion.</param>
+		/// <param name="radiu
