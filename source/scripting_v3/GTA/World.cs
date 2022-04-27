@@ -1726,4 +1726,49 @@ namespace GTA
 		/// <summary>
 		/// Determines where the crosshair intersects with the world.
 		/// </summary>
-		/// <returns>A <see cref="RaycastResult"/> containi
+		/// <returns>A <see cref="RaycastResult"/> containing information about where the crosshair intersects with the world.</returns>
+		public static RaycastResult GetCrosshairCoordinates()
+		{
+			return Raycast(GameplayCamera.Position, GameplayCamera.GetOffsetPosition(new Vector3(0f, 1000f, 0f)), IntersectFlags.Everything, null);
+		}
+		/// <summary>
+		/// Determines where the crosshair intersects with the world.
+		/// </summary>
+		/// <param name="intersectOptions">Type of <see cref="IntersectFlags">environment</see> the raycast should intersect with.</param>
+		/// <param name="ignoreEntity">Prevent the raycast detecting a specific <see cref="Entity"/>.</param>
+		/// <returns>A <see cref="RaycastResult"/> containing information about where the crosshair intersects with the world.</returns>
+		public static RaycastResult GetCrosshairCoordinates(IntersectFlags intersectOptions = IntersectFlags.Everything, Entity ignoreEntity = null)
+		{
+			return Raycast(GameplayCamera.Position, GameplayCamera.GetOffsetPosition(new Vector3(0f, 1000f, 0f)), intersectOptions, ignoreEntity);
+		}
+
+		#endregion
+
+		#region Positioning
+
+		/// <summary>
+		/// Gets the straight line distance between 2 positions.
+		/// </summary>
+		/// <param name="origin">The origin.</param>
+		/// <param name="destination">The destination.</param>
+		/// <returns>The distance</returns>
+		public static float GetDistance(Vector3 origin, Vector3 destination)
+		{
+			return Function.Call<float>(Hash.GET_DISTANCE_BETWEEN_COORDS, origin.X, origin.Y, origin.Z, destination.X, destination.Y, destination.Z, 1);
+		}
+		/// <summary>
+		/// Calculates the travel distance using roads and paths between 2 positions.
+		/// </summary>
+		/// <param name="origin">The origin.</param>
+		/// <param name="destination">The destination.</param>
+		/// <returns>The travel distance</returns>
+		public static float CalculateTravelDistance(Vector3 origin, Vector3 destination)
+		{
+			return Function.Call<float>(Hash.CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS, origin.X, origin.Y, origin.Z, destination.X, destination.Y, destination.Z);
+		}
+
+		/// <summary>
+		/// Gets the height of the ground at a given position.
+		/// </summary>
+		/// <param name="position">The position.</param>
+		/// <retur
