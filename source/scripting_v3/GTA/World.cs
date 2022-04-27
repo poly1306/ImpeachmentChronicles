@@ -1499,4 +1499,51 @@ namespace GTA
 		/// </summary>
 		/// <param name="position">The position of the explosion.</param>
 		/// <param name="type">The type of explosion.</param>
-		/// <param name="radiu
+		/// <param name="radius">The radius of the explosion.</param>
+		/// <param name="cameraShake">The amount of camera shake to apply to nearby cameras.</param>
+		/// <param name="owner">The <see cref="Ped"/> who caused the explosion, leave null if no one caused the explosion.</param>
+		/// <param name="aubidble">if set to <see langword="true" /> explosion can be heard.</param>
+		/// <param name="invisible">if set to <see langword="true" /> explosion is invisible.</param>
+		public static void AddExplosion(Vector3 position, ExplosionType type, float radius, float cameraShake, Ped owner = null, bool aubidble = true, bool invisible = false)
+		{
+			if (owner?.Exists() == true)
+			{
+				Function.Call(Hash.ADD_OWNED_EXPLOSION, owner.Handle, position.X, position.Y, position.Z, type, radius, aubidble, invisible, cameraShake);
+			}
+			else
+			{
+				Function.Call(Hash.ADD_EXPLOSION, position.X, position.Y, position.Z, type, radius, aubidble, invisible, cameraShake);
+			}
+		}
+
+		/// <summary>
+		/// Creates a <see cref="RelationshipGroup"/> with the given name.
+		/// </summary>
+		/// <param name="name">The name of the relationship group.</param>
+		public static RelationshipGroup AddRelationshipGroup(string name)
+		{
+			int resultArg;
+			unsafe
+			{
+				Function.Call(Hash.ADD_RELATIONSHIP_GROUP, name, &resultArg);
+			}
+
+			return new RelationshipGroup(resultArg);
+		}
+
+		#endregion
+
+		#region Drawing
+
+		/// <summary>
+		/// Draws a marker in the world, this needs to be done on a per frame basis
+		/// </summary>
+		/// <param name="type">The type of marker.</param>
+		/// <param name="pos">The position of the marker.</param>
+		/// <param name="dir">The direction the marker points in.</param>
+		/// <param name="rot">The rotation of the marker.</param>
+		/// <param name="scale">The amount to scale the marker by.</param>
+		/// <param name="color">The color of the marker.</param>
+		/// <param name="bobUpAndDown">if set to <see langword="true" /> the marker will bob up and down.</param>
+		/// <param name="faceCamera">if set to <see langword="true" /> the marker will always face the camera, regardless of its rotation.</param>
+		/// <param name="rotateY">if set to <see langword="true" /
