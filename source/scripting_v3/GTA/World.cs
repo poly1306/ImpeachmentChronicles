@@ -1771,4 +1771,58 @@ namespace GTA
 		/// Gets the height of the ground at a given position.
 		/// </summary>
 		/// <param name="position">The position.</param>
-		/// <retur
+		/// <returns>The height measured in meters</returns>
+		public static float GetGroundHeight(Vector2 position)
+		{
+			return GetGroundHeight(new Vector3(position.X, position.Y, 1000f));
+		}
+		/// <summary>
+		/// Gets the height of the ground at a given position.
+		/// Note : If the Vector3 is already below the ground, this will return 0.
+		/// You may want to use the other overloaded function to be safe.
+		/// </summary>
+		/// <param name="position">The position.</param>
+		/// <returns>The height measured in meters</returns>
+		public static float GetGroundHeight(Vector3 position)
+		{
+			float resultArg;
+			unsafe
+			{
+				Function.Call(Hash.GET_GROUND_Z_FOR_3D_COORD, position.X, position.Y, position.Z, &resultArg, false);
+			}
+			return resultArg;
+		}
+
+		/// <summary>
+		/// Gets the nearest safe coordinate to position a <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="position">The position to check around.</param>
+		/// <param name="sidewalk">if set to <see langword="true" /> Only find positions on the sidewalk.</param>
+		/// <param name="flags">The flags.</param>
+		public static Vector3 GetSafeCoordForPed(Vector3 position, bool sidewalk = true, int flags = 0)
+		{
+			NativeVector3 outPos;
+			unsafe
+			{
+				if (Function.Call<bool>(Hash.GET_SAFE_COORD_FOR_PED, position.X, position.Y, position.Z, sidewalk, &outPos, flags))
+				{
+					return outPos;
+				}
+			}
+			return Vector3.Zero;
+		}
+
+		/// <summary>
+		/// Gets the next position on the street where a <see cref="Vehicle"/> can be placed.
+		/// </summary>
+		/// <param name="position">The position to check around.</param>
+		/// <param name="unoccupied">if set to <see langword="true" /> only find positions that dont already have a vehicle in them.</param>
+		public static Vector3 GetNextPositionOnStreet(Vector2 position, bool unoccupied = false)
+		{
+			return GetNextPositionOnStreet(new Vector3(position.X, position.Y, 0f), unoccupied);
+		}
+		/// <summary>
+		/// Gets the next position on the street where a <see cref="Vehicle"/> can be placed.
+		/// </summary>
+		/// <param name="position">The position to check around.</param>
+		/// <param name="unoccupied">if set to
