@@ -1825,4 +1825,75 @@ namespace GTA
 		/// Gets the next position on the street where a <see cref="Vehicle"/> can be placed.
 		/// </summary>
 		/// <param name="position">The position to check around.</param>
-		/// <param name="unoccupied">if set to
+		/// <param name="unoccupied">if set to <see langword="true" /> only find positions that dont already have a vehicle in them.</param>
+		public static Vector3 GetNextPositionOnStreet(Vector3 position, bool unoccupied = false)
+		{
+			NativeVector3 outPos;
+
+			unsafe
+			{
+				if (unoccupied)
+				{
+					for (int i = 1; i < 40; i++)
+					{
+						Function.Call(Hash.GET_NTH_CLOSEST_VEHICLE_NODE, position.X, position.Y, position.Z, i, &outPos, 1, 0x40400000, 0);
+
+						position = outPos;
+
+						if (!Function.Call<bool>(Hash.IS_POINT_OBSCURED_BY_A_MISSION_ENTITY, position.X, position.Y, position.Z, 5.0f,
+							5.0f, 5.0f, 0))
+						{
+							return position;
+						}
+					}
+				}
+				else if (Function.Call<bool>(Hash.GET_NTH_CLOSEST_VEHICLE_NODE, position.X, position.Y, position.Z, 1, &outPos, 1,
+					0x40400000, 0))
+				{
+					return outPos;
+				}
+			}
+
+			return Vector3.Zero;
+		}
+
+		/// <summary>
+		/// Gets the next position on the street where a <see cref="Ped"/> can be placed.
+		/// </summary>
+		/// <param name="position">The position to check around.</param>
+		public static Vector3 GetNextPositionOnSidewalk(Vector2 position)
+		{
+			return GetNextPositionOnSidewalk(new Vector3(position.X, position.Y, 0f));
+		}
+		/// <summary>
+		/// Gets the next position on the street where a <see cref="Ped"/> can be placed.
+		/// </summary>
+		/// <param name="position">The position to check around.</param>
+		public static Vector3 GetNextPositionOnSidewalk(Vector3 position)
+		{
+			NativeVector3 outPos;
+
+			unsafe
+			{
+				if (Function.Call<bool>(Hash.GET_SAFE_COORD_FOR_PED, position.X, position.Y, position.Z, true, &outPos, 0))
+				{
+					return outPos;
+				}
+				else if (Function.Call<bool>(Hash.GET_SAFE_COORD_FOR_PED, position.X, position.Y, position.Z, false, &outPos, 0))
+				{
+					return outPos;
+				}
+			}
+
+			return Vector3.Zero;
+		}
+
+		/// <summary>
+		/// Determines the name of the street which is the closest to the given coordinates.
+		/// </summary>
+		public static string GetStreetName(Vector2 position)
+		{
+			return GetStreetName(new Vector3(position.X, position.Y, 0f));
+		}
+		/// <summary>
+		/// Determines the name of the street which is the
