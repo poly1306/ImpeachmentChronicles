@@ -1657,4 +1657,44 @@ namespace GTA
 			DrawQuadPolygonInternal(point4 - normalVector, point1 + normalVector, point4 + normalVector, point1 - normalVector, color);
 		}
 
-		private static void DrawQ
+		private static void DrawQuadPolygonInternal(Vector3 point1, Vector3 point2, Vector3 point3, Vector3 point4, Color color)
+		{
+			DrawPolygon(point1, point2, point3, color);
+			DrawPolygon(point2, point1, point4, color);
+		}
+
+		#endregion
+
+		#region Raycasting
+
+		/// <summary>
+		/// Creates a raycast between 2 points.
+		/// </summary>
+		/// <param name="source">The source of the raycast.</param>
+		/// <param name="target">The target of the raycast.</param>
+		/// <param name="options">What type of objects the raycast should intersect with.</param>
+		/// <param name="ignoreEntity">Specify an <see cref="Entity"/> that the raycast should ignore, leave null for no entities ignored.</param>
+		public static RaycastResult Raycast(Vector3 source, Vector3 target, IntersectFlags options, Entity ignoreEntity = null)
+		{
+			return new RaycastResult(Function.Call<int>(Hash.START_EXPENSIVE_SYNCHRONOUS_SHAPE_TEST_LOS_PROBE, source.X, source.Y, source.Z, target.X, target.Y, target.Z, options, ignoreEntity == null ? 0 : ignoreEntity.Handle, 7));
+		}
+		/// <summary>
+		/// Creates a raycast between 2 points.
+		/// </summary>
+		/// <param name="source">The source of the raycast.</param>
+		/// <param name="direction">The direction of the raycast.</param>
+		/// <param name="maxDistance">How far the raycast should go out to.</param>
+		/// <param name="options">What type of objects the raycast should intersect with.</param>
+		/// <param name="ignoreEntity">Specify an <see cref="Entity"/> that the raycast should ignore, leave null for no entities ignored.</param>
+		public static RaycastResult Raycast(Vector3 source, Vector3 direction, float maxDistance, IntersectFlags options, Entity ignoreEntity = null)
+		{
+			Vector3 target = source + direction * maxDistance;
+
+			return new RaycastResult(Function.Call<int>(Hash.START_EXPENSIVE_SYNCHRONOUS_SHAPE_TEST_LOS_PROBE, source.X, source.Y, source.Z, target.X, target.Y, target.Z, options, ignoreEntity == null ? 0 : ignoreEntity.Handle, 7));
+		}
+
+		/// <summary>
+		/// Creates a 3D raycast between 2 points.
+		/// </summary>
+		/// <param name="source">The source of the raycast.</param>
+		/// <param name="target">The targ
