@@ -1580,4 +1580,48 @@ namespace GTA
 
 		public static void DrawSpotLight(Vector3 pos, Vector3 dir, Color color, float distance, float brightness, float roundness, float radius, float fadeout)
 		{
-			Function.Call(
+			Function.Call(Hash.DRAW_SPOT_LIGHT, pos.X, pos.Y, pos.Z, dir.X, dir.Y, dir.Z, color.R, color.G, color.B, distance, brightness, roundness, radius, fadeout);
+		}
+
+		public static void DrawSpotLightWithShadow(Vector3 pos, Vector3 dir, Color color, float distance, float brightness, float roundness, float radius, float fadeout)
+		{
+			Function.Call(Hash.DRAW_SHADOWED_SPOT_LIGHT, pos.X, pos.Y, pos.Z, dir.X, dir.Y, dir.Z, color.R, color.G, color.B, distance, brightness, roundness, radius, fadeout);
+		}
+
+		public static void DrawLine(Vector3 start, Vector3 end, Color color)
+		{
+			Function.Call(Hash.DRAW_LINE, start.X, start.Y, start.Z, end.X, end.Y, end.Z, color.R, color.G, color.B, color.A);
+		}
+
+		public static void DrawPolygon(Vector3 vertexA, Vector3 vertexB, Vector3 vertexC, Color color)
+		{
+			Function.Call(Hash.DRAW_POLY, vertexA.X, vertexA.Y, vertexA.Z, vertexB.X, vertexB.Y, vertexB.Z, vertexC.X, vertexC.Y, vertexC.Z, color.R, color.G, color.B, color.A);
+		}
+
+		/// <summary>
+		/// Draws a box that occupies the angled area.
+		/// An angled area is an X-Z oriented rectangle with three parameters: origin, extent, and width.
+		/// </summary>
+		/// <param name="originEdge">The mid-point along a base edge of the rectangle.</param>
+		/// <param name="extentEdge">The mid-point of opposite base edge on the other Z.</param>
+		/// <param name="width">The length of the base edge.</param>
+		/// <param name="color">The color of the box.</param>
+		/// <param name="drawFlags">Which sides to draw.</param>
+		public static void DrawBoxForAngledArea(Vector3 originEdge, Vector3 extentEdge, float width, Color color, DrawBoxFlags drawFlags = DrawBoxFlags.OutsideOnly)
+		{
+			if ((drawFlags & DrawBoxFlags.InsideOnly) == DrawBoxFlags.InsideOnly)
+			{
+				DrawBoxForAngledAreaInsideInternal(originEdge, extentEdge, width, color);
+			}
+			if ((drawFlags & DrawBoxFlags.OutsideOnly) == DrawBoxFlags.OutsideOnly)
+			{
+				DrawBoxForAngledAreaOutsideInternal(originEdge, extentEdge, width, color);
+			}
+		}
+
+		private static void DrawBoxForAngledAreaOutsideInternal(Vector3 origin, Vector3 extent, float width, Color color)
+		{
+			Vector3 point1 = origin;
+			Vector3 point2 = extent;
+			Vector3 point3 = new Vector3(point2.X, point2.Y, point1.Z);
+			Vector
