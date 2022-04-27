@@ -1624,4 +1624,37 @@ namespace GTA
 			Vector3 point1 = origin;
 			Vector3 point2 = extent;
 			Vector3 point3 = new Vector3(point2.X, point2.Y, point1.Z);
-			Vector
+			Vector3 normalVector = Vector3.Cross(point2 - point1, point3 - point1).Normalized * (width / 2);
+
+			Vector3 point4 = new Vector3(point1.X, point1.Y, point2.Z);
+
+			DrawQuadPolygonInternal(point1 + normalVector, point2 + normalVector, point3 + normalVector, point4 + normalVector, color);
+			DrawQuadPolygonInternal(point2 - normalVector, point1 - normalVector, point3 - normalVector, point4 - normalVector, color);
+
+			DrawQuadPolygonInternal(point1 + normalVector, point3 - normalVector, point1 - normalVector, point3 + normalVector, color);
+			DrawQuadPolygonInternal(point2 + normalVector, point4 - normalVector, point2 - normalVector, point4 + normalVector, color);
+
+			DrawQuadPolygonInternal(point2 + normalVector, point3 - normalVector, point3 + normalVector, point2 - normalVector, color);
+			DrawQuadPolygonInternal(point1 + normalVector, point4 - normalVector, point4 + normalVector, point1 - normalVector, color);
+		}
+
+		private static void DrawBoxForAngledAreaInsideInternal(Vector3 origin, Vector3 extent, float width, Color color)
+		{
+			Vector3 point1 = origin;
+			Vector3 point2 = extent;
+			Vector3 point3 = new Vector3(point2.X, point2.Y, point1.Z);
+			Vector3 normalVector = Vector3.Cross(point2 - point1, point3 - point1).Normalized * (width / 2);
+
+			Vector3 point4 = new Vector3(point1.X, point1.Y, point2.Z);
+
+			DrawQuadPolygonInternal(point2 + normalVector, point1 + normalVector, point3 + normalVector, point4 + normalVector, color);
+			DrawQuadPolygonInternal(point1 - normalVector, point2 - normalVector, point3 - normalVector, point4 - normalVector, color);
+
+			DrawQuadPolygonInternal(point3 - normalVector, point1 + normalVector, point1 - normalVector, point3 + normalVector, color);
+			DrawQuadPolygonInternal(point4 - normalVector, point2 + normalVector, point2 - normalVector, point4 + normalVector, color);
+
+			DrawQuadPolygonInternal(point3 - normalVector, point2 + normalVector, point3 + normalVector, point2 - normalVector, color);
+			DrawQuadPolygonInternal(point4 - normalVector, point1 + normalVector, point4 + normalVector, point1 - normalVector, color);
+		}
+
+		private static void DrawQ
