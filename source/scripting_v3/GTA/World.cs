@@ -1896,4 +1896,57 @@ namespace GTA
 			return GetStreetName(new Vector3(position.X, position.Y, 0f));
 		}
 		/// <summary>
-		/// Determines the name of the street which is the
+		/// Determines the name of the street which is the closest to the given coordinates.
+		/// </summary>
+		public static string GetStreetName(Vector3 position)
+		{
+			int streetHash, crossingHash;
+			unsafe
+			{
+				Function.Call(Hash.GET_STREET_NAME_AT_COORD, position.X, position.Y, position.Z, &streetHash, &crossingHash);
+			}
+			return Function.Call<string>(Hash.GET_STREET_NAME_FROM_HASH_KEY, streetHash);
+		}
+		/// <summary>
+		/// Determines the name of the street which is the closest to the given coordinates.
+		/// </summary>
+		/// <param name="position">The coordinates of the street</param>
+		/// <param name="crossingRoadName">If the coordinates are on an intersection, the name of the crossing road</param>
+		/// <returns>Returns the name of the street the coordinates are on.</returns>
+		public static string GetStreetName(Vector3 position, out string crossingRoadName)
+		{
+			int streetHash, crossingHash;
+			unsafe
+			{
+				Function.Call(Hash.GET_STREET_NAME_AT_COORD, position.X, position.Y, position.Z, &streetHash, &crossingHash);
+			}
+			crossingRoadName = Function.Call<string>(Hash.GET_STREET_NAME_FROM_HASH_KEY, crossingHash);
+			return Function.Call<string>(Hash.GET_STREET_NAME_FROM_HASH_KEY, streetHash);
+		}
+
+		/// <summary>
+		/// Gets the display name of the a zone in the map.
+		/// Use <see cref="Game.GetLocalizedString(string)"/> to convert to the localized name.
+		/// </summary>
+		/// <param name="position">The position on the map.</param>
+		public static string GetZoneDisplayName(Vector2 position)
+		{
+			return GetZoneDisplayName(new Vector3(position.X, position.Y, 0f));
+		}
+		/// <summary>
+		/// Gets the display name of the a zone in the map.
+		/// Use <see cref="Game.GetLocalizedString(string)"/> to convert to the localized name.
+		/// </summary>
+		/// <param name="position">The position on the map.</param>
+		public static string GetZoneDisplayName(Vector3 position)
+		{
+			return Function.Call<string>(Hash.GET_NAME_OF_ZONE, position.X, position.Y, position.Z);
+		}
+
+		/// <summary>
+		/// Gets the localized name of the a zone in the map.
+		/// </summary>
+		/// <param name="position">The position on the map.</param>
+		public static string GetZoneLocalizedName(Vector2 position)
+		{
+			return GetZoneLocalizedName(new Vect
