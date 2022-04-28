@@ -1949,4 +1949,37 @@ namespace GTA
 		/// <param name="position">The position on the map.</param>
 		public static string GetZoneLocalizedName(Vector2 position)
 		{
-			return GetZoneLocalizedName(new Vect
+			return GetZoneLocalizedName(new Vector3(position.X, position.Y, 0f));
+		}
+		/// <summary>
+		/// Gets the localized name of the a zone in the map.
+		/// </summary>
+		/// <param name="position">The position on the map.</param>
+		public static string GetZoneLocalizedName(Vector3 position)
+		{
+			return Game.GetLocalizedString(GetZoneDisplayName(position));
+		}
+
+		/// <summary>
+		/// Determines whether the specified point is in the angled area.
+		/// An angled area is an X-Z oriented rectangle with three parameters: origin, extent, and width.
+		/// </summary>
+		/// <param name="point">The point to check whether is in the angled area.</param>
+		/// <param name="originEdge">The mid-point along a base edge of the rectangle.</param>
+		/// <param name="extentEdge">The mid-point of opposite base edge on the other Z.</param>
+		/// <param name="width">The length of the base edge.</param>
+		/// <param name="includeZAxis">
+		/// If set to <see langword="true" />, the method will also check if the point is in area in Z axis as well as X and Y axes.
+		/// If set to <see langword="false" />, the method will only check if the point is in area in X and Y axes.
+		/// </param>
+		///  <returns>
+		///   <see langword="true" /> if the specified point is in the specified angled area; otherwise, <see langword="false" />.
+		/// </returns>
+		public static bool IsPointInAngledArea(Vector3 point, Vector3 originEdge, Vector3 extentEdge, float width, bool includeZAxis = true)
+		{
+			return Function.Call<bool>(Hash.IS_POINT_IN_ANGLED_AREA, point.X, point.Y, point.Z, originEdge.X, originEdge.Y, originEdge.Z, extentEdge.X, extentEdge.Y, extentEdge.Z, width, false, includeZAxis);
+		}
+
+		#endregion
+	}
+}
