@@ -280,4 +280,63 @@ namespace GTA.Math
 		/// <param name="value">The vector to scale.</param>
 		/// <param name="scale">The amount by which to scale the vector.</param>
 		/// <returns>The scaled vector.</returns>
-		
+		public static Vector2 Divide(Vector2 value, float scale) => new Vector2(value.X / scale, value.Y / scale);
+
+		/// <summary>
+		/// Reverses the direction of a given vector.
+		/// </summary>
+		/// <param name="value">The vector to negate.</param>
+		/// <returns>A vector facing in the opposite direction.</returns>
+		public static Vector2 Negate(Vector2 value) => new Vector2(-value.X, -value.Y);
+
+		/// <summary>
+		/// Restricts a value to be within a specified range.
+		/// </summary>
+		/// <param name="value">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
+		/// <returns>The clamped value.</returns>
+		public static Vector2 Clamp(Vector2 value, Vector2 min, Vector2 max)
+		{
+			float x = value.X;
+			x = (x > max.X) ? max.X : x;
+			x = (x < min.X) ? min.X : x;
+
+			float y = value.Y;
+			y = (y > max.Y) ? max.Y : y;
+			y = (y < min.Y) ? min.Y : y;
+
+			return new Vector2(x, y);
+		}
+
+		/// <summary>
+		/// Performs a linear interpolation between two vectors.
+		/// </summary>
+		/// <param name="start">Start vector.</param>
+		/// <param name="end">End vector.</param>
+		/// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+		/// <returns>The linear interpolation of the two vectors.</returns>
+		/// <remarks>
+		/// This method performs the linear interpolation based on the following formula.
+		/// <code>start + (end - start) * amount</code>
+		/// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned.
+		/// </remarks>
+		public static Vector2 Lerp(Vector2 start, Vector2 end, float amount)
+		{
+			Vector2 vector;
+
+			vector.X = start.X + ((end.X - start.X) * amount);
+			vector.Y = start.Y + ((end.Y - start.Y) * amount);
+
+			return vector;
+		}
+
+		/// <summary>
+		/// Converts the vector into a unit vector.
+		/// </summary>
+		/// <param name="vector">The vector to normalize.</param>
+		/// <returns>The normalized vector.</returns>
+		public static Vector2 Normalize(Vector2 vector)
+		{
+			vector.Normalize();
+			ret
