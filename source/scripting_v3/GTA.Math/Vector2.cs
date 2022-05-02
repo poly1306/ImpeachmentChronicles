@@ -165,4 +165,65 @@ namespace GTA.Math
 		/// <summary>
 		/// Calculates the distance between two vectors.
 		/// </summary>
-		/// <para
+		/// <param name="position">The second vector to calculate the distance to.</param>
+		/// <returns>The distance to the other vector.</returns>
+		public float DistanceTo(Vector2 position)
+		{
+			return (position - this).Length();
+		}
+
+		/// <summary>
+		/// Calculates the squared distance between two vectors.
+		/// </summary>
+		/// <param name="position">The second vector to calculate the squared distance to.</param>
+		/// <returns>The squared distance to the other vector.</returns>
+		public float DistanceToSquared(Vector2 position)
+		{
+			return DistanceSquared(position, this);
+		}
+
+		/// <summary>
+		/// Calculates the distance between two vectors.
+		/// </summary>
+		/// <param name="position1">The first vector to calculate the distance to the second vector.</param>
+		/// <param name="position2">The second vector to calculate the distance to the first vector.</param>
+		/// <returns>The distance between the two vectors.</returns>
+		public static float Distance(Vector2 position1, Vector2 position2)
+		{
+			return (position1 - position2).Length();
+		}
+
+		/// <summary>
+		/// Calculates the squared distance between two vectors.
+		/// </summary>
+		/// <param name="position1">The first vector to calculate the squared distance to the second vector.</param>
+		/// <param name="position2">The second vector to calculate the squared distance to the first vector.</param>
+		/// <returns>The squared distance between the two vectors.</returns>
+		public static float DistanceSquared(Vector2 position1, Vector2 position2)
+		{
+			return (position1 - position2).LengthSquared();
+		}
+
+		/// <summary>
+		/// Returns the angle in degrees between from and to.
+		/// The angle returned is always the acute angle between the two vectors.
+		/// </summary>
+		public static float Angle(Vector2 from, Vector2 to)
+		{
+			return System.Math.Abs(SignedAngle(from, to));
+		}
+
+		/// <summary>
+		/// Returns the signed angle in degrees between from and to.
+		/// </summary>
+		public static float SignedAngle(Vector2 from, Vector2 to)
+		{
+			return (float)((System.Math.Atan2(to.Y, to.X) - System.Math.Atan2(from.Y, from.X)) * (180.0 / System.Math.PI));
+		}
+
+		/// <summary>
+		/// Converts a vector to a heading.
+		/// </summary>
+		public float ToHeading()
+		{
+			re
