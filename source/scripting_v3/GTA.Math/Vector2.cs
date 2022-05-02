@@ -444,4 +444,61 @@ namespace GTA.Math
 		public static Vector2 operator /(Vector2 vector, float scale) => new Vector2(vector.X / scale, vector.Y / scale);
 
 		/// <summary>
-		/// Tests for equality between two 
+		/// Tests for equality between two objects.
+		/// </summary>
+		/// <param name="left">The first value to compare.</param>
+		/// <param name="right">The second value to compare.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> has the same value as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator ==(Vector2 left, Vector2 right) => Equals(left, right);
+
+		/// <summary>
+		/// Tests for inequality between two objects.
+		/// </summary>
+		/// <param name="left">The first value to compare.</param>
+		/// <param name="right">The second value to compare.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> has a different value than <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator !=(Vector2 left, Vector2 right) => !Equals(left, right);
+
+		/// <summary>
+		/// Converts a Vector2 to a Vector3 implicitly.
+		/// </summary>
+		public static implicit operator Vector3(Vector2 vector) => new Vector3(vector.X, vector.Y, 0);
+
+		/// <summary>
+		/// Converts the value of the object to its equivalent string representation.
+		/// </summary>
+		/// <returns>The string representation of the value of this instance.</returns>
+		public override string ToString()
+		{
+			return string.Format(CultureInfo.CurrentCulture, "X:{0} Y:{1}", X, Y);
+		}
+
+		/// <summary>
+		/// Converts the value of the object to its equivalent string representation.
+		/// </summary>
+		/// <param name="format">The format.</param>
+		/// <returns>The string representation of the value of this instance.</returns>
+		public string ToString(string format)
+		{
+			if (format == null)
+			{
+				return ToString();
+			}
+
+			return string.Format(CultureInfo.CurrentCulture, "X:{0} Y:{1}", X.ToString(format, CultureInfo.CurrentCulture), Y.ToString(format, CultureInfo.CurrentCulture));
+		}
+
+		/// <summary>
+		/// Returns the hash code for this instance.
+		/// </summary>
+		/// <returns>A 32-bit signed integer hash code.</returns>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return (X.GetHashCode() * 397) ^ Y.GetHashCode();
+			}
+		}
+
+		/// <summary>
+		/// 
