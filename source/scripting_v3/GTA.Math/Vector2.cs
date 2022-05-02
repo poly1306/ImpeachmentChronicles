@@ -339,4 +339,56 @@ namespace GTA.Math
 		public static Vector2 Normalize(Vector2 vector)
 		{
 			vector.Normalize();
-			ret
+			return vector;
+		}
+
+		/// <summary>
+		/// Calculates the dot product of two vectors.
+		/// </summary>
+		/// <param name="left">First source vector.</param>
+		/// <param name="right">Second source vector.</param>
+		/// <returns>The dot product of the two vectors.</returns>
+		public static float Dot(Vector2 left, Vector2 right) => (left.X * right.X + left.Y * right.Y);
+
+		/// <summary>
+		/// Returns the reflection of a vector off a surface that has the specified normal.
+		/// </summary>
+		/// <param name="vector">The source vector.</param>
+		/// <param name="normal">Normal of the surface.</param>
+		/// <returns>The reflected vector.</returns>
+		/// <remarks>Reflect only gives the direction of a reflection off a surface, it does not determine
+		/// whether the original vector was close enough to the surface to hit it.</remarks>
+		public static Vector2 Reflect(Vector2 vector, Vector2 normal)
+		{
+			Vector2 result;
+			float dot = ((vector.X * normal.X) + (vector.Y * normal.Y));
+
+			result.X = vector.X - ((2.0f * dot) * normal.X);
+			result.Y = vector.Y - ((2.0f * dot) * normal.Y);
+
+			return result;
+		}
+
+		/// <summary>
+		/// Returns a vector containing the smallest components of the specified vectors.
+		/// </summary>
+		/// <param name="left">The first source vector.</param>
+		/// <param name="right">The second source vector.</param>
+		/// <returns>A vector containing the smallest components of the source vectors.</returns>
+		public static Vector2 Minimize(Vector2 left, Vector2 right)
+		{
+			Vector2 vector;
+			vector.X = (left.X < right.X) ? left.X : right.X;
+			vector.Y = (left.Y < right.Y) ? left.Y : right.Y;
+			return vector;
+		}
+		/// <summary>
+		/// Returns a vector containing the largest components of the specified vectors.
+		/// </summary>
+		/// <param name="left">The first source vector.</param>
+		/// <param name="right">The second source vector.</param>
+		/// <returns>A vector containing the largest components of the source vectors.</returns>
+		public static Vector2 Maximize(Vector2 left, Vector2 right)
+		{
+			Vector2 vector;
+			vector.
