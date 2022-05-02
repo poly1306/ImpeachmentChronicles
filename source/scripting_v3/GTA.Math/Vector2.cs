@@ -226,4 +226,58 @@ namespace GTA.Math
 		/// </summary>
 		public float ToHeading()
 		{
-			re
+			return (float)((System.Math.Atan2(X, -Y) + System.Math.PI) * (180.0 / System.Math.PI));
+		}
+
+		/// <summary>
+		/// Returns a new normalized vector with random X and Y components.
+		/// </summary>
+		public static Vector2 RandomXY()
+		{
+			Vector2 v;
+			double radian = Random.Instance.NextDouble() * 2 * System.Math.PI;
+			v.X = (float)(System.Math.Cos(radian));
+			v.Y = (float)(System.Math.Sin(radian));
+			v.Normalize();
+			return v;
+		}
+
+		/// <summary>
+		/// Adds two vectors.
+		/// </summary>
+		/// <param name="left">The first vector to add.</param>
+		/// <param name="right">The second vector to add.</param>
+		/// <returns>The sum of the two vectors.</returns>
+		public static Vector2 Add(Vector2 left, Vector2 right) => new Vector2(left.X + right.X, left.Y + right.Y);
+
+		/// <summary>
+		/// Subtracts two vectors.
+		/// </summary>
+		/// <param name="left">The first vector to subtract.</param>
+		/// <param name="right">The second vector to subtract.</param>
+		/// <returns>The difference of the two vectors.</returns>
+		public static Vector2 Subtract(Vector2 left, Vector2 right) => new Vector2(left.X - right.X, left.Y - right.Y);
+
+		/// <summary>
+		/// Scales a vector by the given value.
+		/// </summary>
+		/// <param name="value">The vector to scale.</param>
+		/// <param name="scale">The amount by which to scale the vector.</param>
+		/// <returns>The scaled vector.</returns>
+		public static Vector2 Multiply(Vector2 value, float scale) => new Vector2(value.X * scale, value.Y * scale);
+
+		/// <summary>
+		/// Multiplies a vector with another by performing component-wise multiplication.
+		/// </summary>
+		/// <param name="left">The first vector to multiply.</param>
+		/// <param name="right">The second vector to multiply.</param>
+		/// <returns>The multiplied vector.</returns>
+		public static Vector2 Multiply(Vector2 left, Vector2 right) => new Vector2(left.X * right.X, left.Y * right.Y);
+
+		/// <summary>
+		/// Scales a vector by the given value.
+		/// </summary>
+		/// <param name="value">The vector to scale.</param>
+		/// <param name="scale">The amount by which to scale the vector.</param>
+		/// <returns>The scaled vector.</returns>
+		
