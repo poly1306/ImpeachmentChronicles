@@ -4,4 +4,73 @@
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 // associated documentation files (the "Software"), to deal in the Software without restriction,
 // including without limitation the rights to use, copy, modify, merge, publish, distribute,
-// sublicense, and/or sell copies of the Software, and to permit persons to whom the Software 
+// sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all copies or
+// substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+// NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+// OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+
+using System;
+using System.Globalization;
+using System.Runtime.InteropServices;
+
+namespace GTA.Math
+{
+	[Serializable]
+	[StructLayout(LayoutKind.Sequential, Pack = 4)]
+	public struct Vector2 : IEquatable<Vector2>
+	{
+		/// <summary>
+		/// Gets or sets the X component of the vector.
+		/// </summary>
+		/// <value>The X component of the vector.</value>
+		public float X;
+
+		/// <summary>
+		/// Gets or sets the Y component of the vector.
+		/// </summary>
+		/// <value>The Y component of the vector.</value>
+		public float Y;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Vector2"/> class.
+		/// </summary>
+		/// <param name="x">Initial value for the X component of the vector.</param>
+		/// <param name="y">Initial value for the Y component of the vector.</param>
+		public Vector2(float x, float y)
+		{
+			X = x;
+			Y = y;
+		}
+
+		/// <summary>
+		/// Returns this vector with a magnitude of 1.
+		/// </summary>
+		public Vector2 Normalized => Normalize(new Vector2(X, Y));
+
+		/// <summary>
+		/// Returns a null vector. (0,0)
+		/// </summary>
+		public static Vector2 Zero => new Vector2(0.0f, 0.0f);
+
+		/// <summary>
+		/// The X unit <see cref="Vector2"/> (1, 0).
+		/// </summary>
+		public static Vector2 UnitX => new Vector2(1.0f, 0.0f);
+
+		/// <summary>
+		/// The Y unit <see cref="Vector2"/> (0, 1).
+		/// </summary>
+		public static Vector2 UnitY => new Vector2(0.0f, 1.0f);
+
+		/// <summary>
+		/// Returns the up vector. (0,1)
+		/// </summary>
+		public static Vector2 Up => new Vector2(0
