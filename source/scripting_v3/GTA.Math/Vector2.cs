@@ -391,4 +391,57 @@ namespace GTA.Math
 		public static Vector2 Maximize(Vector2 left, Vector2 right)
 		{
 			Vector2 vector;
-			vector.
+			vector.X = (left.X > right.X) ? left.X : right.X;
+			vector.Y = (left.Y > right.Y) ? left.Y : right.Y;
+			return vector;
+		}
+
+		/// <summary>
+		/// Adds two vectors.
+		/// </summary>
+		/// <param name="left">The first vector to add.</param>
+		/// <param name="right">The second vector to add.</param>
+		/// <returns>The sum of the two vectors.</returns>
+		public static Vector2 operator +(Vector2 left, Vector2 right) => new Vector2(left.X + right.X, left.Y + right.Y);
+
+		/// <summary>
+		/// Subtracts two vectors.
+		/// </summary>
+		/// <param name="left">The first vector to subtract.</param>
+		/// <param name="right">The second vector to subtract.</param>
+		/// <returns>The difference of the two vectors.</returns>
+		public static Vector2 operator -(Vector2 left, Vector2 right) => new Vector2(left.X - right.X, left.Y - right.Y);
+
+		/// <summary>
+		/// Reverses the direction of a given vector.
+		/// </summary>
+		/// <param name="value">The vector to negate.</param>
+		/// <returns>A vector facing in the opposite direction.</returns>
+		public static Vector2 operator -(Vector2 value) => new Vector2(-value.X, -value.Y);
+
+		/// <summary>
+		/// Scales a vector by the given value.
+		/// </summary>
+		/// <param name="vector">The vector to scale.</param>
+		/// <param name="scale">The amount by which to scale the vector.</param>
+		/// <returns>The scaled vector.</returns>
+		public static Vector2 operator *(Vector2 vector, float scale) => new Vector2(vector.X * scale, vector.Y * scale);
+
+		/// <summary>
+		/// Scales a vector by the given value.
+		/// </summary>
+		/// <param name="vector">The vector to scale.</param>
+		/// <param name="scale">The amount by which to scale the vector.</param>
+		/// <returns>The scaled vector.</returns>
+		public static Vector2 operator *(float scale, Vector2 vector) => new Vector2(vector.X * scale, vector.Y * scale);
+
+		/// <summary>
+		/// Scales a vector by the given value.
+		/// </summary>
+		/// <param name="vector">The vector to scale.</param>
+		/// <param name="scale">The amount by which to scale the vector.</param>
+		/// <returns>The scaled vector.</returns>
+		public static Vector2 operator /(Vector2 vector, float scale) => new Vector2(vector.X / scale, vector.Y / scale);
+
+		/// <summary>
+		/// Tests for equality between two 
