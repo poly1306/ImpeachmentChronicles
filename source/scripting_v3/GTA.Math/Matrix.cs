@@ -553,3 +553,786 @@ namespace GTA.Math
 			result.M13 = left.M13 * right;
 			result.M14 = left.M14 * right;
 			result.M21 = left.M21 * right;
+			result.M22 = left.M22 * right;
+			result.M23 = left.M23 * right;
+			result.M24 = left.M24 * right;
+			result.M31 = left.M31 * right;
+			result.M32 = left.M32 * right;
+			result.M33 = left.M33 * right;
+			result.M34 = left.M34 * right;
+			result.M41 = left.M41 * right;
+			result.M42 = left.M42 * right;
+			result.M43 = left.M43 * right;
+			result.M44 = left.M44 * right;
+			return result;
+		}
+
+		/// <summary>
+		/// Determines the quotient of two matrices.
+		/// </summary>
+		/// <param name="left">The first matrix to divide.</param>
+		/// <param name="right">The second matrix to divide.</param>
+		/// <returns>The quotient of the two matrices.</returns>
+		public static Matrix Divide(Matrix left, Matrix right)
+		{
+			Matrix result;
+			result.M11 = left.M11 / right.M11;
+			result.M12 = left.M12 / right.M12;
+			result.M13 = left.M13 / right.M13;
+			result.M14 = left.M14 / right.M14;
+			result.M21 = left.M21 / right.M21;
+			result.M22 = left.M22 / right.M22;
+			result.M23 = left.M23 / right.M23;
+			result.M24 = left.M24 / right.M24;
+			result.M31 = left.M31 / right.M31;
+			result.M32 = left.M32 / right.M32;
+			result.M33 = left.M33 / right.M33;
+			result.M34 = left.M34 / right.M34;
+			result.M41 = left.M41 / right.M41;
+			result.M42 = left.M42 / right.M42;
+			result.M43 = left.M43 / right.M43;
+			result.M44 = left.M44 / right.M44;
+			return result;
+		}
+
+		/// <summary>
+		/// Scales a matrix by the given value.
+		/// </summary>
+		/// <param name="left">The matrix to scale.</param>
+		/// <param name="right">The amount by which to scale.</param>
+		/// <returns>The scaled matrix.</returns>
+		public static Matrix Divide(Matrix left, float right)
+		{
+			Matrix result;
+			float inv = 1.0f / right;
+
+			result.M11 = left.M11 * inv;
+			result.M12 = left.M12 * inv;
+			result.M13 = left.M13 * inv;
+			result.M14 = left.M14 * inv;
+			result.M21 = left.M21 * inv;
+			result.M22 = left.M22 * inv;
+			result.M23 = left.M23 * inv;
+			result.M24 = left.M24 * inv;
+			result.M31 = left.M31 * inv;
+			result.M32 = left.M32 * inv;
+			result.M33 = left.M33 * inv;
+			result.M34 = left.M34 * inv;
+			result.M41 = left.M41 * inv;
+			result.M42 = left.M42 * inv;
+			result.M43 = left.M43 * inv;
+			result.M44 = left.M44 * inv;
+			return result;
+		}
+
+		/// <summary>
+		/// Negates a matrix.
+		/// </summary>
+		/// <param name="matrix">The matrix to be negated.</param>
+		/// <returns>The negated matrix.</returns>
+		public static Matrix Negate(Matrix matrix)
+		{
+			Matrix result;
+			result.M11 = -matrix.M11;
+			result.M12 = -matrix.M12;
+			result.M13 = -matrix.M13;
+			result.M14 = -matrix.M14;
+			result.M21 = -matrix.M21;
+			result.M22 = -matrix.M22;
+			result.M23 = -matrix.M23;
+			result.M24 = -matrix.M24;
+			result.M31 = -matrix.M31;
+			result.M32 = -matrix.M32;
+			result.M33 = -matrix.M33;
+			result.M34 = -matrix.M34;
+			result.M41 = -matrix.M41;
+			result.M42 = -matrix.M42;
+			result.M43 = -matrix.M43;
+			result.M44 = -matrix.M44;
+			return result;
+		}
+
+		/// <summary>
+		/// Calculates the inverse of a matrix if it exists.
+		/// </summary>
+		/// <returns>The inverse of the matrix.</returns>
+		public static Matrix Invert(Matrix matrix)
+		{
+			matrix.Invert();
+			return matrix;
+		}
+
+		/// <summary>
+		/// Performs a linear interpolation between two matrices.
+		/// </summary>
+		/// <param name="start">Start matrix.</param>
+		/// <param name="end">End matrix.</param>
+		/// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+		/// <returns>The linear interpolation of the two matrices.</returns>
+		/// <remarks>
+		/// This method performs the linear interpolation based on the following formula.
+		/// <code>start + (end - start) * amount</code>
+		/// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned.
+		/// </remarks>
+		public static Matrix Lerp(Matrix start, Matrix end, float amount)
+		{
+			Matrix result;
+			result.M11 = start.M11 + ((end.M11 - start.M11) * amount);
+			result.M12 = start.M12 + ((end.M12 - start.M12) * amount);
+			result.M13 = start.M13 + ((end.M13 - start.M13) * amount);
+			result.M14 = start.M14 + ((end.M14 - start.M14) * amount);
+			result.M21 = start.M21 + ((end.M21 - start.M21) * amount);
+			result.M22 = start.M22 + ((end.M22 - start.M22) * amount);
+			result.M23 = start.M23 + ((end.M23 - start.M23) * amount);
+			result.M24 = start.M24 + ((end.M24 - start.M24) * amount);
+			result.M31 = start.M31 + ((end.M31 - start.M31) * amount);
+			result.M32 = start.M32 + ((end.M32 - start.M32) * amount);
+			result.M33 = start.M33 + ((end.M33 - start.M33) * amount);
+			result.M34 = start.M34 + ((end.M34 - start.M34) * amount);
+			result.M41 = start.M41 + ((end.M41 - start.M41) * amount);
+			result.M42 = start.M42 + ((end.M42 - start.M42) * amount);
+			result.M43 = start.M43 + ((end.M43 - start.M43) * amount);
+			result.M44 = start.M44 + ((end.M44 - start.M44) * amount);
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a matrix that rotates around the x-axis.
+		/// </summary>
+		/// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+		/// <returns>The created rotation matrix.</returns>
+		public static Matrix RotationX(float angle)
+		{
+			Matrix result;
+			float cos = (float)System.Math.Cos(angle);
+			float sin = (float)(System.Math.Sin(angle));
+
+			result.M11 = 1.0f;
+			result.M12 = 0.0f;
+			result.M13 = 0.0f;
+			result.M14 = 0.0f;
+			result.M21 = 0.0f;
+			result.M22 = cos;
+			result.M23 = sin;
+			result.M24 = 0.0f;
+			result.M31 = 0.0f;
+			result.M32 = -sin;
+			result.M33 = cos;
+			result.M34 = 0.0f;
+			result.M41 = 0.0f;
+			result.M42 = 0.0f;
+			result.M43 = 0.0f;
+			result.M44 = 1.0f;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a matrix that rotates around the y-axis.
+		/// </summary>
+		/// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+		/// <returns>The created rotation matrix.</returns>
+		public static Matrix RotationY(float angle)
+		{
+			Matrix result;
+			float cos = (float)(System.Math.Cos(angle));
+			float sin = (float)(System.Math.Sin(angle));
+
+			result.M11 = cos;
+			result.M12 = 0.0f;
+			result.M13 = -sin;
+			result.M14 = 0.0f;
+			result.M21 = 0.0f;
+			result.M22 = 1.0f;
+			result.M23 = 0.0f;
+			result.M24 = 0.0f;
+			result.M31 = sin;
+			result.M32 = 0.0f;
+			result.M33 = cos;
+			result.M34 = 0.0f;
+			result.M41 = 0.0f;
+			result.M42 = 0.0f;
+			result.M43 = 0.0f;
+			result.M44 = 1.0f;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a matrix that rotates around the z-axis.
+		/// </summary>
+		/// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+		/// <returns>The created rotation matrix.</returns>
+		public static Matrix RotationZ(float angle)
+		{
+			Matrix result;
+			float cos = (float)(System.Math.Cos(angle));
+			float sin = (float)(System.Math.Sin(angle));
+
+			result.M11 = cos;
+			result.M12 = sin;
+			result.M13 = 0.0f;
+			result.M14 = 0.0f;
+			result.M21 = -sin;
+			result.M22 = cos;
+			result.M23 = 0.0f;
+			result.M24 = 0.0f;
+			result.M31 = 0.0f;
+			result.M32 = 0.0f;
+			result.M33 = 1.0f;
+			result.M34 = 0.0f;
+			result.M41 = 0.0f;
+			result.M42 = 0.0f;
+			result.M43 = 0.0f;
+			result.M44 = 1.0f;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a matrix that rotates around an arbitrary axis.
+		/// </summary>
+		/// <param name="axis">The axis around which to rotate.</param>
+		/// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+		/// <returns>The created rotation matrix.</returns>
+		public static Matrix RotationAxis(Vector3 axis, float angle)
+		{
+			if (axis.LengthSquared() != 1.0f)
+			{
+				axis.Normalize();
+			}
+
+			Matrix result;
+			float x = axis.X;
+			float y = axis.Y;
+			float z = axis.Z;
+			float cos = (float)(System.Math.Cos(angle));
+			float sin = (float)(System.Math.Sin(angle));
+			float xx = x * x;
+			float yy = y * y;
+			float zz = z * z;
+			float xy = x * y;
+			float xz = x * z;
+			float yz = y * z;
+
+			result.M11 = xx + (cos * (1.0f - xx));
+			result.M12 = (xy - (cos * xy)) + (sin * z);
+			result.M13 = (xz - (cos * xz)) - (sin * y);
+			result.M14 = 0.0f;
+			result.M21 = (xy - (cos * xy)) - (sin * z);
+			result.M22 = yy + (cos * (1.0f - yy));
+			result.M23 = (yz - (cos * yz)) + (sin * x);
+			result.M24 = 0.0f;
+			result.M31 = (xz - (cos * xz)) + (sin * y);
+			result.M32 = (yz - (cos * yz)) - (sin * x);
+			result.M33 = zz + (cos * (1.0f - zz));
+			result.M34 = 0.0f;
+			result.M41 = 0.0f;
+			result.M42 = 0.0f;
+			result.M43 = 0.0f;
+			result.M44 = 1.0f;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a rotation matrix from a rotation.
+		/// </summary>
+		/// <param name="rotation">The quaternion to use to build the matrix.</param>
+		/// <returns>The created rotation matrix.</returns>
+		public static Matrix RotationQuaternion(Quaternion rotation)
+		{
+			Matrix result;
+
+			float xx = rotation.X * rotation.X;
+			float yy = rotation.Y * rotation.Y;
+			float zz = rotation.Z * rotation.Z;
+			float xy = rotation.X * rotation.Y;
+			float zw = rotation.Z * rotation.W;
+			float zx = rotation.Z * rotation.X;
+			float yw = rotation.Y * rotation.W;
+			float yz = rotation.Y * rotation.Z;
+			float xw = rotation.X * rotation.W;
+			result.M11 = 1.0f - (2.0f * (yy + zz));
+			result.M12 = 2.0f * (xy + zw);
+			result.M13 = 2.0f * (zx - yw);
+			result.M14 = 0.0f;
+			result.M21 = 2.0f * (xy - zw);
+			result.M22 = 1.0f - (2.0f * (zz + xx));
+			result.M23 = 2.0f * (yz + xw);
+			result.M24 = 0.0f;
+			result.M31 = 2.0f * (zx + yw);
+			result.M32 = 2.0f * (yz - xw);
+			result.M33 = 1.0f - (2.0f * (yy + xx));
+			result.M34 = 0.0f;
+			result.M41 = 0.0f;
+			result.M42 = 0.0f;
+			result.M43 = 0.0f;
+			result.M44 = 1.0f;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a rotation matrix with a specified yaw, pitch, and roll.
+		/// </summary>
+		/// <param name="yaw">Yaw around the y-axis, in radians.</param>
+		/// <param name="pitch">Pitch around the x-axis, in radians.</param>
+		/// <param name="roll">Roll around the z-axis, in radians.</param>
+		/// <returns>The created rotation matrix.</returns>
+		public static Matrix RotationYawPitchRoll(float yaw, float pitch, float roll)
+		{
+			Quaternion quaternion = Quaternion.RotationYawPitchRoll(yaw, pitch, roll);
+			return RotationQuaternion(quaternion);
+		}
+
+		/// <summary>
+		/// Creates a matrix that scales along the x-axis, y-axis, and y-axis.
+		/// </summary>
+		/// <param name="x">Scaling factor that is applied along the x-axis.</param>
+		/// <param name="y">Scaling factor that is applied along the y-axis.</param>
+		/// <param name="z">Scaling factor that is applied along the z-axis.</param>
+		/// <returns>The created scaling matrix.</returns>
+		public static Matrix Scaling(float x, float y, float z)
+		{
+			Matrix result;
+			result.M11 = x;
+			result.M12 = 0.0f;
+			result.M13 = 0.0f;
+			result.M14 = 0.0f;
+			result.M21 = 0.0f;
+			result.M22 = y;
+			result.M23 = 0.0f;
+			result.M24 = 0.0f;
+			result.M31 = 0.0f;
+			result.M32 = 0.0f;
+			result.M33 = z;
+			result.M34 = 0.0f;
+			result.M41 = 0.0f;
+			result.M42 = 0.0f;
+			result.M43 = 0.0f;
+			result.M44 = 1.0f;
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a matrix that scales along the x-axis, y-axis, and y-axis.
+		/// </summary>
+		/// <param name="scale">Scaling factor for all three axes.</param>
+		/// <returns>The created scaling matrix.</returns>
+		public static Matrix Scaling(Vector3 scale)
+		{
+			Matrix result;
+			result.M11 = scale.X;
+			result.M12 = 0.0f;
+			result.M13 = 0.0f;
+			result.M14 = 0.0f;
+			result.M21 = 0.0f;
+			result.M22 = scale.Y;
+			result.M23 = 0.0f;
+			result.M24 = 0.0f;
+			result.M31 = 0.0f;
+			result.M32 = 0.0f;
+			result.M33 = scale.Z;
+			result.M34 = 0.0f;
+			result.M41 = 0.0f;
+			result.M42 = 0.0f;
+			result.M43 = 0.0f;
+			result.M44 = 1.0f;
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a translation matrix using the specified offsets.
+		/// </summary>
+		/// <param name="x">X-coordinate offset.</param>
+		/// <param name="y">Y-coordinate offset.</param>
+		/// <param name="z">Z-coordinate offset.</param>
+		/// <returns>The created translation matrix.</returns>
+		public static Matrix Translation(float x, float y, float z)
+		{
+			Matrix result;
+			result.M11 = 1.0f;
+			result.M12 = 0.0f;
+			result.M13 = 0.0f;
+			result.M14 = 0.0f;
+			result.M21 = 0.0f;
+			result.M22 = 1.0f;
+			result.M23 = 0.0f;
+			result.M24 = 0.0f;
+			result.M31 = 0.0f;
+			result.M32 = 0.0f;
+			result.M33 = 1.0f;
+			result.M34 = 0.0f;
+			result.M41 = x;
+			result.M42 = y;
+			result.M43 = z;
+			result.M44 = 1.0f;
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a translation matrix using the specified offsets.
+		/// </summary>
+		/// <param name="amount">The offset for all three coordinate planes.</param>
+		/// <returns>The created translation matrix.</returns>
+		public static Matrix Translation(Vector3 amount)
+		{
+			Matrix result = Identity;
+			result.M11 = 1.0f;
+			result.M12 = 0.0f;
+			result.M13 = 0.0f;
+			result.M14 = 0.0f;
+			result.M21 = 0.0f;
+			result.M22 = 1.0f;
+			result.M23 = 0.0f;
+			result.M24 = 0.0f;
+			result.M31 = 0.0f;
+			result.M32 = 0.0f;
+			result.M33 = 1.0f;
+			result.M34 = 0.0f;
+			result.M41 = amount.X;
+			result.M42 = amount.Y;
+			result.M43 = amount.Z;
+			result.M44 = 1.0f;
+			return result;
+		}
+
+		/// <summary>
+		/// Calculates the transpose of the specified matrix.
+		/// </summary>
+		/// <param name="matrix">The matrix whose transpose is to be calculated.</param>
+		/// <returns>The transpose of the specified matrix.</returns>
+		public static Matrix Transpose(Matrix matrix)
+		{
+			Matrix result;
+			result.M11 = matrix.M11;
+			result.M12 = matrix.M21;
+			result.M13 = matrix.M31;
+			result.M14 = matrix.M41;
+			result.M21 = matrix.M12;
+			result.M22 = matrix.M22;
+			result.M23 = matrix.M32;
+			result.M24 = matrix.M42;
+			result.M31 = matrix.M13;
+			result.M32 = matrix.M23;
+			result.M33 = matrix.M33;
+			result.M34 = matrix.M43;
+			result.M41 = matrix.M14;
+			result.M42 = matrix.M24;
+			result.M43 = matrix.M34;
+			result.M44 = matrix.M44;
+			return result;
+		}
+
+		/// <summary>
+		/// Negates a matrix.
+		/// </summary>
+		/// <param name="matrix">The matrix to negate.</param>
+		/// <returns>The negated matrix.</returns>
+		public static Matrix operator -(Matrix matrix)
+		{
+			Matrix result;
+			result.M11 = -matrix.M11;
+			result.M12 = -matrix.M12;
+			result.M13 = -matrix.M13;
+			result.M14 = -matrix.M14;
+			result.M21 = -matrix.M21;
+			result.M22 = -matrix.M22;
+			result.M23 = -matrix.M23;
+			result.M24 = -matrix.M24;
+			result.M31 = -matrix.M31;
+			result.M32 = -matrix.M32;
+			result.M33 = -matrix.M33;
+			result.M34 = -matrix.M34;
+			result.M41 = -matrix.M41;
+			result.M42 = -matrix.M42;
+			result.M43 = -matrix.M43;
+			result.M44 = -matrix.M44;
+			return result;
+		}
+
+		/// <summary>
+		/// Adds two matrices.
+		/// </summary>
+		/// <param name="left">The first matrix to add.</param>
+		/// <param name="right">The second matrix to add.</param>
+		/// <returns>The sum of the two matrices.</returns>
+		public static Matrix operator +(Matrix left, Matrix right)
+		{
+			Matrix result;
+			result.M11 = left.M11 + right.M11;
+			result.M12 = left.M12 + right.M12;
+			result.M13 = left.M13 + right.M13;
+			result.M14 = left.M14 + right.M14;
+			result.M21 = left.M21 + right.M21;
+			result.M22 = left.M22 + right.M22;
+			result.M23 = left.M23 + right.M23;
+			result.M24 = left.M24 + right.M24;
+			result.M31 = left.M31 + right.M31;
+			result.M32 = left.M32 + right.M32;
+			result.M33 = left.M33 + right.M33;
+			result.M34 = left.M34 + right.M34;
+			result.M41 = left.M41 + right.M41;
+			result.M42 = left.M42 + right.M42;
+			result.M43 = left.M43 + right.M43;
+			result.M44 = left.M44 + right.M44;
+			return result;
+		}
+
+		/// <summary>
+		/// Subtracts two matrices.
+		/// </summary>
+		/// <param name="left">The first matrix to subtract.</param>
+		/// <param name="right">The second matrix to subtract.</param>
+		/// <returns>The difference between the two matrices.</returns>
+		public static Matrix operator -(Matrix left, Matrix right)
+		{
+			Matrix result;
+			result.M11 = left.M11 - right.M11;
+			result.M12 = left.M12 - right.M12;
+			result.M13 = left.M13 - right.M13;
+			result.M14 = left.M14 - right.M14;
+			result.M21 = left.M21 - right.M21;
+			result.M22 = left.M22 - right.M22;
+			result.M23 = left.M23 - right.M23;
+			result.M24 = left.M24 - right.M24;
+			result.M31 = left.M31 - right.M31;
+			result.M32 = left.M32 - right.M32;
+			result.M33 = left.M33 - right.M33;
+			result.M34 = left.M34 - right.M34;
+			result.M41 = left.M41 - right.M41;
+			result.M42 = left.M42 - right.M42;
+			result.M43 = left.M43 - right.M43;
+			result.M44 = left.M44 - right.M44;
+			return result;
+		}
+
+		/// <summary>
+		/// Divides two matrices.
+		/// </summary>
+		/// <param name="left">The first matrix to divide.</param>
+		/// <param name="right">The second matrix to divide.</param>
+		/// <returns>The quotient of the two matrices.</returns>
+		public static Matrix operator /(Matrix left, Matrix right)
+		{
+			Matrix result;
+			result.M11 = left.M11 / right.M11;
+			result.M12 = left.M12 / right.M12;
+			result.M13 = left.M13 / right.M13;
+			result.M14 = left.M14 / right.M14;
+			result.M21 = left.M21 / right.M21;
+			result.M22 = left.M22 / right.M22;
+			result.M23 = left.M23 / right.M23;
+			result.M24 = left.M24 / right.M24;
+			result.M31 = left.M31 / right.M31;
+			result.M32 = left.M32 / right.M32;
+			result.M33 = left.M33 / right.M33;
+			result.M34 = left.M34 / right.M34;
+			result.M41 = left.M41 / right.M41;
+			result.M42 = left.M42 / right.M42;
+			result.M43 = left.M43 / right.M43;
+			result.M44 = left.M44 / right.M44;
+			return result;
+		}
+
+		/// <summary>
+		/// Scales a matrix by a given value.
+		/// </summary>
+		/// <param name="left">The matrix to scale.</param>
+		/// <param name="right">The amount by which to scale.</param>
+		/// <returns>The scaled matrix.</returns>
+		public static Matrix operator /(Matrix left, float right)
+		{
+			Matrix result;
+			float invRight = 1.0f / right;
+			result.M11 = left.M11 * invRight;
+			result.M12 = left.M12 * invRight;
+			result.M13 = left.M13 * invRight;
+			result.M14 = left.M14 * invRight;
+			result.M21 = left.M21 * invRight;
+			result.M22 = left.M22 * invRight;
+			result.M23 = left.M23 * invRight;
+			result.M24 = left.M24 * invRight;
+			result.M31 = left.M31 * invRight;
+			result.M32 = left.M32 * invRight;
+			result.M33 = left.M33 * invRight;
+			result.M34 = left.M34 * invRight;
+			result.M41 = left.M41 * invRight;
+			result.M42 = left.M42 * invRight;
+			result.M43 = left.M43 * invRight;
+			result.M44 = left.M44 * invRight;
+			return result;
+		}
+
+		/// <summary>
+		/// Multiplies two matrices.
+		/// </summary>
+		/// <param name="left">The first matrix to multiply.</param>
+		/// <param name="right">The second matrix to multiply.</param>
+		/// <returns>The product of the two matrices.</returns>
+		public static Matrix operator *(Matrix left, Matrix right)
+		{
+			Matrix result;
+			result.M11 = (left.M11 * right.M11) + (left.M12 * right.M21) + (left.M13 * right.M31) + (left.M14 * right.M41);
+			result.M12 = (left.M11 * right.M12) + (left.M12 * right.M22) + (left.M13 * right.M32) + (left.M14 * right.M42);
+			result.M13 = (left.M11 * right.M13) + (left.M12 * right.M23) + (left.M13 * right.M33) + (left.M14 * right.M43);
+			result.M14 = (left.M11 * right.M14) + (left.M12 * right.M24) + (left.M13 * right.M34) + (left.M14 * right.M44);
+			result.M21 = (left.M21 * right.M11) + (left.M22 * right.M21) + (left.M23 * right.M31) + (left.M24 * right.M41);
+			result.M22 = (left.M21 * right.M12) + (left.M22 * right.M22) + (left.M23 * right.M32) + (left.M24 * right.M42);
+			result.M23 = (left.M21 * right.M13) + (left.M22 * right.M23) + (left.M23 * right.M33) + (left.M24 * right.M43);
+			result.M24 = (left.M21 * right.M14) + (left.M22 * right.M24) + (left.M23 * right.M34) + (left.M24 * right.M44);
+			result.M31 = (left.M31 * right.M11) + (left.M32 * right.M21) + (left.M33 * right.M31) + (left.M34 * right.M41);
+			result.M32 = (left.M31 * right.M12) + (left.M32 * right.M22) + (left.M33 * right.M32) + (left.M34 * right.M42);
+			result.M33 = (left.M31 * right.M13) + (left.M32 * right.M23) + (left.M33 * right.M33) + (left.M34 * right.M43);
+			result.M34 = (left.M31 * right.M14) + (left.M32 * right.M24) + (left.M33 * right.M34) + (left.M34 * right.M44);
+			result.M41 = (left.M41 * right.M11) + (left.M42 * right.M21) + (left.M43 * right.M31) + (left.M44 * right.M41);
+			result.M42 = (left.M41 * right.M12) + (left.M42 * right.M22) + (left.M43 * right.M32) + (left.M44 * right.M42);
+			result.M43 = (left.M41 * right.M13) + (left.M42 * right.M23) + (left.M43 * right.M33) + (left.M44 * right.M43);
+			result.M44 = (left.M41 * right.M14) + (left.M42 * right.M24) + (left.M43 * right.M34) + (left.M44 * right.M44);
+			return result;
+		}
+
+		/// <summary>
+		/// Scales a matrix by a given value.
+		/// </summary>
+		/// <param name="left">The matrix to scale.</param>
+		/// <param name="right">The amount by which to scale.</param>
+		/// <returns>The scaled matrix.</returns>
+		public static Matrix operator *(Matrix left, float right)
+		{
+			Matrix result;
+			result.M11 = left.M11 * right;
+			result.M12 = left.M12 * right;
+			result.M13 = left.M13 * right;
+			result.M14 = left.M14 * right;
+			result.M21 = left.M21 * right;
+			result.M22 = left.M22 * right;
+			result.M23 = left.M23 * right;
+			result.M24 = left.M24 * right;
+			result.M31 = left.M31 * right;
+			result.M32 = left.M32 * right;
+			result.M33 = left.M33 * right;
+			result.M34 = left.M34 * right;
+			result.M41 = left.M41 * right;
+			result.M42 = left.M42 * right;
+			result.M43 = left.M43 * right;
+			result.M44 = left.M44 * right;
+			return result;
+		}
+
+		/// <summary>
+		/// Scales a matrix by a given value.
+		/// </summary>
+		/// <param name="right">The matrix to scale.</param>
+		/// <param name="left">The amount by which to scale.</param>
+		/// <returns>The scaled matrix.</returns>
+		public static Matrix operator *(float left, Matrix right) => right * left;
+
+		/// <summary>
+		/// Tests for equality between two objects.
+		/// </summary>
+		/// <param name="left">The first value to compare.</param>
+		/// <param name="right">The second value to compare.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> has the same value as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator ==(Matrix left, Matrix right) => Matrix.Equals(left, right);
+
+		/// <summary>
+		/// Tests for inequality between two objects.
+		/// </summary>
+		/// <param name="left">The first value to compare.</param>
+		/// <param name="right">The second value to compare.</param>
+		/// <returns><see langword="true" /> if <paramref name="left"/> has a different value than <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
+		public static bool operator !=(Matrix left, Matrix right) => !Matrix.Equals(left, right);
+
+		/// <summary>
+		/// Converts the matrix to an array of floats.
+		/// </summary>
+		public float[] ToArray() => new[] { M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44 };
+
+		/// <summary>
+		/// Converts the value of the object to its equivalent string representation.
+		/// </summary>
+		/// <returns>The string representation of the value of this instance.</returns>
+		public override string ToString()
+		{
+			return string.Format(CultureInfo.CurrentCulture, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
+				M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44);
+		}
+
+		/// <summary>
+		/// Converts the value of the object to its equivalent string representation.
+		/// </summary>
+		/// <param name="format">The format.</param>
+		/// <returns>The string representation of the value of this instance.</returns>
+		public string ToString(string format)
+		{
+			if (format == null)
+			{
+				return ToString();
+			}
+
+			return string.Format(format, CultureInfo.CurrentCulture, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
+				M11.ToString(format, CultureInfo.CurrentCulture), M12.ToString(format, CultureInfo.CurrentCulture), M13.ToString(format, CultureInfo.CurrentCulture), M14.ToString(format, CultureInfo.CurrentCulture),
+				M21.ToString(format, CultureInfo.CurrentCulture), M22.ToString(format, CultureInfo.CurrentCulture), M23.ToString(format, CultureInfo.CurrentCulture), M24.ToString(format, CultureInfo.CurrentCulture),
+				M31.ToString(format, CultureInfo.CurrentCulture), M32.ToString(format, CultureInfo.CurrentCulture), M33.ToString(format, CultureInfo.CurrentCulture), M34.ToString(format, CultureInfo.CurrentCulture),
+				M41.ToString(format, CultureInfo.CurrentCulture), M42.ToString(format, CultureInfo.CurrentCulture), M43.ToString(format, CultureInfo.CurrentCulture), M44.ToString(format, CultureInfo.CurrentCulture));
+		}
+
+		/// <summary>
+		/// Returns the hash code for this instance.
+		/// </summary>
+		/// <returns>A 32-bit signed integer hash code.</returns>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = M11.GetHashCode();
+				hashCode = (hashCode * 397) ^ M12.GetHashCode();
+				hashCode = (hashCode * 397) ^ M13.GetHashCode();
+				hashCode = (hashCode * 397) ^ M14.GetHashCode();
+				hashCode = (hashCode * 397) ^ M21.GetHashCode();
+				hashCode = (hashCode * 397) ^ M22.GetHashCode();
+				hashCode = (hashCode * 397) ^ M23.GetHashCode();
+				hashCode = (hashCode * 397) ^ M24.GetHashCode();
+				hashCode = (hashCode * 397) ^ M31.GetHashCode();
+				hashCode = (hashCode * 397) ^ M32.GetHashCode();
+				hashCode = (hashCode * 397) ^ M33.GetHashCode();
+				hashCode = (hashCode * 397) ^ M34.GetHashCode();
+				hashCode = (hashCode * 397) ^ M41.GetHashCode();
+				hashCode = (hashCode * 397) ^ M42.GetHashCode();
+				hashCode = (hashCode * 397) ^ M43.GetHashCode();
+				hashCode = (hashCode * 397) ^ M44.GetHashCode();
+				return hashCode;
+			}
+		}
+
+		/// <summary>
+		/// Returns a value that indicates whether the current instance is equal to a specified object.
+		/// </summary>
+		/// <param name="obj">Object to make the comparison with.</param>
+		/// <returns><see langword="true" /> if the current instance is equal to the specified object; <see langword="false" /> otherwise.</returns>
+		public override bool Equals(object obj)
+		{
+			if (obj == null || obj.GetType() != GetType())
+			{
+				return false;
+			}
+
+			return Equals((Matrix)obj);
+		}
+
+		/// <summary>
+		/// Returns a value that indicates whether the current instance is equal to the specified object.
+		/// </summary>
+		/// <param name="other">Object to make the comparison with.</param>
+		/// <returns><see langword="true" /> if the current instance is equal to the specified object; <see langword="false" /> otherwise.</returns>
+		public bool Equals(Matrix other)
+		{
+			return (M11 == other.M11 && M12 == other.M12 && M13 == other.M13 && M14 == other.M14 &&
+				M21 == other.M21 && M22 == other.M22 && M23 == other.M23 && M24 == other.M24 &&
+				M31 == other.M31 && M32 == other.M32 && M33 == other.M33 && M34 == other.M34 &&
+				M41 == other.M41 && M42 == other.M42 && M43 == other.M43 && M44 == other.M44);
+		}
+	}
+}
