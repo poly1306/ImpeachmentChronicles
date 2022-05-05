@@ -501,4 +501,25 @@ namespace GTA.Math
 		}
 
 		/// <summary>
-		/// 
+		/// Returns a value that indicates whether the current instance is equal to a specified object.
+		/// </summary>
+		/// <param name="obj">Object to make the comparison with.</param>
+		/// <returns><see langword="true" /> if the current instance is equal to the specified object; otherwise, <see langword="false" />.</returns>
+		public override bool Equals(object obj)
+		{
+			if (obj == null || obj.GetType() != GetType())
+			{
+				return false;
+			}
+
+			return Equals((Vector2)obj);
+		}
+
+		/// <summary>
+		/// Returns a value that indicates whether the current instance is equal to the specified object.
+		/// </summary>
+		/// <param name="other">Object to make the comparison with.</param>
+		/// <returns><see langword="true" /> if the current instance is equal to the specified object; <see langword="false" /> otherwise.</returns>
+		public bool Equals(Vector2 other) => (X == other.X && Y == other.Y);
+	}
+}
