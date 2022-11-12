@@ -60,4 +60,77 @@ namespace GTA.NaturalMotion
 			_message.SendTo(_ped);
 
 			if (boolWasStartArgumentSet)
-				_message.SetArgument
+				_message.SetArgument("start", true);
+		}
+
+		/// <summary>
+		/// Stops this Nbehavior on the <see cref="Ped"/>.
+		/// </summary>
+		public void Stop()
+		{
+			_message.Abort(_ped);
+		}
+
+		/// <summary>
+		/// Sets an argument to a <see cref="bool"/> value.
+		/// </summary>
+		/// <param name="argName">The argument name.</param>
+		/// <param name="value">The value to set the argument to.</param>
+		public void SetArgument(string argName, bool value)
+		{
+			_message.SetArgument(argName, value);
+		}
+		/// <summary>
+		/// Sets an argument to a <see cref="int"/> value.
+		/// </summary>
+		/// <param name="argName">The argument name.</param>
+		/// <param name="value">The value to set the argument to.</param>
+		public void SetArgument(string argName, int value)
+		{
+			_message.SetArgument(argName, value);
+		}
+		/// <summary>
+		/// Sets an argument to a <see cref="float"/> value.
+		/// </summary>
+		/// <param name="argName">The argument name.</param>
+		/// <param name="value">The value to set the argument to.</param>
+		public void SetArgument(string argName, float value)
+		{
+			_message.SetArgument(argName, value);
+		}
+		/// <summary>
+		/// Sets an argument to a <see cref="string"/> value.
+		/// </summary>
+		/// <param name="argName">The argument name.</param>
+		/// <param name="value">The value to set the argument to.</param>
+		public void SetArgument(string argName, string value)
+		{
+			_message.SetArgument(argName, value);
+		}
+		/// <summary>
+		/// Sets an argument to a <see cref="Vector3"/> value.
+		/// </summary>
+		/// <param name="argName">The argument name.</param>
+		/// <param name="value">The value to set the argument to.</param>
+		public void SetArgument(string argName, Vector3 value)
+		{
+			_message.SetArgument(argName, value);
+		}
+
+		/// <summary>
+		/// Resets all arguments to their default values.
+		/// </summary>
+		public void ResetArguments()
+		{
+			_message.ResetArguments();
+		}
+
+		/// <summary>
+		/// Returns the internal message name.
+		/// </summary>
+		public override string ToString()
+		{
+			return _message.ToString();
+		}
+	}
+}
