@@ -1829,3 +1829,2177 @@ namespace GTA.NaturalMotion
 		}
 
 		/// <summary>
+		/// Foot friction multiplier is multiplied by this amount if staggerFall is running.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 40.0f.
+		/// </remarks>
+		public float FootFrictionStagger
+		{
+			set
+			{
+				if (value > 40.0f)
+				{
+					value = 40.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("footFrictionStagger", value);
+			}
+		}
+
+		/// <summary>
+		/// Backwards lean threshold to cut off stay upright forces. 0.0 Vertical - 1.0 horizontal.  0.6 is a sensible value.  NB: the balancer does not fail in order to give stagger that extra step as it falls.  A backwards lean of GT 0.6 will generally mean the balancer will soon fail without stayUpright forces.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.1f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float BackwardsLeanCutoff
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("backwardsLeanCutoff", value);
+			}
+		}
+
+		/// <summary>
+		/// If this value is different from giveUpHeight, actual giveUpHeight will be ramped toward this value.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.5f.
+		/// </remarks>
+		public float GiveUpHeightEnd
+		{
+			set
+			{
+				if (value > 1.5f)
+				{
+					value = 1.5f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("giveUpHeightEnd", value);
+			}
+		}
+
+		/// <summary>
+		/// If this value is different from balanceAbortThreshold, actual balanceAbortThreshold will be ramped toward this value.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float BalanceAbortThresholdEnd
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("balanceAbortThresholdEnd", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration of ramp from start of behavior for above two parameters. If smaller than 0, no ramp is applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float GiveUpRampDuration
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("giveUpRampDuration", value);
+			}
+		}
+
+		/// <summary>
+		/// Lean at which to send abort message when maxSteps or maxBalanceTime is reached.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanToAbort
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("leanToAbort", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Reset the values configurable by the Configure Balance message to their defaults.
+	/// </summary>
+	public sealed class ConfigureBalanceResetHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureBalanceResetHelper for sending a ConfigureBalanceReset <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureBalanceReset <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Reset the values configurable by the Configure Balance message to their defaults.
+		/// </remarks>
+		public ConfigureBalanceResetHelper(Ped ped) : base(ped, "configureBalanceReset")
+		{
+		}
+	}
+
+	/// <summary>
+	/// This single message allows to configure self avoidance for the character.BBDD Self avoidance tech.
+	/// </summary>
+	public sealed class ConfigureSelfAvoidanceHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureSelfAvoidanceHelper for sending a ConfigureSelfAvoidance <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureSelfAvoidance <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// This single message allows to configure self avoidance for the character.BBDD Self avoidance tech.
+		/// </remarks>
+		public ConfigureSelfAvoidanceHelper(Ped ped) : base(ped, "configureSelfAvoidance")
+		{
+		}
+
+		/// <summary>
+		/// Enable or disable self avoidance tech.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseSelfAvoidance
+		{
+			set
+			{
+				SetArgument("useSelfAvoidance", value);
+			}
+		}
+
+		/// <summary>
+		/// Specify whether self avoidance tech should use original IK input target or the target that has been already modified by getStabilisedPos() tech i.e. function that compensates for rotational and linear velocity of shoulder/thigh.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool OverwriteDragReduction
+		{
+			set
+			{
+				SetArgument("overwriteDragReduction", value);
+			}
+		}
+
+		/// <summary>
+		/// Place the adjusted target this much along the arc between effector (wrist) and target, value in range [0,1].
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.8f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TorsoSwingFraction
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torsoSwingFraction", value);
+			}
+		}
+
+		/// <summary>
+		/// Max value on the effector (wrist) to adjusted target offset.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.8f.
+		/// Min value = 0.0f.
+		/// Max value = 1.6f.
+		/// </remarks>
+		public float MaxTorsoSwingAngleRad
+		{
+			set
+			{
+				if (value > 1.6f)
+				{
+					value = 1.6f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("maxTorsoSwingAngleRad", value);
+			}
+		}
+
+		/// <summary>
+		/// Restrict self avoidance to operate on targets that are within character torso bounds only.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool SelfAvoidIfInSpineBoundsOnly
+		{
+			set
+			{
+				SetArgument("selfAvoidIfInSpineBoundsOnly", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of self avoidance offset applied when angle from effector (wrist) to target is greater then right angle i.e. when total offset is a blend between where effector currently is to value that is a product of total arm length and selfAvoidAmount. SelfAvoidAmount is in a range between [0, 1].
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float SelfAvoidAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("selfAvoidAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Overwrite desired IK twist with self avoidance procedural twist.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool OverwriteTwist
+		{
+			set
+			{
+				SetArgument("overwriteTwist", value);
+			}
+		}
+
+		/// <summary>
+		/// Use the alternative self avoidance algorithm that is based on linear and polar target blending. WARNING: It only requires "radius" in terms of parametrization.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UsePolarPathAlgorithm
+		{
+			set
+			{
+				SetArgument("usePolarPathAlgorithm", value);
+			}
+		}
+
+		/// <summary>
+		/// Self avoidance radius, measured out from the spine axis along the plane perpendicular to that axis. The closer is the proximity of reaching target to that radius, the more polar (curved) motion is used for offsetting the target. WARNING: Parameter only used by the alternative algorithm that is based on linear and polar target blending.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Radius
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("radius", value);
+			}
+		}
+	}
+
+	public sealed class ConfigureBulletsHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureBulletsHelper for sending a ConfigureBullets <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureBullets <see cref="Message"/> to.</param>
+		public ConfigureBulletsHelper(Ped ped) : base(ped, "configureBullets")
+		{
+		}
+
+		/// <summary>
+		/// Spreads impulse across parts. Currently only for spine parts, not limbs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ImpulseSpreadOverParts
+		{
+			set
+			{
+				SetArgument("impulseSpreadOverParts", value);
+			}
+		}
+
+		/// <summary>
+		/// For weaker characters subsequent impulses remain strong.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ImpulseLeakageStrengthScaled
+		{
+			set
+			{
+				SetArgument("impulseLeakageStrengthScaled", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration that impulse is spread over (triangular shaped).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulsePeriod
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulsePeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// An impulse applied at a point on a body equivalent to an impulse at the center of the body and a torque.  This parameter scales the torque component. (The torque component seems to be excite the rage looseness bug which sends the character in a sometimes wildly different direction to an applied impulse).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseTorqueScale
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseTorqueScale", value);
+			}
+		}
+
+		/// <summary>
+		/// Fix the rage looseness bug by applying only the impulse at the center of the body unless it is a spine part then apply the twist component only of the torque as well.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool LoosenessFix
+		{
+			set
+			{
+				SetArgument("loosenessFix", value);
+			}
+		}
+
+		/// <summary>
+		/// Time from hit before impulses are being applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseDelay
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseDelay", value);
+			}
+		}
+
+		/// <summary>
+		/// By how much are subsequent impulses reduced (e.g. 0.0: no reduction, 0.1: 10% reduction each new hit).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseReductionPerShot
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseReductionPerShot", value);
+			}
+		}
+
+		/// <summary>
+		/// Recovery rate of impulse strength per second (impulse strength from 0.0:1.0).  At 60fps a impulseRecovery=60.0 will recover in 1 frame.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 60.0f.
+		/// </remarks>
+		public float ImpulseRecovery
+		{
+			set
+			{
+				if (value > 60.0f)
+				{
+					value = 60.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseRecovery", value);
+			}
+		}
+
+		/// <summary>
+		/// The minimum amount of impulse leakage allowed.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseMinLeakage
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseMinLeakage", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="TorqueMode.Disabled"/>.
+		/// If <see cref="TorqueMode.Proportional"/> - proportional to character strength, can reduce impulse amount.
+		/// If <see cref="TorqueMode.Additive"/> - no reduction of impulse and not proportional to character strength.
+		/// </remarks>
+		public TorqueMode TorqueMode
+		{
+			set
+			{
+				SetArgument("torqueMode", (int)value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="TorqueSpinMode.FromImpulse"/>.
+		/// If <see cref="TorqueSpinMode.Flipping"/> a burst effect is achieved.
+		/// </remarks>
+		public TorqueSpinMode TorqueSpinMode
+		{
+			set
+			{
+				SetArgument("torqueSpinMode", (int)value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="TorqueFilterMode.ApplyEveryBullet"/>.
+		/// </remarks>
+		public TorqueFilterMode TorqueFilterMode
+		{
+			set
+			{
+				SetArgument("torqueFilterMode", (int)value);
+			}
+		}
+
+		/// <summary>
+		/// Always apply torques to spine3 instead of actual part hit.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool TorqueAlwaysSpine3
+		{
+			set
+			{
+				SetArgument("torqueAlwaysSpine3", value);
+			}
+		}
+
+		/// <summary>
+		/// Time from hit before torques are being applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TorqueDelay
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torqueDelay", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration of torque.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TorquePeriod
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torquePeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// Multiplies impulse magnitude to arrive at torque that is applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float TorqueGain
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torqueGain", value);
+			}
+		}
+
+		/// <summary>
+		/// Minimum ratio of impulse that remains after converting to torque (if in strength-proportional mode).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TorqueCutoff
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torqueCutoff", value);
+			}
+		}
+
+		/// <summary>
+		/// Ratio of torque for next tick (e.g. 1.0: not reducing over time, 0.9: each tick torque is reduced by 10%).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TorqueReductionPerTick
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torqueReductionPerTick", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of lift (directly multiplies torque axis to give lift force).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LiftGain
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("liftGain", value);
+			}
+		}
+
+		/// <summary>
+		/// Time after impulse is applied that counter impulse is applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CounterImpulseDelay
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("counterImpulseDelay", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of the original impulse that is countered.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CounterImpulseMag
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("counterImpulseMag", value);
+			}
+		}
+
+		/// <summary>
+		/// Applies the counter impulse counterImpulseDelay(secs) after counterImpulseMag of the Impulse has been applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool CounterAfterMagReached
+		{
+			set
+			{
+				SetArgument("counterAfterMagReached", value);
+			}
+		}
+
+		/// <summary>
+		/// Add a counter impulse to the pelvis.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool DoCounterImpulse
+		{
+			set
+			{
+				SetArgument("doCounterImpulse", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of the counter impulse applied to hips - the rest is applied to the part originally hit.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CounterImpulse2Hips
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("counterImpulse2Hips", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to scale impulse by if the dynamicBalance is not OK.  1.0 means this functionality is not applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseNoBalMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseNoBalMult", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseBalStabMult*100% GT End. NB: Start LT End.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 3.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float ImpulseBalStabStart
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseBalStabStart", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseBalStabMult*100% GT End. NB: Start LT End.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 10.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float ImpulseBalStabEnd
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseBalStabEnd", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseBalStabMult*100% GT End. NB: leaving this as 1.0 means this functionality is not applied and Start and End have no effect.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseBalStabMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseBalStabMult", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% GE Start to impulseSpineAngMult*100% LT End. NB: Start GT End.  This the dot of hip2Head with up.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.7f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseSpineAngStart
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("impulseSpineAngStart", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% GE Start to impulseSpineAngMult*100% LT End. NB: Start GT End.  This the dot of hip2Head with up.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseSpineAngEnd
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("impulseSpineAngEnd", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% GE Start to impulseSpineAngMult*100% LT End. NB: leaving this as 1.0 means this functionality is not applied and Start and End have no effect.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseSpineAngMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseSpineAngMult", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseVelMult*100% GT End. NB: Start LT End.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float ImpulseVelStart
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseVelStart", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseVelMult*100% GT End. NB: Start LT End.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float ImpulseVelEnd
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseVelEnd", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseVelMult*100% GT End. NB: leaving this as 1.0 means this functionality is not applied and Start and End have no effect.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseVelMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseVelMult", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to scale impulse by if the character is airborne and dynamicBalance is OK and impulse is above impulseAirMultStart.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseAirMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseAirMult", value);
+			}
+		}
+
+		/// <summary>
+		/// If impulse is above this value scale it by impulseAirMult.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 100.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseAirMultStart
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseAirMultStart", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to clamp impulse to if character is airborne  and dynamicBalance is OK.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 100.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseAirMax
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseAirMax", value);
+			}
+		}
+
+		/// <summary>
+		/// If impulse is above this amount then do not scale/clamp just let it through as is - it's a shotgun or cannon.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 399.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseAirApplyAbove
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseAirApplyAbove", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale and/or clamp impulse if the character is airborne and dynamicBalance is OK.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ImpulseAirOn
+		{
+			set
+			{
+				SetArgument("impulseAirOn", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to scale impulse by if the character is contacting with one foot only and dynamicBalance is OK and impulse is above impulseAirMultStart.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseOneLegMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseOneLegMult", value);
+			}
+		}
+
+		/// <summary>
+		/// If impulse is above this value scale it by impulseOneLegMult.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 100.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseOneLegMultStart
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseOneLegMultStart", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to clamp impulse to if character is contacting with one foot only  and dynamicBalance is OK.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 100.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseOneLegMax
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseOneLegMax", value);
+			}
+		}
+
+		/// <summary>
+		/// If impulse is above this amount then do not scale/clamp just let it through as is - it's a shotgun or cannon.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 399.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseOneLegApplyAbove
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseOneLegApplyAbove", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale and/or clamp impulse if the character is contacting with one leg only and dynamicBalance is OK.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ImpulseOneLegOn
+		{
+			set
+			{
+				SetArgument("impulseOneLegOn", value);
+			}
+		}
+
+		/// <summary>
+		/// 0.0 no rigidBody response, 0.5 half partForce half rigidBody, 1.0 = no partForce full rigidBody.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbRatio
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbRatio", value);
+			}
+		}
+
+		/// <summary>
+		/// Rigid body response is shared between the upper and lower body (rbUpperShare = 1-rbLowerShare). RbLowerShare=0.5 gives upper and lower share scaled by mass.  i.e. if 70% ub mass and 30% lower mass then rbLowerShare=0.5 gives actualrbShare of 0.7ub and 0.3lb. rbLowerShare GT 0.5 scales the ub share down from 0.7 and the lb up from 0.3.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbLowerShare
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbLowerShare", value);
+			}
+		}
+
+		/// <summary>
+		/// 0.0 only force, 0.5 = force and half the rigid body moment applied, 1.0 = force and full rigidBody moment.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbMoment
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMoment", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum twist arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxTwistMomentArm
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxTwistMomentArm", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum broom((everything but the twist) arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxBroomMomentArm
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxBroomMomentArm", value);
+			}
+		}
+
+		/// <summary>
+		/// If Airborne: 0.0 no rigidBody response, 0.5 half partForce half rigidBody, 1.0 = no partForce full rigidBody.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbRatioAirborne
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbRatioAirborne", value);
+			}
+		}
+
+		/// <summary>
+		/// If Airborne: 0.0 only force, 0.5 = force and half the rigid body moment applied, 1.0 = force and full rigidBody moment.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbMomentAirborne
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMomentAirborne", value);
+			}
+		}
+
+		/// <summary>
+		/// If Airborne: Maximum twist arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxTwistMomentArmAirborne
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxTwistMomentArmAirborne", value);
+			}
+		}
+
+		/// <summary>
+		/// If Airborne: Maximum broom((everything but the twist) arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxBroomMomentArmAirborne
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxBroomMomentArmAirborne", value);
+			}
+		}
+
+		/// <summary>
+		/// If only one leg in contact: 0.0 no rigidBody response, 0.5 half partForce half rigidBody, 1.0 = no partForce full rigidBody.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbRatioOneLeg
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbRatioOneLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// If only one leg in contact: 0.0 only force, 0.5 = force and half the rigid body moment applied, 1.0 = force and full rigidBody moment.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbMomentOneLeg
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMomentOneLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// If only one leg in contact: Maximum twist arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxTwistMomentArmOneLeg
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxTwistMomentArmOneLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// If only one leg in contact: Maximum broom((everything but the twist) arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxBroomMomentArmOneLeg
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxBroomMomentArmOneLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="RbTwistAxis.WorldUp"/>.
+		/// </remarks>.
+		public RbTwistAxis RbTwistAxis
+		{
+			set
+			{
+				SetArgument("rbTwistAxis", (int)value);
+			}
+		}
+
+		/// <summary>
+		/// If false pivot around COM always, if true change pivot depending on foot contact:  to feet center if both feet in contact, or foot position if 1 foot in contact or COM position if no feet in contact.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool RbPivot
+		{
+			set
+			{
+				SetArgument("rbPivot", value);
+			}
+		}
+	}
+
+	public sealed class ConfigureBulletsExtraHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureBulletsExtraHelper for sending a ConfigureBulletsExtra <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureBulletsExtra <see cref="Message"/> to.</param>
+		public ConfigureBulletsExtraHelper(Ped ped) : base(ped, "configureBulletsExtra")
+		{
+		}
+
+		/// <summary>
+		/// Spreads impulse across parts. Currently only for spine parts, not limbs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ImpulseSpreadOverParts
+		{
+			set
+			{
+				SetArgument("impulseSpreadOverParts", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration that impulse is spread over (triangular shaped).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulsePeriod
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulsePeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// An impulse applied at a point on a body equivalent to an impulse at the center of the body and a torque.  This parameter scales the torque component. (The torque component seems to be excite the rage looseness bug which sends the character in a sometimes wildly different direction to an applied impulse).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseTorqueScale
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseTorqueScale", value);
+			}
+		}
+
+		/// <summary>
+		/// Fix the rage looseness bug by applying only the impulse at the center of the body unless it is a spine part then apply the twist component only of the torque as well.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool LoosenessFix
+		{
+			set
+			{
+				SetArgument("loosenessFix", value);
+			}
+		}
+
+		/// <summary>
+		/// Time from hit before impulses are being applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseDelay
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseDelay", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="TorqueMode.Disabled"/>.
+		/// If <see cref="TorqueMode.Proportional"/> - proportional to character strength, can reduce impulse amount.
+		/// If <see cref="TorqueMode.Additive"/> - no reduction of impulse and not proportional to character strength.
+		/// </remarks>
+		public TorqueMode TorqueMode
+		{
+			set
+			{
+				SetArgument("torqueMode", (int)value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="TorqueSpinMode.FromImpulse"/>.
+		/// If <see cref="TorqueSpinMode.Flipping"/> a burst effect is achieved.
+		/// </remarks>
+		public TorqueSpinMode TorqueSpinMode
+		{
+			set
+			{
+				SetArgument("torqueSpinMode", (int)value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="TorqueFilterMode.ApplyEveryBullet"/>.
+		/// </remarks>
+		public TorqueFilterMode TorqueFilterMode
+		{
+			set
+			{
+				SetArgument("torqueFilterMode", (int)value);
+			}
+		}
+
+		/// <summary>
+		/// Always apply torques to spine3 instead of actual part hit.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool TorqueAlwaysSpine3
+		{
+			set
+			{
+				SetArgument("torqueAlwaysSpine3", value);
+			}
+		}
+
+		/// <summary>
+		/// Time from hit before torques are being applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TorqueDelay
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torqueDelay", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration of torque.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TorquePeriod
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torquePeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// Multiplies impulse magnitude to arrive at torque that is applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float TorqueGain
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torqueGain", value);
+			}
+		}
+
+		/// <summary>
+		/// Minimum ratio of impulse that remains after converting to torque (if in strength-proportional mode).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TorqueCutoff
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torqueCutoff", value);
+			}
+		}
+
+		/// <summary>
+		/// Ratio of torque for next tick (e.g. 1.0: not reducing over time, 0.9: each tick torque is reduced by 10%).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TorqueReductionPerTick
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("torqueReductionPerTick", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of lift (directly multiplies torque axis to give lift force).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LiftGain
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("liftGain", value);
+			}
+		}
+
+		/// <summary>
+		/// Time after impulse is applied that counter impulse is applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CounterImpulseDelay
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("counterImpulseDelay", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of the original impulse that is countered.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CounterImpulseMag
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("counterImpulseMag", value);
+			}
+		}
+
+		/// <summary>
+		/// Applies the counter impulse counterImpulseDelay(secs) after counterImpulseMag of the Impulse has been applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool CounterAfterMagReached
+		{
+			set
+			{
+				SetArgument("counterAfterMagReached", value);
+			}
+		}
+
+		/// <summary>
+		/// Add a counter impulse to the pelvis.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool DoCounterImpulse
+		{
+			set
+			{
+				SetArgument("doCounterImpulse", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of the counter impulse applied to hips - the rest is applied to the part originally hit.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CounterImpulse2Hips
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("counterImpulse2Hips", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to scale impulse by if the dynamicBalance is not OK.  1.0 means this functionality is not applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseNoBalMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseNoBalMult", value);
+			}
