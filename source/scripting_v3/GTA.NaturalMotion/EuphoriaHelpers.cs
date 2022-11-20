@@ -4003,3 +4003,2281 @@ namespace GTA.NaturalMotion
 
 				SetArgument("impulseNoBalMult", value);
 			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseBalStabMult*100% GT End. NB: Start LT End.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 3.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float ImpulseBalStabStart
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseBalStabStart", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseBalStabMult*100% GT End. NB: Start LT End.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 10.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float ImpulseBalStabEnd
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseBalStabEnd", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseBalStabMult*100% GT End. NB: leaving this as 1.0 means this functionality is not applied and Start and End have no effect.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseBalStabMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseBalStabMult", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% GE Start to impulseSpineAngMult*100% LT End. NB: Start GT End.  This the dot of hip2Head with up.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.7f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseSpineAngStart
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("impulseSpineAngStart", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% GE Start to impulseSpineAngMult*100% LT End. NB: Start GT End.  This the dot of hip2Head with up.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseSpineAngEnd
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("impulseSpineAngEnd", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% GE Start to impulseSpineAngMult*100% LT End. NB: leaving this as 1.0 means this functionality is not applied and Start and End have no effect.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseSpineAngMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseSpineAngMult", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseVelMult*100% GT End. NB: Start LT End.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float ImpulseVelStart
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseVelStart", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseVelMult*100% GT End. NB: Start LT End.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 4.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float ImpulseVelEnd
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseVelEnd", value);
+			}
+		}
+
+		/// <summary>
+		/// 100% LE Start to impulseVelMult*100% GT End. NB: leaving this as 1.0 means this functionality is not applied and Start and End have no effect.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseVelMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseVelMult", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to scale impulse by if the character is airborne and dynamicBalance is OK and impulse is above impulseAirMultStart.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseAirMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseAirMult", value);
+			}
+		}
+
+		/// <summary>
+		/// If impulse is above this value scale it by impulseAirMult.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 100.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseAirMultStart
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseAirMultStart", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to clamp impulse to if character is airborne  and dynamicBalance is OK.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 100.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseAirMax
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseAirMax", value);
+			}
+		}
+
+		/// <summary>
+		/// If impulse is above this amount then do not scale/clamp just let it through as is - it's a shotgun or cannon.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 399.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseAirApplyAbove
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseAirApplyAbove", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale and/or clamp impulse if the character is airborne and dynamicBalance is OK.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ImpulseAirOn
+		{
+			set
+			{
+				SetArgument("impulseAirOn", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to scale impulse by if the character is contacting with one foot only and dynamicBalance is OK and impulse is above impulseAirMultStart.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ImpulseOneLegMult
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseOneLegMult", value);
+			}
+		}
+
+		/// <summary>
+		/// If impulse is above this value scale it by impulseOneLegMult.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 100.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseOneLegMultStart
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseOneLegMultStart", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount to clamp impulse to if character is contacting with one foot only  and dynamicBalance is OK.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 100.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseOneLegMax
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseOneLegMax", value);
+			}
+		}
+
+		/// <summary>
+		/// If impulse is above this amount then do not scale/clamp just let it through as is - it's a shotgun or cannon.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 399.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ImpulseOneLegApplyAbove
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("impulseOneLegApplyAbove", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale and/or clamp impulse if the character is contacting with one leg only and dynamicBalance is OK.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ImpulseOneLegOn
+		{
+			set
+			{
+				SetArgument("impulseOneLegOn", value);
+			}
+		}
+
+		/// <summary>
+		/// 0.0 no rigidBody response, 0.5 half partForce half rigidBody, 1.0 = no partForce full rigidBody.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbRatio
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbRatio", value);
+			}
+		}
+
+		/// <summary>
+		/// Rigid body response is shared between the upper and lower body (rbUpperShare = 1-rbLowerShare). RbLowerShare=0.5 gives upper and lower share scaled by mass.  i.e. if 70% ub mass and 30% lower mass then rbLowerShare=0.5 gives actualrbShare of 0.7ub and 0.3lb. rbLowerShare GT 0.5 scales the ub share down from 0.7 and the lb up from 0.3.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbLowerShare
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbLowerShare", value);
+			}
+		}
+
+		/// <summary>
+		/// 0.0 only force, 0.5 = force and half the rigid body moment applied, 1.0 = force and full rigidBody moment.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbMoment
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMoment", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum twist arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxTwistMomentArm
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxTwistMomentArm", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum broom((everything but the twist) arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxBroomMomentArm
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxBroomMomentArm", value);
+			}
+		}
+
+		/// <summary>
+		/// If Airborne: 0.0 no rigidBody response, 0.5 half partForce half rigidBody, 1.0 = no partForce full rigidBody.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbRatioAirborne
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbRatioAirborne", value);
+			}
+		}
+
+		/// <summary>
+		/// If Airborne: 0.0 only force, 0.5 = force and half the rigid body moment applied, 1.0 = force and full rigidBody moment.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbMomentAirborne
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMomentAirborne", value);
+			}
+		}
+
+		/// <summary>
+		/// If Airborne: Maximum twist arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxTwistMomentArmAirborne
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxTwistMomentArmAirborne", value);
+			}
+		}
+
+		/// <summary>
+		/// If Airborne: Maximum broom((everything but the twist) arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxBroomMomentArmAirborne
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxBroomMomentArmAirborne", value);
+			}
+		}
+
+		/// <summary>
+		/// If only one leg in contact: 0.0 no rigidBody response, 0.5 half partForce half rigidBody, 1.0 = no partForce full rigidBody.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbRatioOneLeg
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbRatioOneLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// If only one leg in contact: 0.0 only force, 0.5 = force and half the rigid body moment applied, 1.0 = force and full rigidBody moment.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RbMomentOneLeg
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMomentOneLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// If only one leg in contact: Maximum twist arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxTwistMomentArmOneLeg
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxTwistMomentArmOneLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// If only one leg in contact: Maximum broom((everything but the twist) arm moment of bullet applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RbMaxBroomMomentArmOneLeg
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rbMaxBroomMomentArmOneLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = <see cref="RbTwistAxis.WorldUp"/>.
+		/// </remarks>.
+		public RbTwistAxis RbTwistAxis
+		{
+			set
+			{
+				SetArgument("rbTwistAxis", (int)value);
+			}
+		}
+
+		/// <summary>
+		/// If false pivot around COM always, if true change pivot depending on foot contact:  to feet center if both feet in contact, or foot position if 1 foot in contact or COM position if no feet in contact.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool RbPivot
+		{
+			set
+			{
+				SetArgument("rbPivot", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Enable/disable/edit character limits in real time.  This adjusts limits in RAGE-native space and will *not* reorient the joint.
+	/// </summary>
+	public sealed class ConfigureLimitsHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureLimitsHelper for sending a ConfigureLimits <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureLimits <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Enable/disable/edit character limits in real time.  This adjusts limits in RAGE-native space and will *not* reorient the joint.
+		/// </remarks>
+		public ConfigureLimitsHelper(Ped ped) : base(ped, "configureLimits")
+		{
+		}
+
+		/// <summary>
+		/// Two character body-masking value, bitwise joint mask or bitwise logic string of two character body-masking value  for joint limits to configure. Ignored if index != -1.
+		/// </summary>
+		/// <remarks>
+		/// Default value = "fb".
+		/// </remarks>
+		public string Mask
+		{
+			set
+			{
+				SetArgument("mask", value);
+			}
+		}
+
+		/// <summary>
+		/// If false, disable (set all to PI, -PI) limits.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool Enable
+		{
+			set
+			{
+				SetArgument("enable", value);
+			}
+		}
+
+		/// <summary>
+		/// If true, set limits to accommodate current desired angles.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ToDesired
+		{
+			set
+			{
+				SetArgument("toDesired", value);
+			}
+		}
+
+		/// <summary>
+		/// Return to cached defaults?.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool Restore
+		{
+			set
+			{
+				SetArgument("restore", value);
+			}
+		}
+
+		/// <summary>
+		/// If true, set limits to the current animated limits.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ToCurAnimation
+		{
+			set
+			{
+				SetArgument("toCurAnimation", value);
+			}
+		}
+
+		/// <summary>
+		/// Index of effector to configure.  Set to -1 to use mask.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int Index
+		{
+			set
+			{
+				if (value < -1)
+				{
+					value = -1;
+				}
+
+				SetArgument("index", value);
+			}
+		}
+
+		/// <summary>
+		/// Custom limit values to use if not setting limits to desired. Limits are RAGE-native, not NM-wrapper-native.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.6f.
+		/// Min value = 0.0f.
+		/// Max value = 3.1f.
+		/// </remarks>
+		public float Lean1
+		{
+			set
+			{
+				if (value > 3.1f)
+				{
+					value = 3.1f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("lean1", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.6f.
+		/// Min value = 0.0f.
+		/// Max value = 3.1f.
+		/// </remarks>
+		public float Lean2
+		{
+			set
+			{
+				if (value > 3.1f)
+				{
+					value = 3.1f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("lean2", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.6f.
+		/// Min value = 0.0f.
+		/// Max value = 3.1f.
+		/// </remarks>
+		public float Twist
+		{
+			set
+			{
+				if (value > 3.1f)
+				{
+					value = 3.1f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("twist", value);
+			}
+		}
+
+		/// <summary>
+		/// Joint limit margin to add to current animation limits when using those to set runtime limits.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// Max value = 3.1f.
+		/// </remarks>
+		public float Margin
+		{
+			set
+			{
+				if (value > 3.1f)
+				{
+					value = 3.1f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("margin", value);
+			}
+		}
+	}
+
+	public sealed class ConfigureSoftLimitHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureSoftLimitHelper for sending a ConfigureSoftLimit <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureSoftLimit <see cref="Message"/> to.</param>
+		public ConfigureSoftLimitHelper(Ped ped) : base(ped, "configureSoftLimit")
+		{
+		}
+
+		/// <summary>
+		/// Select limb that the soft limit is going to be applied to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 3.
+		/// </remarks>
+		public int Index
+		{
+			set
+			{
+				if (value > 3)
+				{
+					value = 3;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("index", value);
+			}
+		}
+
+		/// <summary>
+		/// Stiffness of the soft limit.
+		/// Parameter is used to calculate spring term that contributes to the desired acceleration.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 15.0f.
+		/// Min value = 0.0f.
+		/// Max value = 30.0f.
+		/// </remarks>
+		public float Stiffness
+		{
+			set
+			{
+				if (value > 30.0f)
+				{
+					value = 30.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("stiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Damping of the soft limit.
+		/// Parameter is used to calculate damper term that contributes to the desired acceleration.
+		/// To have the system critically dampened set it to 1.0.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.9f.
+		/// Max value = 1.1f.
+		/// </remarks>
+		public float Damping
+		{
+			set
+			{
+				if (value > 1.1f)
+				{
+					value = 1.1f;
+				}
+
+				if (value < 0.9f)
+				{
+					value = 0.9f;
+				}
+
+				SetArgument("damping", value);
+			}
+		}
+
+		/// <summary>
+		/// Soft limit angle.
+		/// Positive angle in RAD, measured relatively either from hard limit maxAngle (approach direction = -1) or minAngle (approach direction = 1).
+		/// This angle will be clamped if outside the joint hard limit range.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 6.3f.
+		/// </remarks>
+		public float LimitAngle
+		{
+			set
+			{
+				if (value > 6.3f)
+				{
+					value = 6.3f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("limitAngle", value);
+			}
+		}
+
+		/// <summary>
+		/// Limit angle can be measured relatively to joints hard limit minAngle or maxAngle.
+		/// Set it to +1 to measure soft limit angle relatively to hard limit minAngle that corresponds to the maximum stretch of the elbow.
+		/// Set it to -1 to measure soft limit angle relatively to hard limit maxAngle that corresponds to the maximum stretch of the knee.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.
+		/// Min value = -1.
+		/// Max value = 1.
+		/// </remarks>
+		public int ApproachDirection
+		{
+			set
+			{
+				if (value > 1)
+				{
+					value = 1;
+				}
+
+				if (value < -1)
+				{
+					value = -1;
+				}
+
+				SetArgument("approachDirection", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale stiffness based on character angular velocity.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool VelocityScaled
+		{
+			set
+			{
+				SetArgument("velocityScaled", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// This single message allows you to configure the injured arm reaction during shot.
+	/// </summary>
+	public sealed class ConfigureShotInjuredArmHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureShotInjuredArmHelper for sending a ConfigureShotInjuredArm <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureShotInjuredArm <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// This single message allows you to configure the injured arm reaction during shot.
+		/// </remarks>
+		public ConfigureShotInjuredArmHelper(Ped ped) : base(ped, "configureShotInjuredArm")
+		{
+		}
+
+		/// <summary>
+		/// Length of the reaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float InjuredArmTime
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("injuredArmTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of hip twist.  (Negative values twist into bullet direction - probably not what is wanted).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.8f.
+		/// Min value = -2.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float HipYaw
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < -2.0f)
+				{
+					value = -2.0f;
+				}
+
+				SetArgument("hipYaw", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of hip roll.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -2.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float HipRoll
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < -2.0f)
+				{
+					value = -2.0f;
+				}
+
+				SetArgument("hipRoll", value);
+			}
+		}
+
+		/// <summary>
+		/// Additional height added to stepping foot.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 0.7f.
+		/// </remarks>
+		public float ForceStepExtraHeight
+		{
+			set
+			{
+				if (value > 0.7f)
+				{
+					value = 0.7f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("forceStepExtraHeight", value);
+			}
+		}
+
+		/// <summary>
+		/// Force a step to be taken whether pushed out of balance or not.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool ForceStep
+		{
+			set
+			{
+				SetArgument("forceStep", value);
+			}
+		}
+
+		/// <summary>
+		/// Turn the character using the balancer.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool StepTurn
+		{
+			set
+			{
+				SetArgument("stepTurn", value);
+			}
+		}
+
+		/// <summary>
+		/// Start velocity where parameters begin to be ramped down to zero linearly.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float VelMultiplierStart
+		{
+			set
+			{
+				if (value > 20.0f)
+				{
+					value = 20.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("velMultiplierStart", value);
+			}
+		}
+
+		/// <summary>
+		/// End velocity of ramp where parameters are scaled to zero.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 5.0f.
+		/// Min value = 1.0f.
+		/// Max value = 40.0f.
+		/// </remarks>
+		public float VelMultiplierEnd
+		{
+			set
+			{
+				if (value > 40.0f)
+				{
+					value = 40.0f;
+				}
+
+				if (value < 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				SetArgument("velMultiplierEnd", value);
+			}
+		}
+
+		/// <summary>
+		/// Velocity above which a step is not forced.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.8f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float VelForceStep
+		{
+			set
+			{
+				if (value > 20.0f)
+				{
+					value = 20.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("velForceStep", value);
+			}
+		}
+
+		/// <summary>
+		/// Velocity above which a stepTurn is not asked for.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.8f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float VelStepTurn
+		{
+			set
+			{
+				if (value > 20.0f)
+				{
+					value = 20.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("velStepTurn", value);
+			}
+		}
+
+		/// <summary>
+		/// Use the velocity scaling parameters.
+		/// Tune for standing still then use velocity scaling to make sure a running character stays balanced (the turning tends to make the character fall over more at speed).
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool VelScales
+		{
+			set
+			{
+				SetArgument("velScales", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// This single message allows you to configure the injured leg reaction during shot.
+	/// </summary>
+	public sealed class ConfigureShotInjuredLegHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ConfigureShotInjuredLegHelper for sending a ConfigureShotInjuredLeg <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ConfigureShotInjuredLeg <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// This single message allows you to configure the injured leg reaction during shot.
+		/// </remarks>
+		public ConfigureShotInjuredLegHelper(Ped ped) : base(ped, "configureShotInjuredLeg")
+		{
+		}
+
+		/// <summary>
+		/// Time before a wounded leg is set to be weak and cause the character to collapse.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float TimeBeforeCollapseWoundLeg
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("timeBeforeCollapseWoundLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury duration (reaction to being shot in leg).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float LegInjuryTime
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("legInjuryTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Force a step to be taken whether pushed out of balance or not.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool LegForceStep
+		{
+			set
+			{
+				SetArgument("legForceStep", value);
+			}
+		}
+
+		/// <summary>
+		/// Bend the legs via the balancer by this amount if stepping on the injured leg.
+		/// 0.2 seems a good default.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegLimpBend
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("legLimpBend", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg lift duration (reaction to being shot in leg).
+		/// (Lifting happens when not stepping with other leg).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float LegLiftTime
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("legLiftTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury - leg strength is reduced.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjury
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("legInjury", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury bend forwards amount when not lifting leg.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjuryHipPitch
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("legInjuryHipPitch", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury bend forwards amount when lifting leg.
+		/// (Lifting happens when not stepping with other leg).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjuryLiftHipPitch
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("legInjuryLiftHipPitch", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury bend forwards amount when not lifting leg.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjurySpineBend
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("legInjurySpineBend", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg injury bend forwards amount when lifting leg.
+		/// (Lifting happens when not stepping with other leg).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegInjuryLiftSpineBend
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("legInjuryLiftSpineBend", value);
+			}
+		}
+	}
+
+	public sealed class DefineAttachedObjectHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the DefineAttachedObjectHelper for sending a DefineAttachedObject <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the DefineAttachedObject <see cref="Message"/> to.</param>
+		public DefineAttachedObjectHelper(Ped ped) : base(ped, "defineAttachedObject")
+		{
+		}
+
+		/// <summary>
+		/// Index of part to attach to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// Max value = 21.
+		/// </remarks>
+		public int PartIndex
+		{
+			set
+			{
+				if (value > 21)
+				{
+					value = 21;
+				}
+
+				if (value < -1)
+				{
+					value = -1;
+				}
+
+				SetArgument("partIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// Mass of the attached object.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float ObjectMass
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("objectMass", value);
+			}
+		}
+
+		/// <summary>
+		/// World position of attached object's center of mass. Must be updated each frame.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 WorldPos
+		{
+			set
+			{
+				SetArgument("worldPos", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Apply an impulse to a named body part.
+	/// </summary>
+	public sealed class ForceToBodyPartHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ForceToBodyPartHelper for sending a ForceToBodyPart <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the ForceToBodyPart <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Apply an impulse to a named body part.
+		/// </remarks>
+		public ForceToBodyPartHelper(Ped ped) : base(ped, "forceToBodyPart")
+		{
+		}
+
+		/// <summary>
+		/// Part or link or bound index.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 28.
+		/// </remarks>
+		public int PartIndex
+		{
+			set
+			{
+				if (value > 28)
+				{
+					value = 28;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("partIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// Force to apply.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, -50.0f, 0.0f).
+		/// Min value = -100000.0f.
+		/// Max value = 100000.0f.
+		/// </remarks>
+		public Vector3 Force
+		{
+			set
+			{
+				SetArgument("force",
+					Vector3.Clamp(value, new Vector3(-100000.0f, -100000.0f, -100000.0f), new Vector3(100000.0f, 100000.0f, 100000.0f)));
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ForceDefinedInPartSpace
+		{
+			set
+			{
+				SetArgument("forceDefinedInPartSpace", value);
+			}
+		}
+	}
+
+	public sealed class LeanInDirectionHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the LeanInDirectionHelper for sending a LeanInDirection <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the LeanInDirection <see cref="Message"/> to.</param>
+		public LeanInDirectionHelper(Ped ped) : base(ped, "leanInDirection")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Direction to lean in.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 1.0f).
+		/// Min value = 0.0f.
+		/// </remarks>
+		public Vector3 Dir
+		{
+			set
+			{
+				SetArgument("dir", Vector3.Maximize(value, new Vector3(0.0f, 0.0f, 0.0f)));
+			}
+		}
+	}
+
+	public sealed class LeanRandomHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the LeanRandomHelper for sending a LeanRandom <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the LeanRandom <see cref="Message"/> to.</param>
+		public LeanRandomHelper(Ped ped) : base(ped, "leanRandom")
+		{
+		}
+
+		/// <summary>
+		/// Minimum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMin
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("leanAmountMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMax
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("leanAmountMax", value);
+			}
+		}
+
+		/// <summary>
+		/// Minimum time until changing direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ChangeTimeMin
+		{
+			set
+			{
+				if (value > 20.0f)
+				{
+					value = 20.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("changeTimeMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum time until changing direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ChangeTimeMax
+		{
+			set
+			{
+				if (value > 20.0f)
+				{
+					value = 20.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("changeTimeMax", value);
+			}
+		}
+	}
+
+	public sealed class LeanToPositionHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the LeanToPositionHelper for sending a LeanToPosition <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the LeanToPosition <see cref="Message"/> to.</param>
+		public LeanToPositionHelper(Ped ped) : base(ped, "leanToPosition")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -0.5f.
+		/// Max value = 0.5f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 0.5f)
+				{
+					value = 0.5f;
+				}
+
+				if (value < -0.5f)
+				{
+					value = -0.5f;
+				}
+
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Position to head towards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 Pos
+		{
+			set
+			{
+				SetArgument("pos", value);
+			}
+		}
+	}
+
+	public sealed class LeanTowardsObjectHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the LeanTowardsObjectHelper for sending a LeanTowardsObject <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the LeanTowardsObject <see cref="Message"/> to.</param>
+		public LeanTowardsObjectHelper(Ped ped) : base(ped, "leanTowardsObject")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -0.5f.
+		/// Max value = 0.5f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 0.5f)
+				{
+					value = 0.5f;
+				}
+
+				if (value < -0.5f)
+				{
+					value = -0.5f;
+				}
+
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Offset from instance position added when calculating position to lean to.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// Min value = -100.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public Vector3 Offset
+		{
+			set
+			{
+				SetArgument("offset",
+					Vector3.Clamp(value, new Vector3(-100.0f, -100.0f, -100.0f), new Vector3(100.0f, 100.0f, 100.0f)));
+			}
+		}
+
+		/// <summary>
+		/// LevelIndex of object to lean towards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int InstanceIndex
+		{
+			set
+			{
+				if (value < -1)
+				{
+					value = -1;
+				}
+
+				SetArgument("instanceIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// BoundIndex of object to lean towards (0 = just use instance coordinates).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// </remarks>
+		public int BoundIndex
+		{
+			set
+			{
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("boundIndex", value);
+			}
+		}
+	}
+
+	public sealed class HipsLeanInDirectionHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the HipsLeanInDirectionHelper for sending a HipsLeanInDirection <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the HipsLeanInDirection <see cref="Message"/> to.</param>
+		public HipsLeanInDirectionHelper(Ped ped) : base(ped, "hipsLeanInDirection")
+		{
+		}
+
+		/// <summary>
+		/// Amount of lean, 0 to about 0.5. -ve will move away from the target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("leanAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Direction to lean in.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 1.0f).
+		/// Min value = 0.0f.
+		/// </remarks>
+		public Vector3 Dir
+		{
+			set
+			{
+				SetArgument("dir", Vector3.Maximize(value, new Vector3(0.0f, 0.0f, 0.0f)));
+			}
+		}
+	}
+
+	public sealed class HipsLeanRandomHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the HipsLeanRandomHelper for sending a HipsLeanRandom <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the HipsLeanRandom <see cref="Message"/> to.</param>
+		public HipsLeanRandomHelper(Ped ped) : base(ped, "hipsLeanRandom")
+		{
+		}
+
+		/// <summary>
+		/// Minimum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMin
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("leanAmountMin", value);
+			}
+		}
+
+		/// <summary>
+		/// Maximum amount of lean.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LeanAmountMax
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("leanAmountMax", value);
+			}
