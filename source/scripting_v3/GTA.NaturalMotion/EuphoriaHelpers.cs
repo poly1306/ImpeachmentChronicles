@@ -19540,3 +19540,2243 @@ namespace GTA.NaturalMotion
 				if (value > 60.0f)
 				{
 					value = 60.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("maxRollOverTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Rolling torque is ramped down with distance measured from position where character hit the ground and started rolling. At this distance in meters torque value converges to zero. Use this parameter to restrict distance the character travels due to rolling.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float RollOverRadius
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rollOverRadius", value);
+			}
+		}
+	}
+
+	public sealed class PedalLegsHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the PedalLegsHelper for sending a PedalLegs <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the PedalLegs <see cref="Message"/> to.</param>
+		public PedalLegsHelper(Ped ped) : base(ped, "pedalLegs")
+		{
+		}
+
+		/// <summary>
+		/// Pedal with this leg or not.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool PedalLeftLeg
+		{
+			set
+			{
+				SetArgument("pedalLeftLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// Pedal with this leg or not.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool PedalRightLeg
+		{
+			set
+			{
+				SetArgument("pedalRightLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// Pedal forwards or backwards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool BackPedal
+		{
+			set
+			{
+				SetArgument("backPedal", value);
+			}
+		}
+
+		/// <summary>
+		/// Base radius of pedal action.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float Radius
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("radius", value);
+			}
+		}
+
+		/// <summary>
+		/// Rate of pedaling. If adaptivePedal4Dragging is true then the legsAngularSpeed calculated to match the linear speed of the character can have a maximum value of angularSpeed (this max used to be hard coded to 13.0).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 10.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float AngularSpeed
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("angularSpeed", value);
+			}
+		}
+
+		/// <summary>
+		/// Stiffness of legs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 10.0f.
+		/// Min value = 6.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float LegStiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 6.0f)
+				{
+					value = 6.0f;
+				}
+
+				SetArgument("legStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Move the center of the pedal for the left leg up by this amount, the right leg down by this amount.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float PedalOffset
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("pedalOffset", value);
+			}
+		}
+
+		/// <summary>
+		/// Random seed used to generate speed changes.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 100.
+		/// Min value = 0.
+		/// </remarks>
+		public int RandomSeed
+		{
+			set
+			{
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("randomSeed", value);
+			}
+		}
+
+		/// <summary>
+		/// Random offset applied per leg to the angular speed to desynchronize the pedaling - set to 0 to disable, otherwise should be set to less than the angularSpeed value.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 8.0f.
+		/// Min value = -10.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float SpeedAsymmetry
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < -10.0f)
+				{
+					value = -10.0f;
+				}
+
+				SetArgument("speedAsymmetry", value);
+			}
+		}
+
+		/// <summary>
+		/// Will pedal in the direction of travel (if backPedal = false, against travel if backPedal = true) and with an angular velocity relative to speed upto a maximum of 13(rads/sec).  Use when being dragged by a car.  Overrides angularSpeed.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool AdaptivePedal4Dragging
+		{
+			set
+			{
+				SetArgument("adaptivePedal4Dragging", value);
+			}
+		}
+
+		/// <summary>
+		/// NewAngularSpeed = Clamp(angSpeedMultiplier4Dragging * linear_speed/pedalRadius, 0.0, angularSpeed).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float AngSpeedMultiplier4Dragging
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("angSpeedMultiplier4Dragging", value);
+			}
+		}
+
+		/// <summary>
+		/// 0-1 value used to add variance to the radius value while pedalling, to desynchonize the legs' movement and provide some variety.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float RadiusVariance
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("radiusVariance", value);
+			}
+		}
+
+		/// <summary>
+		/// 0-1 value used to vary the angle of the legs from the hips during the pedal.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LegAngleVariance
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("legAngleVariance", value);
+			}
+		}
+
+		/// <summary>
+		/// Move the center of the pedal for both legs sideways (+ve = right).  NB: not applied to hula.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CentreSideways
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("centreSideways", value);
+			}
+		}
+
+		/// <summary>
+		/// Move the center of the pedal for both legs forward (or backward -ve).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CentreForwards
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("centreForwards", value);
+			}
+		}
+
+		/// <summary>
+		/// Move the center of the pedal for both legs up (or down -ve).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float CentreUp
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("centreUp", value);
+			}
+		}
+
+		/// <summary>
+		/// Turn the circle into an ellipse.  Ellipse has horizontal radius a and vertical radius b.  If ellipse is +ve then a=radius*ellipse and b=radius.  If ellipse is -ve then a=radius and b = radius*ellipse.  0.0 = vertical line of length 2*radius, 0.0:1.0 circle squashed horizontally (vertical radius = radius), 1.0=circle.  -0.001 = horizontal line of length 2*radius, -0.0:-1.0 circle squashed vertically (horizontal radius = radius), -1.0 = circle.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Ellipse
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("ellipse", value);
+			}
+		}
+
+		/// <summary>
+		/// How much to account for the target moving through space rather than being static.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float DragReduction
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("dragReduction", value);
+			}
+		}
+
+		/// <summary>
+		/// Spread legs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Spread
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("spread", value);
+			}
+		}
+
+		/// <summary>
+		/// If true circle the legs in a hula motion.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool Hula
+		{
+			set
+			{
+				SetArgument("hula", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// BEHAVIOURS REFERENCED: AnimPose - allows animPose to override body parts: Arms (useLeftArm, useRightArm).
+	/// </summary>
+	public sealed class PointArmHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the PointArmHelper for sending a PointArm <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the PointArm <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// BEHAVIOURS REFERENCED: AnimPose - allows animPose to override body parts: Arms (useLeftArm, useRightArm).
+		/// </remarks>
+		public PointArmHelper(Ped ped) : base(ped, "pointArm")
+		{
+		}
+
+		/// <summary>
+		/// Point to point to (in world space).
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 TargetLeft
+		{
+			set
+			{
+				SetArgument("targetLeft", value);
+			}
+		}
+
+		/// <summary>
+		/// Twist of the arm around point direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TwistLeft
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("twistLeft", value);
+			}
+		}
+
+		/// <summary>
+		/// Values less than 1 can give the arm a more bent look.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.8f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float ArmStraightnessLeft
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("armStraightnessLeft", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseLeftArm
+		{
+			set
+			{
+				SetArgument("useLeftArm", value);
+			}
+		}
+
+		/// <summary>
+		/// Stiffness of arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 15.0f.
+		/// Min value = 6.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float ArmStiffnessLeft
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 6.0f)
+				{
+					value = 6.0f;
+				}
+
+				SetArgument("armStiffnessLeft", value);
+			}
+		}
+
+		/// <summary>
+		/// Damping value for arm used to point.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float ArmDampingLeft
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("armDampingLeft", value);
+			}
+		}
+
+		/// <summary>
+		/// Level index of thing to point at, or -1 for none. if -1, target is specified in world space, otherwise it is an offset from the object specified by this index.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int InstanceIndexLeft
+		{
+			set
+			{
+				if (value < -1)
+				{
+					value = -1;
+				}
+
+				SetArgument("instanceIndexLeft", value);
+			}
+		}
+
+		/// <summary>
+		/// Swing limit.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.5f.
+		/// Min value = 0.0f.
+		/// Max value = 3.0f.
+		/// </remarks>
+		public float PointSwingLimitLeft
+		{
+			set
+			{
+				if (value > 3.0f)
+				{
+					value = 3.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("pointSwingLimitLeft", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseZeroPoseWhenNotPointingLeft
+		{
+			set
+			{
+				SetArgument("useZeroPoseWhenNotPointingLeft", value);
+			}
+		}
+
+		/// <summary>
+		/// Point to point to (in world space).
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 TargetRight
+		{
+			set
+			{
+				SetArgument("targetRight", value);
+			}
+		}
+
+		/// <summary>
+		/// Twist of the arm around point direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TwistRight
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("twistRight", value);
+			}
+		}
+
+		/// <summary>
+		/// Values less than 1 can give the arm a more bent look.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.8f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float ArmStraightnessRight
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("armStraightnessRight", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseRightArm
+		{
+			set
+			{
+				SetArgument("useRightArm", value);
+			}
+		}
+
+		/// <summary>
+		/// Stiffness of arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 15.0f.
+		/// Min value = 6.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float ArmStiffnessRight
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 6.0f)
+				{
+					value = 6.0f;
+				}
+
+				SetArgument("armStiffnessRight", value);
+			}
+		}
+
+		/// <summary>
+		/// Damping value for arm used to point.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float ArmDampingRight
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("armDampingRight", value);
+			}
+		}
+
+		/// <summary>
+		/// Level index of thing to point at, or -1 for none. if -1, target is specified in world space, otherwise it is an offset from the object specified by this index.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int InstanceIndexRight
+		{
+			set
+			{
+				if (value < -1)
+				{
+					value = -1;
+				}
+
+				SetArgument("instanceIndexRight", value);
+			}
+		}
+
+		/// <summary>
+		/// Swing limit.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.5f.
+		/// Min value = 0.0f.
+		/// Max value = 3.0f.
+		/// </remarks>
+		public float PointSwingLimitRight
+		{
+			set
+			{
+				if (value > 3.0f)
+				{
+					value = 3.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("pointSwingLimitRight", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseZeroPoseWhenNotPointingRight
+		{
+			set
+			{
+				SetArgument("useZeroPoseWhenNotPointingRight", value);
+			}
+		}
+	}
+
+	public sealed class PointGunHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the PointGunHelper for sending a PointGun <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the PointGun <see cref="Message"/> to.</param>
+		public PointGunHelper(Ped ped) : base(ped, "pointGun")
+		{
+		}
+
+		/// <summary>
+		/// Allow right hand to point/support?.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool EnableRight
+		{
+			set
+			{
+				SetArgument("enableRight", value);
+			}
+		}
+
+		/// <summary>
+		/// Allow right hand to point/support?.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool EnableLeft
+		{
+			set
+			{
+				SetArgument("enableLeft", value);
+			}
+		}
+
+		/// <summary>
+		/// Target for the left Hand.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 LeftHandTarget
+		{
+			set
+			{
+				SetArgument("leftHandTarget", value);
+			}
+		}
+
+		/// <summary>
+		/// Index of the object that the left hand target is specified in, -1 is world space.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// </remarks>
+		public int LeftHandTargetIndex
+		{
+			set
+			{
+				SetArgument("leftHandTargetIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// Target for the right Hand.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 RightHandTarget
+		{
+			set
+			{
+				SetArgument("rightHandTarget", value);
+			}
+		}
+
+		/// <summary>
+		/// Index of the object that the right hand target is specified in, -1 is world space.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// </remarks>
+		public int RightHandTargetIndex
+		{
+			set
+			{
+				SetArgument("rightHandTargetIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// NB: Only Applied to single handed weapons (some more work is required to have this tech on two handed weapons). Amount to lead target based on target velocity relative to the chest.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float LeadTarget
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("leadTarget", value);
+			}
+		}
+
+		/// <summary>
+		/// Stiffness of the arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 14.0f.
+		/// Min value = 2.0f.
+		/// Max value = 15.0f.
+		/// </remarks>
+		public float ArmStiffness
+		{
+			set
+			{
+				if (value > 15.0f)
+				{
+					value = 15.0f;
+				}
+
+				if (value < 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				SetArgument("armStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Stiffness of the arm on pointing arm when a support arm is detached from a two-handed weapon.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 8.0f.
+		/// Min value = 2.0f.
+		/// Max value = 15.0f.
+		/// </remarks>
+		public float ArmStiffnessDetSupport
+		{
+			set
+			{
+				if (value > 15.0f)
+				{
+					value = 15.0f;
+				}
+
+				if (value < 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				SetArgument("armStiffnessDetSupport", value);
+			}
+		}
+
+		/// <summary>
+		/// Damping.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.1f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float ArmDamping
+		{
+			set
+			{
+				if (value > 5.0f)
+				{
+					value = 5.0f;
+				}
+
+				if (value < 0.1f)
+				{
+					value = 0.1f;
+				}
+
+				SetArgument("armDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of gravity opposition on pointing arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float GravityOpposition
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("gravityOpposition", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of gravity opposition on pointing arm when a support arm is detached from a two-handed weapon.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float GravOppDetachedSupport
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("gravOppDetachedSupport", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of mass of weapon taken into account by gravity opposition on pointing arm when a support arm is detached from a two-handed weapon.  The lower the value the more the character doesn't know about the weapon mass and therefore is more affected by it.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float MassMultDetachedSupport
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("massMultDetachedSupport", value);
+			}
+		}
+
+		/// <summary>
+		/// Allow shot to set a lower arm muscleStiffness than pointGun normally would.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool AllowShotLooseness
+		{
+			set
+			{
+				SetArgument("allowShotLooseness", value);
+			}
+		}
+
+		/// <summary>
+		/// How much of blend should come from incoming transforms 0(all IK) .. 1(all ITMs)   For pointing arms only.  (Support arm uses the IK solution as is for clavicles).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ClavicleBlend
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("clavicleBlend", value);
+			}
+		}
+
+		/// <summary>
+		/// Controls arm twist. (except in pistolIK).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ElbowAttitude
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("elbowAttitude", value);
+			}
+		}
+
+		/// <summary>
+		/// Type of constraint between the support hand and gun.  0=no constraint, 1=hard distance constraint, 2=Force based constraint, 3=hard spherical constraint.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.
+		/// Min value = 0.
+		/// Max value = 3.
+		/// </remarks>
+		public int SupportConstraint
+		{
+			set
+			{
+				if (value > 3)
+				{
+					value = 3;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("supportConstraint", value);
+			}
+		}
+
+		/// <summary>
+		/// For supportConstraint = 1: Support hand constraint distance will be slowly reduced until it hits this value.  This is for stability and also allows the pointing arm to lead a little.  Don't set lower than NM_MIN_STABLE_DISTANCECONSTRAINT_DISTANCE 0.001f.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 0.1f.
+		/// </remarks>
+		public float ConstraintMinDistance
+		{
+			set
+			{
+				if (value > 0.1f)
+				{
+					value = 0.1f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("constraintMinDistance", value);
+			}
+		}
+
+		/// <summary>
+		/// For supportConstraint = 1:  Minimum distance within which support hand constraint will be made.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 3.0f.
+		/// </remarks>
+		public float MakeConstraintDistance
+		{
+			set
+			{
+				if (value > 3.0f)
+				{
+					value = 3.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("makeConstraintDistance", value);
+			}
+		}
+
+		/// <summary>
+		/// For supportConstraint = 1:  Velocity at which to reduce the support hand constraint length.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.5f.
+		/// Min value = 0.1f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float ReduceConstraintLengthVel
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.1f)
+				{
+					value = 0.1f;
+				}
+
+				SetArgument("reduceConstraintLengthVel", value);
+			}
+		}
+
+		/// <summary>
+		/// For supportConstraint = 1: strength of the supporting hands constraint (kg m/s), -1 to ignore/disable.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1000.0f.
+		/// </remarks>
+		public float BreakingStrength
+		{
+			set
+			{
+				if (value > 1000.0f)
+				{
+					value = 1000.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("breakingStrength", value);
+			}
+		}
+
+		/// <summary>
+		/// Once constraint is broken then do not try to reconnect/support for this amount of time.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float BrokenSupportTime
+		{
+			set
+			{
+				if (value > 5.0f)
+				{
+					value = 5.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("brokenSupportTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Probability that the when a constraint is broken that during brokenSupportTime a side pose will be selected.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float BrokenToSideProb
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("brokenToSideProb", value);
+			}
+		}
+
+		/// <summary>
+		/// If gunArm has been controlled by other behaviors for this time when it could have been pointing but couldn't due to pointing only allowed if connected, change gunArm pose to something that could connect for connectFor seconds.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.7f.
+		/// Min value = 0.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float ConnectAfter
+		{
+			set
+			{
+				if (value > 5.0f)
+				{
+					value = 5.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("connectAfter", value);
+			}
+		}
+
+		/// <summary>
+		/// Time to try to reconnect for.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = 0.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float ConnectFor
+		{
+			set
+			{
+				if (value > 5.0f)
+				{
+					value = 5.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("connectFor", value);
+			}
+		}
+
+		/// <summary>
+		/// 0 = don't allow, 1= allow for kPistol(two handed pistol) only, 2 = allow for kRifle only, 3 = allow for kPistol and kRifle. Allow one handed pointing - no constraint if cant be supported .  If not allowed then gunHand does not try to point at target if it cannot be supported - the constraint will be controlled by always support.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.
+		/// Min value = 0.
+		/// Max value = 3.
+		/// </remarks>
+		public int OneHandedPointing
+		{
+			set
+			{
+				if (value > 3)
+				{
+					value = 3;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("oneHandedPointing", value);
+			}
+		}
+
+		/// <summary>
+		/// Support a non pointing gunHand i.e. if in zero pose (constrain as well  if constraint possible).
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool AlwaysSupport
+		{
+			set
+			{
+				SetArgument("alwaysSupport", value);
+			}
+		}
+
+		/// <summary>
+		/// Apply neutral pose when a gun arm isn't in use.  NB: at the moment Rifle hand is always controlled by pointGun.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool PoseUnusedGunArm
+		{
+			set
+			{
+				SetArgument("poseUnusedGunArm", value);
+			}
+		}
+
+		/// <summary>
+		/// Apply neutral pose when a support arm isn't in use.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool PoseUnusedSupportArm
+		{
+			set
+			{
+				SetArgument("poseUnusedSupportArm", value);
+			}
+		}
+
+		/// <summary>
+		/// Apply neutral pose to the non-gun arm (otherwise it is always under the control of other behaviors or not set). If the non-gun hand is a supporting hand it is not controlled by this parameter but by poseUnusedSupportArm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool PoseUnusedOtherArm
+		{
+			set
+			{
+				SetArgument("poseUnusedOtherArm", value);
+			}
+		}
+
+		/// <summary>
+		/// Max aiming angle(deg) sideways across body midline measured from chest forward that the character will try to point.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 90.0f.
+		/// Min value = 0.0f.
+		/// Max value = 180.0f.
+		/// </remarks>
+		public float MaxAngleAcross
+		{
+			set
+			{
+				if (value > 180.0f)
+				{
+					value = 180.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("maxAngleAcross", value);
+			}
+		}
+
+		/// <summary>
+		/// Max aiming angle(deg) sideways away from body midline measured from chest forward that the character will try to point.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 90.0f.
+		/// Min value = 0.0f.
+		/// Max value = 180.0f.
+		/// </remarks>
+		public float MaxAngleAway
+		{
+			set
+			{
+				if (value > 180.0f)
+				{
+					value = 180.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("maxAngleAway", value);
+			}
+		}
+
+		/// <summary>
+		/// 0= don't apply limits.  1=apply the limits below only when the character is falling.  2 =  always apply these limits (instead of applying maxAngleAcross and maxAngleAway which only limits the horizontal angle but implicity limits the updown (the limit shape is a vertical hinge).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 2.
+		/// </remarks>
+		public int FallingLimits
+		{
+			set
+			{
+				if (value > 2)
+				{
+					value = 2;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("fallingLimits", value);
+			}
+		}
+
+		/// <summary>
+		/// Max aiming angle(deg) sideways across body midline measured from chest forward that the character will try to point.  i.e. for rightHanded gun this is the angle left of the midline.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 90.0f.
+		/// Min value = 0.0f.
+		/// Max value = 180.0f.
+		/// </remarks>
+		public float AcrossLimit
+		{
+			set
+			{
+				if (value > 180.0f)
+				{
+					value = 180.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("acrossLimit", value);
+			}
+		}
+
+		/// <summary>
+		/// Max aiming angle(deg) sideways away from body midline measured from chest forward that the character will try to point.  i.e. for rightHanded gun this is the angle right of the midline.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 90.0f.
+		/// Min value = 0.0f.
+		/// Max value = 180.0f.
+		/// </remarks>
+		public float AwayLimit
+		{
+			set
+			{
+				if (value > 180.0f)
+				{
+					value = 180.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("awayLimit", value);
+			}
+		}
+
+		/// <summary>
+		/// Max aiming angle(deg) upwards from body midline measured from chest forward that the character will try to point.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 90.0f.
+		/// Min value = 0.0f.
+		/// Max value = 180.0f.
+		/// </remarks>
+		public float UpLimit
+		{
+			set
+			{
+				if (value > 180.0f)
+				{
+					value = 180.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("upLimit", value);
+			}
+		}
+
+		/// <summary>
+		/// Max aiming angle(deg) downwards from body midline measured from chest forward that the character will try to point.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 45.0f.
+		/// Min value = 0.0f.
+		/// Max value = 180.0f.
+		/// </remarks>
+		public float DownLimit
+		{
+			set
+			{
+				if (value > 180.0f)
+				{
+					value = 180.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("downLimit", value);
+			}
+		}
+
+		/// <summary>
+		/// Pose the rifle hand to reduce complications with collisions. 0 = false, 1 = always when falling, 2 = when falling except if falling backwards.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 2.
+		/// </remarks>
+		public int RifleFall
+		{
+			set
+			{
+				if (value > 2)
+				{
+					value = 2;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("rifleFall", value);
+			}
+		}
+
+		/// <summary>
+		/// Allow supporting of a rifle(or two handed pistol) when falling. 0 = false, 1 = support if allowed, 2 = support until constraint not active (don't allow support to restart), 3 = support until constraint not effective (support hand to support distance must be less than 0.15 - don't allow support to restart).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.
+		/// Min value = 0.
+		/// Max value = 3.
+		/// </remarks>
+		public int FallingSupport
+		{
+			set
+			{
+				if (value > 3)
+				{
+					value = 3;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("fallingSupport", value);
+			}
+		}
+
+		/// <summary>
+		/// What is considered a fall by fallingSupport). Apply fallingSupport 0=never(will support if allowed), 1 = falling, 2 = falling except if falling backwards, 3 = falling and collided, 4 = falling and collided except if falling backwards, 5 = falling except if falling backwards until collided.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 5.
+		/// </remarks>
+		public int FallingTypeSupport
+		{
+			set
+			{
+				if (value > 5)
+				{
+					value = 5;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("fallingTypeSupport", value);
+			}
+		}
+
+		/// <summary>
+		/// 0 = byFace, 1=acrossFront, 2=bySide.  NB: bySide is not connectible so be careful if combined with kPistol and oneHandedPointing = 0 or 2.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 2.
+		/// </remarks>
+		public int PistolNeutralType
+		{
+			set
+			{
+				if (value > 2)
+				{
+					value = 2;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("pistolNeutralType", value);
+			}
+		}
+
+		/// <summary>
+		/// NOT IMPLEMENTED YET KEEP=false - use pointing for neutral targets in pistol modes.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool NeutralPoint4Pistols
+		{
+			set
+			{
+				SetArgument("neutralPoint4Pistols", value);
+			}
+		}
+
+		/// <summary>
+		/// Use pointing for neutral targets in rifle mode.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool NeutralPoint4Rifle
+		{
+			set
+			{
+				SetArgument("neutralPoint4Rifle", value);
+			}
+		}
+
+		/// <summary>
+		/// Check the neutral pointing is pointable, if it isn't then choose a neutral pose instead.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool CheckNeutralPoint
+		{
+			set
+			{
+				SetArgument("checkNeutralPoint", value);
+			}
+		}
+
+		/// <summary>
+		/// Side, up, back) side is left for left arm, right for right arm mmmmtodo.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(5.0f, -5.0f, -2.0f).
+		/// </remarks>
+		public Vector3 Point2Side
+		{
+			set
+			{
+				SetArgument("point2Side", value);
+			}
+		}
+
+		/// <summary>
+		/// Add to weaponDistance for point2Side neutral pointing (to straighten the arm).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = -1.0f.
+		/// Max value = 1000.0f.
+		/// </remarks>
+		public float Add2WeaponDistSide
+		{
+			set
+			{
+				if (value > 1000.0f)
+				{
+					value = 1000.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("add2WeaponDistSide", value);
+			}
+		}
+
+		/// <summary>
+		/// Side, up, back) side is left for left arm, right for rght arm mmmmtodo.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(-1.0f, -0.9f, -0.2f).
+		/// </remarks>
+		public Vector3 Point2Connect
+		{
+			set
+			{
+				SetArgument("point2Connect", value);
+			}
+		}
+
+		/// <summary>
+		/// Add to weaponDistance for point2Connect neutral pointing (to straighten the arm).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1000.0f.
+		/// </remarks>
+		public float Add2WeaponDistConnect
+		{
+			set
+			{
+				if (value > 1000.0f)
+				{
+					value = 1000.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("add2WeaponDistConnect", value);
+			}
+		}
+
+		/// <summary>
+		/// Enable new ik for pistol pointing.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool UsePistolIK
+		{
+			set
+			{
+				SetArgument("usePistolIK", value);
+			}
+		}
+
+		/// <summary>
+		/// Use spine twist to orient chest?.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool UseSpineTwist
+		{
+			set
+			{
+				SetArgument("useSpineTwist", value);
+			}
+		}
+
+		/// <summary>
+		/// Turn balancer to help gun point at target.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseTurnToTarget
+		{
+			set
+			{
+				SetArgument("useTurnToTarget", value);
+			}
+		}
+
+		/// <summary>
+		/// Use head look to drive head?.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool UseHeadLook
+		{
+			set
+			{
+				SetArgument("useHeadLook", value);
+			}
+		}
+
+		/// <summary>
+		/// Angular difference between pointing direction and target direction above which feedback will be generated.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 3.1f.
+		/// </remarks>
+		public float ErrorThreshold
+		{
+			set
+			{
+				if (value > 3.1f)
+				{
+					value = 3.1f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("errorThreshold", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration of arms relax following firing weapon.  NB:This is clamped (0,5) in pointGun.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float FireWeaponRelaxTime
+		{
+			set
+			{
+				if (value > 5.0f)
+				{
+					value = 5.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("fireWeaponRelaxTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Relax multiplier following firing weapon. Recovers over relaxTime.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.1f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float FireWeaponRelaxAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.1f)
+				{
+					value = 0.1f;
+				}
+
+				SetArgument("fireWeaponRelaxAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Range of motion for ik-based recoil.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 0.3f.
+		/// </remarks>
+		public float FireWeaponRelaxDistance
+		{
+			set
+			{
+				if (value > 0.3f)
+				{
+					value = 0.3f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("fireWeaponRelaxDistance", value);
+			}
+		}
+
+		/// <summary>
+		/// Use the incoming transforms to inform the pointGun of the primaryWeaponDistance, poleVector for the arm.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool UseIncomingTransforms
+		{
+			set
+			{
+				SetArgument("useIncomingTransforms", value);
+			}
+		}
+
+		/// <summary>
+		/// If useIncomingTransforms = true and measureParentOffset=true then measure the Pointing-from offset from parent effector, using itms - this should point the barrel of the gun to the target.  This is added to the rightHandParentOffset. NB NOT used if rightHandParentEffector LT 0.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool MeasureParentOffset
+		{
+			set
+			{
+				SetArgument("measureParentOffset", value);
+			}
+		}
+
+		/// <summary>
+		/// Pointing-from offset from parent effector, expressed in spine3's frame, x = back/forward, y = right/left, z = up/down.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 LeftHandParentOffset
+		{
+			set
+			{
+				SetArgument("leftHandParentOffset", value);
+			}
+		}
+
+		/// <summary>
+		/// 1 = Use leftShoulder. Effector from which the left hand pointing originates. Ie, point from this part to the target. -1 causes default offset for active weapon mode to be applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// Max value = 21.
+		/// </remarks>
+		public int LeftHandParentEffector
+		{
+			set
+			{
+				if (value > 21)
+				{
+					value = 21;
+				}
+
+				if (value < -1)
+				{
+					value = -1;
+				}
+
+				SetArgument("leftHandParentEffector", value);
+			}
+		}
+
+		/// <summary>
+		/// Pointing-from offset from parent effector, expressed in spine3's frame, x = back/forward, y = right/left, z = up/down. This is added to the measured one if useIncomingTransforms=true and measureParentOffset=true.  NB NOT used if rightHandParentEffector LT 0.  Pistol(0,0,0) Rifle(0.0032, 0.0, -0.0).
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 RightHandParentOffset
+		{
+			set
+			{
+				SetArgument("rightHandParentOffset", value);
+			}
+		}
+
+		/// <summary>
+		/// 1 = Use rightShoulder.. Effector from which the right hand pointing originates. Ie, point from this part to the target. -1 causes default offset for active weapon mode to be applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// Max value = 21.
+		/// </remarks>
+		public int RightHandParentEffector
+		{
+			set
+			{
+				if (value > 21)
+				{
+					value = 21;
+				}
+
+				if (value < -1)
+				{
+					value = -1;
+				}
+
+				SetArgument("rightHandParentEffector", value);
+			}
+		}
+
+		/// <summary>
+		/// Distance from the shoulder to hold the weapon. If -1 and useIncomingTransforms then weaponDistance is read from ITMs. WeaponDistance=primaryHandWeaponDistance clamped [0.2f:m_maxArmReach=0.65] if useIncomingTransforms = false. pistol 0.60383, rifle 0.336.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
