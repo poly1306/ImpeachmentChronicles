@@ -21780,3 +21780,2225 @@ namespace GTA.NaturalMotion
 		/// <remarks>
 		/// Default value = -1.0f.
 		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float PrimaryHandWeaponDistance
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("primaryHandWeaponDistance", value);
+			}
+		}
+
+		/// <summary>
+		/// Use hard constraint to keep rifle stock against shoulder?.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool ConstrainRifle
+		{
+			set
+			{
+				SetArgument("constrainRifle", value);
+			}
+		}
+
+		/// <summary>
+		/// Rifle constraint distance. Deliberately kept large to create a flat constraint surface where rifle meets the shoulder.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// </remarks>
+		public float RifleConstraintMinDistance
+		{
+			set
+			{
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rifleConstraintMinDistance", value);
+			}
+		}
+
+		/// <summary>
+		/// Disable collisions between right hand/forearm and the torso/legs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool DisableArmCollisions
+		{
+			set
+			{
+				SetArgument("disableArmCollisions", value);
+			}
+		}
+
+		/// <summary>
+		/// Disable collisions between right hand/forearm and spine3/spine2 if in rifle mode.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool DisableRifleCollisions
+		{
+			set
+			{
+				SetArgument("disableRifleCollisions", value);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Seldom set parameters for pointGun - just to keep number of parameters in any message less than or equal to 64.
+	/// </summary>
+	public sealed class PointGunExtraHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the PointGunExtraHelper for sending a PointGunExtra <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the PointGunExtra <see cref="Message"/> to.</param>
+		/// <remarks>
+		/// Seldom set parameters for pointGun - just to keep number of parameters in any message less than or equal to 64.
+		/// </remarks>
+		public PointGunExtraHelper(Ped ped) : base(ped, "pointGunExtra")
+		{
+		}
+
+		/// <summary>
+		/// For supportConstraint = 2: force constraint strength of the supporting hands - it gets shaky at about 4.0.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float ConstraintStrength
+		{
+			set
+			{
+				if (value > 5.0f)
+				{
+					value = 5.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("constraintStrength", value);
+			}
+		}
+
+		/// <summary>
+		/// For supportConstraint = 2:  Like makeConstraintDistance. Force starts acting when the hands are  LT  3.0*thresh apart but is maximum strength  LT  thresh. For comparison: 0.1 is used for reachForWound in shot, 0.25 is used in grab.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ConstraintThresh
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("constraintThresh", value);
+			}
+		}
+
+		/// <summary>
+		/// Currently unused - no intoWorldTest. RAGE bit mask to exclude weapons from ray probe - currently defaults to MP3 weapon flag.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1024.
+		/// Min value = 0.
+		/// </remarks>
+		public int WeaponMask
+		{
+			set
+			{
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("weaponMask", value);
+			}
+		}
+
+		/// <summary>
+		/// Is timeWarpActive enabled?.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool TimeWarpActive
+		{
+			set
+			{
+				SetArgument("timeWarpActive", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale for arm and helper strength when timewarp is enabled. 1 = normal compensation.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.1f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float TimeWarpStrengthScale
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.1f)
+				{
+					value = 0.1f;
+				}
+
+				SetArgument("timeWarpStrengthScale", value);
+			}
+		}
+
+		/// <summary>
+		/// Hand stabilization controller stiffness.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float OriStiff
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("oriStiff", value);
+			}
+		}
+
+		/// <summary>
+		/// Hand stabilization controller damping.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float OriDamp
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("oriDamp", value);
+			}
+		}
+
+		/// <summary>
+		/// Hand stabilization controller stiffness.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 100.0f.
+		/// </remarks>
+		public float PosStiff
+		{
+			set
+			{
+				if (value > 100.0f)
+				{
+					value = 100.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("posStiff", value);
+			}
+		}
+
+		/// <summary>
+		/// Hand stabilization controller damping.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float PosDamp
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("posDamp", value);
+			}
+		}
+	}
+
+	public sealed class RollDownStairsHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the RollDownStairsHelper for sending a RollDownStairs <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the RollDownStairs <see cref="Message"/> to.</param>
+		public RollDownStairsHelper(Ped ped) : base(ped, "rollDownStairs")
+		{
+		}
+
+		/// <summary>
+		/// Effector Stiffness. Value feeds through to rollUp directly.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 11.0f.
+		/// Min value = 6.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float Stiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 6.0f)
+				{
+					value = 6.0f;
+				}
+
+				SetArgument("stiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Effector  Damping.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.4f.
+		/// Min value = 0.0f.
+		/// Max value = 4.0f.
+		/// </remarks>
+		public float Damping
+		{
+			set
+			{
+				if (value > 4.0f)
+				{
+					value = 4.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("damping", value);
+			}
+		}
+
+		/// <summary>
+		/// Helper force strength.  Do not go above 1 for a rollDownStairs/roll along ground reaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float Forcemag
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("forcemag", value);
+			}
+		}
+
+		/// <summary>
+		/// The degree to which the character will try to stop a barrel roll with his arms.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.9f.
+		/// Min value = -3.0f.
+		/// Max value = 3.0f.
+		/// </remarks>
+		public float M_useArmToSlowDown
+		{
+			set
+			{
+				if (value > 3.0f)
+				{
+					value = 3.0f;
+				}
+
+				if (value < -3.0f)
+				{
+					value = -3.0f;
+				}
+
+				SetArgument("m_useArmToSlowDown", value);
+			}
+		}
+
+		/// <summary>
+		/// Blends between a zeroPose and the Rollup, Faster the character is rotating the less the zeroPose.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseZeroPose
+		{
+			set
+			{
+				SetArgument("useZeroPose", value);
+			}
+		}
+
+		/// <summary>
+		/// Applied cheat forces to spin the character when in the air, the forces are 40% of the forces applied when touching the ground.  Be careful little bunny rabbits, the character could spin unnaturally in the air.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool SpinWhenInAir
+		{
+			set
+			{
+				SetArgument("spinWhenInAir", value);
+			}
+		}
+
+		/// <summary>
+		/// How much the character reaches with his arms to brace against the ground.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.4f.
+		/// Min value = 0.0f.
+		/// Max value = 3.0f.
+		/// </remarks>
+		public float M_armReachAmount
+		{
+			set
+			{
+				if (value > 3.0f)
+				{
+					value = 3.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("m_armReachAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount that the legs push outwards when tumbling.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float M_legPush
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("m_legPush", value);
+			}
+		}
+
+		/// <summary>
+		/// Blends between a zeroPose and the Rollup, Faster the character is rotating the less the zeroPose.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool TryToAvoidHeadButtingGround
+		{
+			set
+			{
+				SetArgument("tryToAvoidHeadButtingGround", value);
+			}
+		}
+
+		/// <summary>
+		/// The length that the arm reaches and so how much it straightens.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ArmReachLength
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("armReachLength", value);
+			}
+		}
+
+		/// <summary>
+		/// Pass in a custom direction in to have the character try and roll in that direction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 1.0f).
+		/// Min value = 1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public Vector3 CustomRollDir
+		{
+			set
+			{
+				SetArgument("customRollDir", Vector3.Clamp(value, new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f)));
+			}
+		}
+
+		/// <summary>
+		/// Pass in true to use the customRollDir parameter.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseCustomRollDir
+		{
+			set
+			{
+				SetArgument("useCustomRollDir", value);
+			}
+		}
+
+		/// <summary>
+		/// The target linear velocity used to start the rolling.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 9.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float StiffnessDecayTarget
+		{
+			set
+			{
+				if (value > 20.0f)
+				{
+					value = 20.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("stiffnessDecayTarget", value);
+			}
+		}
+
+		/// <summary>
+		/// Time, in seconds, to decay stiffness down to the stiffnessDecayTarget value (or -1 to disable).
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float StiffnessDecayTime
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("stiffnessDecayTime", value);
+			}
+		}
+
+		/// <summary>
+		/// 0 is no leg asymmetry in 'foetal' position.  greater than 0 a asymmetricalLegs-rand(30%), added/minus each joint of the legs in radians.  Random number changes about once every roll.  0.4 gives a lot of asymmetry.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float AsymmetricalLegs
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("asymmetricalLegs", value);
+			}
+		}
+
+		/// <summary>
+		/// Tries to reduce the spin around the z axis. Scale 0 - 1.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float ZAxisSpinReduction
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("zAxisSpinReduction", value);
+			}
+		}
+
+		/// <summary>
+		/// Time for the targetlinearVelocity to decay to zero.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float TargetLinearVelocityDecayTime
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("targetLinearVelocityDecayTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Helper torques are applied to match the spin of the character to the max of targetLinearVelocity and COMVelMag.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float TargetLinearVelocity
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("targetLinearVelocity", value);
+			}
+		}
+
+		/// <summary>
+		/// Don't use rollup if true.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool OnlyApplyHelperForces
+		{
+			set
+			{
+				SetArgument("onlyApplyHelperForces", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale applied cheat forces/torques to (zero) if object underneath character has velocity greater than 1.f.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseVelocityOfObjectBelow
+		{
+			set
+			{
+				SetArgument("useVelocityOfObjectBelow", value);
+			}
+		}
+
+		/// <summary>
+		/// UseVelocityOfObjectBelow uses a relative velocity of the character to the object underneath.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseRelativeVelocity
+		{
+			set
+			{
+				SetArgument("useRelativeVelocity", value);
+			}
+		}
+
+		/// <summary>
+		/// If true, use rollup for upper body and a kind of foetal behavior for legs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ApplyFoetalToLegs
+		{
+			set
+			{
+				SetArgument("applyFoetalToLegs", value);
+			}
+		}
+
+		/// <summary>
+		/// Only used if applyFoetalToLegs = true : define the variation of angles for the joints of the legs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.3f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float MovementLegsInFoetalPosition
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("movementLegsInFoetalPosition", value);
+			}
+		}
+
+		/// <summary>
+		/// Only used if applyNewRollingCheatingTorques or applyHelPerTorqueToAlign defined to true : maximal angular velocity around frontward axis of the pelvis to apply cheating torques.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = -1.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float MaxAngVelAroundFrontwardAxis
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("maxAngVelAroundFrontwardAxis", value);
+			}
+		}
+
+		/// <summary>
+		/// Only used if applyNewRollingCheatingTorques or applyHelPerTorqueToAlign defined to true : minimal angular velocity of the roll to apply cheating torques.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float MinAngVel
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("minAngVel", value);
+			}
+		}
+
+		/// <summary>
+		/// If true will use the new way to apply cheating torques (like in fallOverWall), otherwise will use the old way.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ApplyNewRollingCheatingTorques
+		{
+			set
+			{
+				SetArgument("applyNewRollingCheatingTorques", value);
+			}
+		}
+
+		/// <summary>
+		/// Only used if applyNewRollingCheatingTorques defined to true : maximal angular velocity of the roll to apply cheating torque.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 5.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float MaxAngVel
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("maxAngVel", value);
+			}
+		}
+
+		/// <summary>
+		/// Only used if applyNewRollingCheatingTorques defined to true : magnitude of the torque to roll down the stairs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 50.0f.
+		/// Min value = 0.0f.
+		/// Max value = 500.0f.
+		/// </remarks>
+		public float MagOfTorqueToRoll
+		{
+			set
+			{
+				if (value > 500.0f)
+				{
+					value = 500.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("magOfTorqueToRoll", value);
+			}
+		}
+
+		/// <summary>
+		/// Apply torque to align the body orthogonally to the direction of the roll.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ApplyHelPerTorqueToAlign
+		{
+			set
+			{
+				SetArgument("applyHelPerTorqueToAlign", value);
+			}
+		}
+
+		/// <summary>
+		/// Only used if applyHelPerTorqueToAlign defined to true : delay to start to apply torques.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float DelayToAlignBody
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("delayToAlignBody", value);
+			}
+		}
+
+		/// <summary>
+		/// Only used if applyHelPerTorqueToAlign defined to true : magnitude of the torque to align orthogonally the body.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 50.0f.
+		/// Min value = 0.0f.
+		/// Max value = 500.0f.
+		/// </remarks>
+		public float MagOfTorqueToAlign
+		{
+			set
+			{
+				if (value > 500.0f)
+				{
+					value = 500.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("magOfTorqueToAlign", value);
+			}
+		}
+
+		/// <summary>
+		/// Ordinarily keep at 0.85.  Make this lower if you want spinning in the air.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.9f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float AirborneReduction
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("airborneReduction", value);
+			}
+		}
+
+		/// <summary>
+		/// Pass-through to Roll Up. Controls whether or not behavior enforces min/max friction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool ApplyMinMaxFriction
+		{
+			set
+			{
+				SetArgument("applyMinMaxFriction", value);
+			}
+		}
+
+		/// <summary>
+		/// Scale zAxisSpinReduction back when rotating end-over-end (somersault) to give the body a chance to align with the axis of rotation.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool LimitSpinReduction
+		{
+			set
+			{
+				SetArgument("limitSpinReduction", value);
+			}
+		}
+	}
+
+	public sealed class ShotHelper : CustomHelper
+	{
+		/// <summary>
+		/// Creates a new Instance of the ShotHelper for sending a Shot <see cref="Message"/> to a given <see cref="Ped"/>.
+		/// </summary>
+		/// <param name="ped">The <see cref="Ped"/> to send the Shot <see cref="Message"/> to.</param>
+		public ShotHelper(Ped ped) : base(ped, "shot")
+		{
+		}
+
+		/// <summary>
+		/// Stiffness of body. Feeds through to roll_up.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 11.0f.
+		/// Min value = 6.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float BodyStiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 6.0f)
+				{
+					value = 6.0f;
+				}
+
+				SetArgument("bodyStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Stiffness of body. Feeds through to roll_up.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.1f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float SpineDamping
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.1f)
+				{
+					value = 0.1f;
+				}
+
+				SetArgument("spineDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Arm stiffness.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 10.0f.
+		/// Min value = 6.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float ArmStiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 6.0f)
+				{
+					value = 6.0f;
+				}
+
+				SetArgument("armStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Initial stiffness of neck after being shot.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 14.0f.
+		/// Min value = 3.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float InitialNeckStiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 3.0f)
+				{
+					value = 3.0f;
+				}
+
+				SetArgument("initialNeckStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Intial damping of neck after being shot.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.1f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float InitialNeckDamping
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.1f)
+				{
+					value = 0.1f;
+				}
+
+				SetArgument("initialNeckDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Stiffness of neck.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 14.0f.
+		/// Min value = 3.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float NeckStiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 3.0f)
+				{
+					value = 3.0f;
+				}
+
+				SetArgument("neckStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Damping of neck.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.1f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float NeckDamping
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.1f)
+				{
+					value = 0.1f;
+				}
+
+				SetArgument("neckDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// How much to add to upperbody stiffness dependent on looseness.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float KMultOnLoose
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("kMultOnLoose", value);
+			}
+		}
+
+		/// <summary>
+		/// How much to add to leg stiffnesses dependent on looseness.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float KMult4Legs
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("kMult4Legs", value);
+			}
+		}
+
+		/// <summary>
+		/// How loose the character is made by a newBullet. Between 0 and 1.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float LoosenessAmount
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("loosenessAmount", value);
+			}
+		}
+
+		/// <summary>
+		/// How loose the character is made by a newBullet if falling.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Looseness4Fall
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("looseness4Fall", value);
+			}
+		}
+
+		/// <summary>
+		/// How loose the upperBody of the character is made by a newBullet if staggerFall is running (and not falling).  Note atm the neck ramp values are ignored in staggerFall.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float Looseness4Stagger
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("looseness4Stagger", value);
+			}
+		}
+
+		/// <summary>
+		/// Minimum looseness to apply to the arms.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float MinArmsLooseness
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("minArmsLooseness", value);
+			}
+		}
+
+		/// <summary>
+		/// Minimum looseness to apply to the Legs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float MinLegsLooseness
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("minLegsLooseness", value);
+			}
+		}
+
+		/// <summary>
+		/// How long to hold for before returning to relaxed arm position.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float GrabHoldTime
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("grabHoldTime", value);
+			}
+		}
+
+		/// <summary>
+		/// True: spine is blended with zero pose, false: spine is blended with zero pose if not setting exag or cpain.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool SpineBlendExagCPain
+		{
+			set
+			{
+				SetArgument("spineBlendExagCPain", value);
+			}
+		}
+
+		/// <summary>
+		/// Spine is always blended with zero pose this much and up to 1 as the character become stationary.  If negative no blend is ever applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = -0.1f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float SpineBlendZero
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -0.1f)
+				{
+					value = -0.1f;
+				}
+
+				SetArgument("spineBlendZero", value);
+			}
+		}
+
+		/// <summary>
+		/// Looseness applied to spine is different if bulletProofVest is true.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool BulletProofVest
+		{
+			set
+			{
+				SetArgument("bulletProofVest", value);
+			}
+		}
+
+		/// <summary>
+		/// Looseness always reset on shotNewBullet even if previous looseness ramp still running.  Except for the neck which has it's own ramp.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool AlwaysResetLooseness
+		{
+			set
+			{
+				SetArgument("alwaysResetLooseness", value);
+			}
+		}
+
+		/// <summary>
+		/// Neck looseness always reset on shotNewBullet even if previous looseness ramp still running.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool AlwaysResetNeckLooseness
+		{
+			set
+			{
+				SetArgument("alwaysResetNeckLooseness", value);
+			}
+		}
+
+		/// <summary>
+		/// How much to scale the angular velocity coming in from animation of a part if it is in angVelScaleMask (otherwise scale by 1.0).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float AngVelScale
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("angVelScale", value);
+			}
+		}
+
+		/// <summary>
+		/// Parts to scale the initial angular velocity by angVelScale (otherwize scale by 1.0).
+		/// </summary>
+		/// <remarks>
+		/// Default value = "fb".
+		/// </remarks>
+		public string AngVelScaleMask
+		{
+			set
+			{
+				SetArgument("angVelScaleMask", value);
+			}
+		}
+
+		/// <summary>
+		/// Width of the fling behavior.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float FlingWidth
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("flingWidth", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration of the fling behavior.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = 0.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float FlingTime
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("flingTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Time, in seconds, before the character begins to grab for the wound on the first hit.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float TimeBeforeReachForWound
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("timeBeforeReachForWound", value);
+			}
+		}
+
+		/// <summary>
+		/// Exaggerate bullet duration (at exagMag/exagTwistMag).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float ExagDuration
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("exagDuration", value);
+			}
+		}
+
+		/// <summary>
+		/// Exaggerate bullet spine Lean magnitude.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float ExagMag
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("exagMag", value);
+			}
+		}
+
+		/// <summary>
+		/// Exaggerate bullet spine Twist magnitude.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float ExagTwistMag
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("exagTwistMag", value);
+			}
+		}
+
+		/// <summary>
+		/// Exaggerate bullet duration ramping to zero after exagDuration.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float ExagSmooth2Zero
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("exagSmooth2Zero", value);
+			}
+		}
+
+		/// <summary>
+		/// Exaggerate bullet time spent at 0 spine lean/twist after exagDuration + exagSmooth2Zero.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float ExagZeroTime
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("exagZeroTime", value);
+			}
+		}
+
+		/// <summary>
+		/// Conscious pain duration ramping from zero to cpainMag/cpainTwistMag.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.2f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float CpainSmooth2Time
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("cpainSmooth2Time", value);
+			}
+		}
+
+		/// <summary>
+		/// Conscious pain duration at cpainMag/cpainTwistMag after cpainSmooth2Time.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float CpainDuration
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("cpainDuration", value);
+			}
+		}
+
+		/// <summary>
+		/// Conscious pain spine Lean(back/Forward) magnitude (Replaces spinePainMultiplier).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float CpainMag
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("cpainMag", value);
+			}
+		}
+
+		/// <summary>
+		/// Conscious pain spine Twist/Lean2Side magnitude Replaces spinePainTwistMultiplier).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float CpainTwistMag
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("cpainTwistMag", value);
+			}
+		}
+
+		/// <summary>
+		/// Conscious pain ramping to zero after cpainSmooth2Time + cpainDuration (Replaces spinePainTime).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.5f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float CpainSmooth2Zero
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("cpainSmooth2Zero", value);
+			}
+		}
+
+		/// <summary>
+		/// Is the guy crouching or not.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool Crouching
+		{
+			set
+			{
+				SetArgument("crouching", value);
+			}
+		}
+
+		/// <summary>
+		/// Type of reaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool ChickenArms
+		{
+			set
+			{
+				SetArgument("chickenArms", value);
+			}
+		}
+
+		/// <summary>
+		/// Type of reaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool ReachForWound
+		{
+			set
+			{
+				SetArgument("reachForWound", value);
+			}
+		}
+
+		/// <summary>
+		/// Type of reaction.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool Fling
+		{
+			set
+			{
+				SetArgument("fling", value);
+			}
+		}
+
+		/// <summary>
+		/// Injured arm code runs if arm hit (turns and steps and bends injured arm).
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool AllowInjuredArm
+		{
+			set
+			{
+				SetArgument("allowInjuredArm", value);
+			}
+		}
+
+		/// <summary>
+		/// When false injured leg is not bent and character does not bend to reach it.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool AllowInjuredLeg
+		{
+			set
+			{
+				SetArgument("allowInjuredLeg", value);
+			}
+		}
+
+		/// <summary>
+		/// When false don't try to reach for injured Lower Legs (shins/feet).
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool AllowInjuredLowerLegReach
+		{
+			set
+			{
+				SetArgument("allowInjuredLowerLegReach", value);
+			}
+		}
+
+		/// <summary>
+		/// When false don't try to reach for injured Thighs.
+		/// </summary>
+		/// <remarks>
+		/// Default value = True.
+		/// </remarks>
+		public bool AllowInjuredThighReach
+		{
+			set
+			{
+				SetArgument("allowInjuredThighReach", value);
+			}
+		}
+
+		/// <summary>
+		/// Additional stability for hands and neck (less loose).
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool StableHandsAndNeck
+		{
+			set
+			{
+				SetArgument("stableHandsAndNeck", value);
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool Melee
+		{
+			set
+			{
+				SetArgument("melee", value);
+			}
+		}
+
+		/// <summary>
+		/// 0=Rollup, 1=Catchfall, 2=rollDownStairs, 3=smartFall.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.
+		/// Min value = 0.
+		/// Max value = 3.
+		/// </remarks>
+		public int FallingReaction
+		{
+			set
+			{
+				if (value > 3)
+				{
+					value = 3;
+				}
+
+				if (value < 0)
+				{
+					value = 0;
+				}
+
+				SetArgument("fallingReaction", value);
+			}
+		}
+
+		/// <summary>
+		/// Keep the character active instead of relaxing at the end of the catch fall.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseExtendedCatchFall
+		{
+			set
+			{
+				SetArgument("useExtendedCatchFall", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration for which the character's upper body stays at minimum stiffness (not quite zero).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float InitialWeaknessZeroDuration
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("initialWeaknessZeroDuration", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration of the ramp to bring the character's upper body stiffness back to normal levels.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float InitialWeaknessRampDuration
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("initialWeaknessRampDuration", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration for which the neck stays at intial stiffness/damping.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float InitialNeckDuration
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("initialNeckDuration", value);
+			}
+		}
+
+		/// <summary>
+		/// Duration of the ramp to bring the neck stiffness/damping back to normal levels.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.4f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float InitialNeckRampDuration
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("initialNeckRampDuration", value);
+			}
+		}
+
+		/// <summary>
+		/// If enabled upper and lower body strength scales with character strength, using the range given by parameters below.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseCStrModulation
+		{
+			set
+			{
+				SetArgument("useCStrModulation", value);
+			}
+		}
+
+		/// <summary>
+		/// Proportions to what the strength would be normally.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.1f.
+		/// Min value = 0.1f.
+		/// Max value = 1.0f.
+		/// </remarks>
