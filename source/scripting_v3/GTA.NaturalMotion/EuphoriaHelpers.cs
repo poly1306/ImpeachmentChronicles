@@ -30520,3 +30520,468 @@ namespace GTA.NaturalMotion
 		/// Max angle at which the turn with toggle to the other direction (actual toggle angle is chosen randomly in range min to max).
 		/// If it is 1 then it will never toggle.
 		/// If negative then no turn is applied.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.6f.
+		/// Min value = -0.1f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float TurnThresholdMax
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -0.1f)
+				{
+					value = -0.1f;
+				}
+
+				SetArgument("turnThresholdMax", value);
+			}
+		}
+
+		/// <summary>
+		/// Enable and provide a look-at target to make the character's head turn to face it while balancing.
+		/// </summary>
+		/// <remarks>
+		/// Default value = False.
+		/// </remarks>
+		public bool UseHeadLook
+		{
+			set
+			{
+				SetArgument("useHeadLook", value);
+			}
+		}
+
+		/// <summary>
+		/// Position of thing to look at.
+		/// </summary>
+		/// <remarks>
+		/// Default value = Vector3(0.0f, 0.0f, 0.0f).
+		/// </remarks>
+		public Vector3 HeadLookPos
+		{
+			set
+			{
+				SetArgument("headLookPos", value);
+			}
+		}
+
+		/// <summary>
+		/// Level index of thing to look at.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.
+		/// Min value = -1.
+		/// </remarks>
+		public int HeadLookInstanceIndex
+		{
+			set
+			{
+				if (value < -1)
+				{
+					value = -1;
+				}
+
+				SetArgument("headLookInstanceIndex", value);
+			}
+		}
+
+		/// <summary>
+		/// Probability [0-1] that headLook will be looking in the direction of velocity when stepping.
+		/// </summary>
+		/// <remarks>
+		/// Default value = -1.0f.
+		/// Min value = -1.0f.
+		/// Max value = 1.0f.
+		/// </remarks>
+		public float HeadLookAtVelProb
+		{
+			set
+			{
+				if (value > 1.0f)
+				{
+					value = 1.0f;
+				}
+
+				if (value < -1.0f)
+				{
+					value = -1.0f;
+				}
+
+				SetArgument("headLookAtVelProb", value);
+			}
+		}
+
+		/// <summary>
+		/// For handsAndKnees catchfall ONLY: comVel above which rollDownstairs will start.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 2.0f.
+		/// Min value = 0.0f.
+		/// Max value = 20.0f.
+		/// </remarks>
+		public float ComVelRDSThresh
+		{
+			set
+			{
+				if (value > 20.0f)
+				{
+					value = 20.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("comVelRDSThresh", value);
+			}
+		}
+
+		/// <summary>
+		/// 0.25 A complete wiggle will take 4*hulaPeriod.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float HulaPeriod
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("hulaPeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of hip movement.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 4.0f.
+		/// </remarks>
+		public float HipAmplitude
+		{
+			set
+			{
+				if (value > 4.0f)
+				{
+					value = 4.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("hipAmplitude", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of spine movement.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.0f.
+		/// Min value = 0.0f.
+		/// Max value = 4.0f.
+		/// </remarks>
+		public float SpineAmplitude
+		{
+			set
+			{
+				if (value > 4.0f)
+				{
+					value = 4.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("spineAmplitude", value);
+			}
+		}
+
+		/// <summary>
+		/// Wriggle relaxes for a minimum of minRelaxPeriod (if it is negative it is a multiplier on the time previously spent wriggling).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.3f.
+		/// Min value = -5.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float MinRelaxPeriod
+		{
+			set
+			{
+				if (value > 5.0f)
+				{
+					value = 5.0f;
+				}
+
+				if (value < -5.0f)
+				{
+					value = -5.0f;
+				}
+
+				SetArgument("minRelaxPeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// Wriggle relaxes for a maximum of maxRelaxPeriod (if it is negative it is a multiplier on the time previously spent wriggling).
+		/// </summary>
+		/// <remarks>
+		/// Default value = 1.5f.
+		/// Min value = -5.0f.
+		/// Max value = 5.0f.
+		/// </remarks>
+		public float MaxRelaxPeriod
+		{
+			set
+			{
+				if (value > 5.0f)
+				{
+					value = 5.0f;
+				}
+
+				if (value < -5.0f)
+				{
+					value = -5.0f;
+				}
+
+				SetArgument("maxRelaxPeriod", value);
+			}
+		}
+
+		/// <summary>
+		/// Amount of cheat torque applied to turn the character over.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float RollHelp
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("rollHelp", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg Stiffness when on the ground.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 11.0f.
+		/// Min value = 0.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float GroundLegStiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("groundLegStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Arm Stiffness when on the ground.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 11.0f.
+		/// Min value = 0.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float GroundArmStiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("groundArmStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Spine Stiffness when on the ground.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 14.0f.
+		/// Min value = 0.0f.
+		/// Max value = 16.0f.
+		/// </remarks>
+		public float GroundSpineStiffness
+		{
+			set
+			{
+				if (value > 16.0f)
+				{
+					value = 16.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("groundSpineStiffness", value);
+			}
+		}
+
+		/// <summary>
+		/// Leg Damping when on the ground.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float GroundLegDamping
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("groundLegDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Arm Damping when on the ground.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float GroundArmDamping
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("groundArmDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Spine Damping when on the ground.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 0.5f.
+		/// Min value = 0.0f.
+		/// Max value = 2.0f.
+		/// </remarks>
+		public float GroundSpineDamping
+		{
+			set
+			{
+				if (value > 2.0f)
+				{
+					value = 2.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("groundSpineDamping", value);
+			}
+		}
+
+		/// <summary>
+		/// Friction multiplier on body parts when on ground.
+		/// Character can look too slidy with groundFriction = 1.
+		/// Higher values give a more jerky reaction but this seems timestep dependent especially for dragged by the feet.
+		/// </summary>
+		/// <remarks>
+		/// Default value = 8.0f.
+		/// Min value = 0.0f.
+		/// Max value = 10.0f.
+		/// </remarks>
+		public float GroundFriction
+		{
+			set
+			{
+				if (value > 10.0f)
+				{
+					value = 10.0f;
+				}
+
+				if (value < 0.0f)
+				{
+					value = 0.0f;
+				}
+
+				SetArgument("groundFriction", value);
+			}
+		}
+	}
+}
