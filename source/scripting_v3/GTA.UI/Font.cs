@@ -57,4 +57,23 @@ namespace GTA.UI
 		/// <summary>
 		/// <para>
 		/// This font is for the condensed font for generic uses.
-		//
+		/// Consider using <see cref="ChaletComprimeCologne"/> instead when the texts you want to draw only contain only non-CJK characters.
+		/// </para>
+		/// <para>
+		/// The native functions for text drawing will use the condensed font Chalet Comprim? Cologne 1960 when the game language is set to a non-CJK language,
+		/// but they will use the standard font, which is the same as <see cref="ChaletLondon"/>, when the game language is set to a CJK language (unless the player have custom font files installed).
+		/// </para>
+		/// </summary>
+		ChaletComprimeCologneNotGamerName,
+		/// <summary>
+		/// Pricedown will be used when the game language is set to a non-CJK language.
+		/// The standard font, which is the same as <see cref="ChaletLondon"/>, will be used when the game language is set to a CJK language unless the player have custom font files installed.
+		/// </summary>
+		Pricedown,
+		/// <summary>
+		/// The font for taxi will be used when the game language is set to a non-CJK language. The font does contain invisible glyphs for lower characters.
+		/// The standard font, which is the same as <see cref="ChaletLondon"/>, will be used when the game language is set to a CJK language unless the player have custom font files installed.
+		/// </summary>
+		Taxi,
+	}
+}
