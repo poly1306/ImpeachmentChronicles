@@ -138,4 +138,89 @@ namespace GTA.UI
 		/// <summary>
 		/// Gets or sets the position of this <see cref="TextElement" />.
 		/// </summary>
-		///
+		/// <value>
+		/// The position scaled on a 1280*720 pixel base.
+		/// </value>
+		/// <remarks>
+		/// If ScaledDraw is called, the position will be scaled by the width returned in <see cref="Screen.ScaledWidth" />.
+		/// </remarks>
+		public PointF Position
+		{
+			get; set;
+		}
+		/// <summary>
+		/// Gets or sets the scale of this <see cref="TextElement"/>.
+		/// </summary>
+		/// <value>
+		/// The scale usually a value between ~0.5 and 3.0, Default = 1.0
+		/// </value>
+		public float Scale
+		{
+			get; set;
+		}
+		/// <summary>
+		/// Gets or sets the font of this <see cref="TextElement"/>.
+		/// </summary>
+		/// <value>
+		/// The GTA Font use when drawing.
+		/// </value>
+		public Font Font
+		{
+			get; set;
+		}
+		/// <summary>
+		/// Gets or sets the text to draw in this <see cref="TextElement"/>.
+		/// </summary>
+		/// <value>
+		/// The caption.
+		/// </value>
+		public string Caption
+		{
+			get
+			{
+				return _caption;
+			}
+			set
+			{
+				_caption = value;
+				foreach (var ptr in _pinnedText)
+				{
+					Marshal.FreeCoTaskMem(ptr); //free any existing allocated text
+				}
+				_pinnedText.Clear();
+
+				SHVDN.NativeFunc.PushLongString(value, (string str) =>
+				{
+					byte[] data = Encoding.UTF8.GetBytes(str + "\0");
+					IntPtr next = Marshal.AllocCoTaskMem(data.Length);
+					Marshal.Copy(data, 0, next, data.Length);
+					_pinnedText.Add(next);
+				});
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the alignment of this <see cref="TextElement"/>.
+		/// </summary>
+		/// <value>
+		/// The alignment:<c>Left</c>, <c>Center</c>, <c>Right</c> Justify
+		/// </value>
+		public Alignment Alignment
+		{
+			get; set;
+		}
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="TextElement"/> is drawn with a shadow effect.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if shadow; otherwise, <see langword="false" />.
+		/// </value>
+		public bool Shadow
+		{
+			get; set;
+		}
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="TextElement"/> is drawn with an outline.
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if
