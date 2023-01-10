@@ -223,4 +223,79 @@ namespace GTA.UI
 		/// Gets or sets a value indicating whether this <see cref="TextElement"/> is drawn with an outline.
 		/// </summary>
 		/// <value>
-		///   <see langword="true" /> if
+		///   <see langword="true" /> if outline; otherwise, <see langword="false" />.
+		/// </value>
+		public bool Outline
+		{
+			get; set;
+		}
+		/// <summary>
+		/// Gets or sets the maximum size of the <see cref="TextElement"/> before it wraps to a new line.
+		/// </summary>
+		/// <value>
+		/// The width of the <see cref="TextElement"/>.
+		/// </value>
+		public float WrapWidth
+		{
+			get; set;
+		}
+		/// <summary>
+		/// Gets or sets a value indicating whether the alignment of this <see cref="TextElement" /> is centered.
+		/// See <see cref="Alignment"/>
+		/// </summary>
+		/// <value>
+		///   <see langword="true" /> if centered; otherwise, <see langword="false" />.
+		/// </value>
+		public bool Centered
+		{
+			get
+			{
+				return Alignment == Alignment.Center;
+			}
+			set
+			{
+				if (value)
+				{
+					Alignment = Alignment.Center;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Measures how many pixels in the horizontal axis this <see cref="TextElement"/> will use when drawn	against a 1280 pixel base
+		/// </summary>
+		public float Width
+		{
+			get
+			{
+				Function.Call(Hash.BEGIN_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT, SHVDN.NativeMemory.CellEmailBcon);
+
+				foreach (IntPtr ptr in _pinnedText)
+				{
+					Function.Call(Hash.ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME, ptr);
+				}
+
+				Function.Call(Hash.SET_TEXT_FONT, Font);
+				Function.Call(Hash.SET_TEXT_SCALE, Scale, Scale);
+
+				return Screen.Width * Function.Call<float>(Hash.END_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT, 1);
+			}
+		}
+		/// <summary>
+		/// Measures how many pixels in the horizontal axis this <see cref="TextElement"/> will use when drawn against a <see cref="ScaledWidth"/> pixel base
+		/// </summary>
+		public float ScaledWidth
+		{
+			get
+			{
+				Function.Call(Hash.BEGIN_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT, SHVDN.NativeMemory.CellEmailBcon);
+
+				foreach (IntPtr ptr in _pinnedText)
+				{
+					Function.Call(Hash.ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME, ptr);
+				}
+
+				Function.Call(Hash.SET_TEXT_FONT, Font);
+				Function.Call(Hash.SET_TEXT_SCALE, Scale, Scale);
+
+				return Screen.ScaledWidth * Function.Call<float>(Hash.END_TEXT_COMMAND_GET_SC
