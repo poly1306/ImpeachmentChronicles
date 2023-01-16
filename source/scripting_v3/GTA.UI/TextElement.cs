@@ -298,4 +298,54 @@ namespace GTA.UI
 				Function.Call(Hash.SET_TEXT_FONT, Font);
 				Function.Call(Hash.SET_TEXT_SCALE, Scale, Scale);
 
-				return Screen.ScaledWidth * Function.Call<float>(Hash.END_TEXT_COMMAND_GET_SC
+				return Screen.ScaledWidth * Function.Call<float>(Hash.END_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT, 1);
+			}
+		}
+
+		/// <summary>
+		/// Measures how many pixels in the horizontal axis the string will use when drawn
+		/// </summary>
+		/// <param name="text">The string of text to measure.</param>
+		/// <param name="font">The <see cref="GTA.UI.Font"/> of the textu to measure.</param>
+		/// <param name="scale">Sets a sclae value for increasing or decreasing the size of the text, default value 1.0f - no scaling.</param>
+		/// <returns>
+		/// The amount of pixels scaled on a 1280 pixel width base
+		/// </returns>
+		public static float GetStringWidth(string text, Font font = Font.ChaletLondon, float scale = 1.0f)
+		{
+			Function.Call(Hash.BEGIN_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT, SHVDN.NativeMemory.CellEmailBcon);
+			SHVDN.NativeFunc.PushLongString(text);
+			Function.Call(Hash.SET_TEXT_FONT, font);
+			Function.Call(Hash.SET_TEXT_SCALE, scale, scale);
+
+			return Screen.Width * Function.Call<float>(Hash.END_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT, 1);
+		}
+		/// <summary>
+		/// Measures how many pixels in the horizontal axis the string will use when drawn
+		/// </summary>
+		/// <param name="text">The string of text to measure.</param>
+		/// <param name="font">The <see cref="GTA.UI.Font"/> of the textu to measure.</param>
+		/// <param name="scale">Sets a sclae value for increasing or decreasing the size of the text, default value 1.0f - no scaling.</param>
+		/// <returns>
+		/// The amount of pixels scaled by the pixel width base return in <see cref="Screen.ScaledWidth"/>
+		/// </returns>
+		public static float GetScaledStringWidth(string text, Font font = Font.ChaletLondon, float scale = 1.0f)
+		{
+			Function.Call(Hash.BEGIN_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT, SHVDN.NativeMemory.CellEmailBcon);
+			SHVDN.NativeFunc.PushLongString(text);
+			Function.Call(Hash.SET_TEXT_FONT, font);
+			Function.Call(Hash.SET_TEXT_SCALE, scale, scale);
+
+			return Screen.ScaledWidth * Function.Call<float>(Hash.END_TEXT_COMMAND_GET_SCREEN_WIDTH_OF_DISPLAY_TEXT, 1);
+		}
+
+		/// <summary>
+		/// Draws the <see cref="TextElement" /> this frame.
+		/// </summary>
+		public virtual void Draw()
+		{
+			Draw(SizeF.Empty);
+		}
+		/// <summary>
+		/// Draws the <see cref="TextElement" /> this frame at the specified offset.
+		///
