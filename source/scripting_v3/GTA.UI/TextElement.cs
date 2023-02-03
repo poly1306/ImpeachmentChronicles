@@ -348,4 +348,49 @@ namespace GTA.UI
 		}
 		/// <summary>
 		/// Draws the <see cref="TextElement" /> this frame at the specified offset.
-		///
+		/// </summary>
+		/// <param name="offset">The offset to shift the draw position of this <see cref="TextElement" /> using a 1280*720 pixel base.</param>
+		public virtual void Draw(SizeF offset)
+		{
+			InternalDraw(offset, Screen.Width, Screen.Height);
+		}
+
+		/// <summary>
+		/// Draws the <see cref="TextElement" /> this frame using the width returned in <see cref="Screen.ScaledWidth" />.
+		/// </summary>
+		public virtual void ScaledDraw()
+		{
+			ScaledDraw(SizeF.Empty);
+		}
+		/// <summary>
+		/// Draws the <see cref="TextElement" /> this frame at the specified offset using the width returned in <see cref="Screen.ScaledWidth" />.
+		/// </summary>
+		/// <param name="offset">The offset to shift the draw position of this <see cref="TextElement" /> using a <see cref="Screen.ScaledWidth" />*720 pixel base.</param>
+		public virtual void ScaledDraw(SizeF offset)
+		{
+			InternalDraw(offset, Screen.ScaledWidth, Screen.Height);
+		}
+
+		/// <summary>
+		/// Draws this <see cref="TextElement"/> this frame in the specified <see cref="Vector3"/> position.
+		/// </summary>
+		/// <param name="position">Position in the world where you want the <see cref="TextElement"/> to be drawn</param>
+		public virtual void WorldDraw(Vector3 position)
+		{
+			WorldDraw(position, SizeF.Empty);
+		}
+		/// <summary>
+		/// Draws this <see cref="TextElement"/> this frame at the specified <see cref="Vector3"/> position and offset.
+		/// </summary>
+		/// <param name="position">Position in the world where you want the <see cref="TextElement"/> to be drawn</param>
+		/// <param name="offset">The offset to shift the draw position of this <see cref="TextElement"/> using a 1280*720 pixel base.</param>
+		public virtual void WorldDraw(Vector3 position, SizeF offset)
+		{
+			Function.Call(Hash.SET_DRAW_ORIGIN, position.X, position.Y, position.Z, 0);
+			InternalDraw(offset, Screen.Width, Screen.Height);
+			Function.Call(Hash.CLEAR_DRAW_ORIGIN);
+		}
+		/// <summary>
+		/// Draws this <see cref="TextElement"/> this frame at the specified <see cref="Vector3"/> position and offset using the width returned in <see cref="Screen.ScaledWidth"/>.
+		/// </summary>
+		/// <param name="position">Position in the world where you want the <see cref="TextEleme
