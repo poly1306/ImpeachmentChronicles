@@ -393,4 +393,73 @@ namespace GTA.UI
 		/// <summary>
 		/// Draws this <see cref="TextElement"/> this frame at the specified <see cref="Vector3"/> position and offset using the width returned in <see cref="Screen.ScaledWidth"/>.
 		/// </summary>
-		/// <param name="position">Position in the world where you want the <see cref="TextEleme
+		/// <param name="position">Position in the world where you want the <see cref="TextElement"/> to be drawn</param>
+		public virtual void WorldScaledDraw(Vector3 position)
+		{
+			WorldScaledDraw(position, SizeF.Empty);
+		}
+		/// <summary>
+		/// Draws this <see cref="TextElement"/> this frame at the specified <see cref="Vector3"/> position and offset using the width returned in <see cref="Screen.ScaledWidth"/>.
+		/// </summary>
+		/// <param name="position">Position in the world where you want the <see cref="TextElement"/> to be drawn</param>
+		/// <param name="offset">The offset to shift the draw position of this <see cref="TextElement"/> using a <see cref="Screen.ScaledWidth"/>*720 pixel base.</param>
+		public virtual void WorldScaledDraw(Vector3 position, SizeF offset)
+		{
+			Function.Call(Hash.SET_DRAW_ORIGIN, position.X, position.Y, position.Z, 0);
+			InternalDraw(offset, Screen.ScaledWidth, Screen.Height);
+			Function.Call(Hash.CLEAR_DRAW_ORIGIN);
+		}
+
+		void InternalDraw(SizeF offset, float screenWidth, float screenHeight)
+		{
+			if (!Enabled)
+			{
+				return;
+			}
+
+			float x = (Position.X + offset.Width) / screenWidth;
+			float y = (Position.Y + offset.Height) / screenHeight;
+			float w = WrapWidth / screenWidth;
+
+			if (Shadow)
+			{
+				Function.Call(Hash.SET_TEXT_DROP_SHADOW);
+			}
+			if (Outline)
+			{
+				Function.Call(Hash.SET_TEXT_OUTLINE);
+			}
+
+			Function.Call(Hash.SET_TEXT_FONT, Font);
+			Function.Call(Hash.SET_TEXT_SCALE, Scale, Scale);
+			Function.Call(Hash.SET_TEXT_COLOUR, Color.R, Color.G, Color.B, Color.A);
+			Function.Call(Hash.SET_TEXT_JUSTIFICATION, Alignment);
+
+			if (WrapWidth > 0.0f)
+			{
+				switch (Alignment)
+				{
+					case Alignment.Center:
+						Function.Call(Hash.SET_TEXT_WRAP, x - (w / 2), x + (w / 2));
+						break;
+					case Alignment.Left:
+						Function.Call(Hash.SET_TEXT_WRAP, x, x + w);
+						break;
+					case Alignment.Right:
+						Function.Call(Hash.SET_TEXT_WRAP, x - w, x);
+						break;
+				}
+			}
+			else if (Alignment == Alignment.Right)
+			{
+				Function.Call(Hash.SET_TEXT_WRAP, 0.0f, x);
+			}
+
+			Function.Call(Hash.BEGIN_TEXT_COMMAND_DISPLAY_TEXT, SHVDN.NativeMemory.CellEmailBcon);
+
+			foreach (IntPtr ptr in _pinnedText)
+			{
+				Function.Call(Hash.ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME, ptr);
+			}
+
+			Function.Call(Hash.END_TEXT_COMMAND_DISPLAY_TE
