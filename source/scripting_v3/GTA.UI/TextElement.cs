@@ -462,4 +462,7 @@ namespace GTA.UI
 				Function.Call(Hash.ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME, ptr);
 			}
 
-			Function.Call(Hash.END_TEXT_COMMAND_DISPLAY_TE
+			Function.Call(Hash.END_TEXT_COMMAND_DISPLAY_TEXT, x, y);
+		}
+	}
+}
